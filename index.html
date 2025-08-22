@@ -3,21 +3,24 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<!-- =============================================
+     CÓ THỂ SỬA: TIÊU ĐỀ TRANG WEB
+     ============================================= -->
 <title>XMOD ChatGPT - Phiên bản Mod (VIP)</title>
 <style>
   /* ===========================
-     GLOBAL / THEME
+     CÓ THỂ SỬA: MÀU SẮC CHỦ ĐẠO
      =========================== */
   :root{
-    --bg1:#0b0326;
-    --grad1:#3a0ca3;
-    --grad2:#7209b7;
-    --grad3:#f72585;
-    --accent: #f72585;
-    --card-bg: rgba(255,255,255,0.06);
-    --glass: rgba(255,255,255,0.04);
-    --muted:#c9c2d9;
-    --bot:#1f2240;
+    --bg1:#0b0326;           /* Màu nền chính - tím đậm */
+    --grad1:#3a0ca3;         /* Gradient 1 - tím */
+    --grad2:#7209b7;         /* Gradient 2 - tím hồng */
+    --grad3:#f72585;         /* Gradient 3 - hồng */
+    --accent: #f72585;       /* Màu nhấn chính - hồng */
+    --card-bg: rgba(255,255,255,0.06);  /* Nền card trong suốt */
+    --glass: rgba(255,255,255,0.04);    /* Hiệu ứng kính */
+    --muted:#c9c2d9;         /* Màu chữ nhạt */
+    --bot:#1f2240;           /* Màu nền bot */
   }
   *{box-sizing:border-box}
   html,body{height:100%}
@@ -33,7 +36,7 @@
   }
 
   /* ===========================
-     HEADER
+     HEADER - PHẦN ĐẦU TRANG
      =========================== */
   .header{
     display:flex;
@@ -59,7 +62,7 @@
   .hdr-actions a{color:#fff;text-decoration:none;padding:8px 12px;border-radius:10px;background:linear-gradient(90deg,var(--grad2),var(--grad3));box-shadow:0 6px 18px rgba(0,0,0,0.25);font-weight:600;font-size:13px}
 
   /* ===========================
-     LAYOUT
+     LAYOUT CHÍNH
      =========================== */
   .wrap{display:flex;gap:20px;padding:20px;flex:1;max-width:1200px;margin:0 auto;width:100%}
   .left{
@@ -72,7 +75,7 @@
     box-shadow: 0 10px 30px rgba(0,0,0,0.45);
   }
 
-  /* chat area */
+  /* PHẦN CHAT */
   .chat-window{flex:1;display:flex;flex-direction:column;overflow:hidden;border-radius:10px;background:linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.06));padding:12px}
   .messages{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:8px}
   .bubble{max-width:80%;padding:12px 14px;border-radius:16px;line-height:1.4;word-break:break-word}
@@ -84,17 +87,17 @@
   .typing {height:10px;width:40px;border-radius:5px;background:linear-gradient(90deg,#ffffff33,#ffffff11);animation: blink 1s infinite}
   @keyframes blink{0%{opacity:0.2}50%{opacity:1}100%{opacity:0.2}}
 
-  /* input */
+  /* PHẦN NHẬP LIỆU */
   .input-row{display:flex;gap:8px;padding:10px;border-top:1px solid rgba(255,255,255,0.03);align-items:center}
   .input-row input{flex:1;padding:12px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff;outline:none}
   .btn-send{padding:10px 16px;border-radius:30px;border:none;background:linear-gradient(90deg,var(--grad2),var(--grad3));color:#fff;font-weight:700;cursor:pointer;box-shadow:0 8px 30px rgba(247,37,133,0.12)}
 
-  /* quick commands area */
+  /* NÚT LỆNH NHANH */
   .quick{display:flex;gap:8px;padding:10px 0;flex-wrap:wrap}
   .chip{background:var(--glass);padding:8px 12px;border-radius:20px;color:var(--muted);cursor:pointer;border:1px solid rgba(255,255,255,0.03)}
   .chip:hover{background:linear-gradient(90deg,#ffffff10,#ffffff06);color:#fff}
 
-  /* right sidebar mods list */
+  /* THANH BÊN PHẢI - DANH SÁCH MOD */
   .right{
     width:360px;
     display:flex;
@@ -110,7 +113,7 @@
   .mod-actions{margin-left:auto;display:flex;gap:8px}
   .tiny-btn{padding:8px 10px;border-radius:8px;border:none;background:#7209b7;color:#fff;cursor:pointer;font-weight:700}
 
-  /* responsive */
+  /* RESPONSIVE CHO MOBILE */
   @media(max-width:980px){
     .wrap{flex-direction:column;padding:12px}
     .right{width:100%}
@@ -119,28 +122,34 @@
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- =============================================
+       CÓ THỂ SỬA: PHẦN HEADER
+       ============================================= -->
   <div class="header">
+    <!-- SỬA LOGO TẠI ĐÂY -->
     <div class="logo"><img src="https://i.postimg.cc/T3SYQ8zK/Polish-20250822-083928173.png" alt="XMOD"></div>
     <div class="hdr-title">
+      <!-- SỬA TIÊU ĐỀ VÀ MÔ TẢ -->
       <h1>⚡ XMOD Chat (VIP)</h1>
       <p>Chat hỗ trợ mod — gõ lệnh hoặc bấm nút nhanh</p>
     </div>
     <div class="hdr-actions">
-      <!-- link tới kênh / web -->
+      <!-- SỬA LINK WEBSITE VÀ YOUTUBE -->
       <a href="https://modskinaov.github.io/Xmod" target="_blank">Website</a>
       <a href="https://youtube.com/@xmod-b7i" target="_blank">YouTube</a>
     </div>
   </div>
 
-  <!-- LAYOUT -->
+  <!-- LAYOUT CHÍNH -->
   <div class="wrap">
-    <!-- LEFT: CHAT -->
+    <!-- BÊN TRÁI: PHẦN CHAT -->
     <div class="left">
       <div class="chat-window">
-        <!-- quick commands -->
+        <!-- =============================================
+             CÓ THỂ SỬA: CÁC NÚT LỆNH NHANH
+             ============================================= -->
         <div class="quick" id="quickCommands">
-          <!-- Các nút nhanh, bạn có thể sửa text/nút bên dưới -->
+          <!-- Có thể thêm/sửa/xóa các nút lệnh ở đây -->
           <div class="chip" data-cmd="help">help</div>
           <div class="chip" data-cmd="laymod">laymod</div>
           <div class="chip" data-cmd="gợi ý skin">gợi ý skin</div>
@@ -149,10 +158,10 @@
           <div class="chip" data-cmd="chém gió">chém gió</div>
         </div>
 
-        <!-- messages -->
+        <!-- Khu vực hiển thị tin nhắn -->
         <div class="messages" id="messages"></div>
 
-        <!-- input -->
+        <!-- Ô nhập lệnh -->
         <div class="input-row">
           <input id="inp" placeholder="Nhập lệnh hoặc chat... (gõ 'help' để xem)"/>
           <button class="btn-send" id="sendBtn">Gửi</button>
@@ -160,21 +169,24 @@
       </div>
     </div>
 
-    <!-- RIGHT: MODS / INFO -->
+    <!-- BÊN PHẢI: DANH SÁCH MOD VÀ DONATE -->
     <div class="right">
-      <!-- panel mods -->
+      <!-- Panel danh sách mod -->
       <div class="panel">
         <h3 style="margin:0 0 10px 0">Các mod hiện có</h3>
         <div id="modsList">
-          <!-- mod items sẽ được render từ JS -->
+          <!-- Danh sách mod sẽ được tự động tạo từ JavaScript -->
         </div>
       </div>
 
-      <!-- panel donate/info -->
+      <!-- =============================================
+           CÓ THỂ SỬA: THÔNG TIN DONATE
+           ============================================= -->
       <div class="panel">
         <h3 style="margin:0 0 10px 0">Ủng hộ tác giả</h3>
         <p style="color:var(--muted);font-size:14px">Quét QR hoặc chuyển khoản VietinBank để ủng hộ XMOD phát triển mod nhanh hơn.</p>
         <div style="display:flex;gap:8px;align-items:center;margin-top:10px">
+          <!-- SỬA QR CODE VÀ THÔNG TIN TÀI KHOẢN -->
           <img src="https://i.postimg.cc/YqG9JCtp/i-Pay-Fri-Aug-22-10-47-44-GMT-07-00-2025.jpg" alt="QR" style="width:110px;height:110px;border-radius:8px;object-fit:cover;border:2px solid rgba(255,255,255,0.04)">
           <div style="font-size:14px;color:var(--muted)">
             <strong>VietinBank</strong><br>
@@ -187,21 +199,39 @@
   </div>
 
 <script>
-/* =========================
-   DỮ LIỆU CẦN SỬA: MODS
-   - Mảng MODS chứa danh sách mod hiện có
-   - Mỗi mod: id, title, desc, thumb (ảnh), link (tải)
-   - Sửa hoặc thêm mod ở đây => giao diện + gợi ý skin tự cập nhật
-   ========================= */
+/* =============================================
+   QUAN TRỌNG: DANH SÁCH MOD - DỄ SỬA NHẤT
+   - Thêm/sửa/xóa mod tại đây
+   - Mỗi mod cần: id, title, desc, thumb, link
+   ============================================= */
 const MODS = [
-  { id:"m1", title:"Nakroth Tử Lôi Thần Ngưu", desc:"Hiệu ứng sấm sét tím, ulti hoành tráng", thumb:"https://i.postimg.cc/qv9G4yx7/skin-lien-quan-1.jpg", link:"https://gofile.io/d/45ZG6L" },
-  { id:"m2", title:"Allain Gojo Satoru", desc:"Mod Allain biến thành Gojo - hiệu ứng ánh sáng", thumb:"https://i.postimg.cc/qMpJDFfJ/skin-moi-lien-quan-3-c5bbe99eb1.png", link:"https://gofile.io/d/xxxx" },
-  { id:"m3", title:"Resources 17.8 Pack", desc:"Full resources cập nhật 17.8", thumb:"https://i.postimg.cc/J4FFHy5f/folder-la-gi.jpg", link:"https://gofile.io/d/45ZG6L" }
+  { 
+    id:"m1", 
+    title:"Nakroth Tử Lôi Thần Ngưu",           // TÊN MOD
+    desc:"Hiệu ứng sấm sét tím, ulti hoành tráng", // MÔ TẢ
+    thumb:"https://i.postimg.cc/qv9G4yx7/skin-lien-quan-1.jpg", // ẢNH THUMBNAIL
+    link:"https://gofile.io/d/45ZG6L"            // LINK TẢI
+  },
+  { 
+    id:"m2", 
+    title:"Allain Gojo Satoru", 
+    desc:"Mod Allain biến thành Gojo - hiệu ứng ánh sáng", 
+    thumb:"https://i.postimg.cc/qMpJDFfJ/skin-moi-lien-quan-3-c5bbe99eb1.png", 
+    link:"https://gofile.io/d/xxxx" 
+  },
+  { 
+    id:"m3", 
+    title:"Resources 17.8 Pack", 
+    desc:"Full resources cập nhật 17.8", 
+    thumb:"https://i.postimg.cc/J4FFHy5f/folder-la-gi.jpg", 
+    link:"https://gofile.io/d/45ZG6L" 
+  }
+  // THÊM MOD MỚI Ở ĐÂY THEO ĐỊNH DẠNG TƯƠNG TỰ
 ];
 
-/* =========================
-   HỖ TRỢ CHÍNH: render list mod sang sidebar
-   ========================= */
+/* =============================================
+   HỆ THỐNG TẠO DANH SÁCH MOD TỰ ĐỘNG
+   ============================================= */
 const modsListEl = document.getElementById("modsList");
 function renderMods(){
   modsListEl.innerHTML = "";
@@ -219,16 +249,16 @@ function renderMods(){
         <button class="tiny-btn" onclick="openLink('${m.link}')">Tải</button>
       </div>
     `;
-    // click vào card sẽ gửi 1 message chứa mod chi tiết vào chat
+    // Click vào card sẽ hiển thị mod trong chat
     el.addEventListener("click", ()=> showModInChat(m));
     modsListEl.appendChild(el);
   })
 }
-renderMods();
+renderMods(); // Tạo danh sách mod
 
-/* =========================
-   UTILS: open / copy
-   ========================= */
+/* =============================================
+   TIỆN ÍCH: MỞ LINK VÀ SAO CHÉP
+   ============================================= */
 function openLink(url){
   window.open(url, "_blank");
 }
@@ -240,35 +270,31 @@ function copyLink(url){
   });
 }
 
-/* =========================
-   CHAT CORE
-   - messages stored in localStorage (history)
-   - addUserMsg / addBotMsg helpers
-   ========================= */
+/* =============================================
+   HỆ THỐNG CHAT - LƯU TRỮ TIN NHẮN
+   ============================================= */
 const messagesEl = document.getElementById("messages");
-const STORAGE_KEY = "xmod_chat_history_v1";
+const STORAGE_KEY = "xmod_chat_history_v1"; // Tên key lưu trữ
 
-// load history
+// Tải lịch sử chat từ trình duyệt
 let HISTORY = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
 HISTORY.forEach(item=>{
   appendMessageToDom(item);
 });
 scrollToBottom();
 
-// helper: append to DOM and optionally save
+// Hàm hỗ trợ hiển thị tin nhắn
 function appendMessageToDom(item){
   const div = document.createElement("div");
   div.className = "bubble " + (item.sender==="user" ? "user" : "bot");
-  // meta (optional)
   if(item.meta){ div.innerHTML = `<div class="meta">${item.meta}</div>` + item.html; }
   else div.innerHTML = item.html;
-  // support clickable content (links, images, cards already in html)
   messagesEl.appendChild(div);
   scrollToBottom();
 }
 function saveToHistory(obj){
   HISTORY.push(obj);
-  if(HISTORY.length>200) HISTORY.shift(); // limit history size
+  if(HISTORY.length>200) HISTORY.shift(); // Giới hạn 200 tin nhắn
   localStorage.setItem(STORAGE_KEY, JSON.stringify(HISTORY));
 }
 function addUserMsg(text){
@@ -284,22 +310,17 @@ function addBotMsg(html, meta){
 function scrollToBottom(){
   setTimeout(()=> messagesEl.scrollTop = messagesEl.scrollHeight, 80);
 }
-/* escape html to show user text safely */
 function escapeHtml(str){
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
 }
 
-/* =========================
-   BOT LOGIC
-   - command handling
-   - gợi ý skin từ MODS array
-   - show mod card inside chat (image + desc + btn)
-   - random fun replies
-   ========================= */
+/* =============================================
+   BOT LOGIC - CÁC LỆNH CÓ THỂ SỬA
+   ============================================= */
 function handleCommand(input){
   const cmd = input.trim().toLowerCase();
 
-  // common commands:
+  // LỆNH HELP - Hiển thị trợ giúp
   if(cmd==="help"){
     const html = `
       <b>Danh sách lệnh:</b><br>
@@ -315,16 +336,16 @@ function handleCommand(input){
     return;
   }
 
+  // LỆNH LAYMOD - Lấy mod mới nhất (mod đầu tiên trong danh sách)
   if(cmd==="laymod"){
-    // trả link mod "mới nhất" - ở đây lấy mod đầu tiên MODS[0]
     const m = MODS[0];
     const html = renderModCardHtml(m);
     addBotMsg(`📥 Link mod mới nhất:<br>${html}`);
     return;
   }
 
+  // LỆNH ALLMODS - Hiển thị tất cả mod
   if(cmd==="allmods"){
-    // show all mods as cards
     let html = `<b>Danh sách mod hiện có:</b><br>`;
     MODS.forEach(m=>{
       html += renderModCardHtml(m) + "<br>";
@@ -333,15 +354,17 @@ function handleCommand(input){
     return;
   }
 
+  // LỆNH GỢI Ý SKIN - Chọn ngẫu nhiên 1 mod
   if(cmd==="gợi ý skin" || cmd==="goi y skin" || cmd==="goiyskin"){
-    // random suggestion but only from existing mods (MODS array)
     const m = MODS[Math.floor(Math.random()*MODS.length)];
     addBotMsg(`🤔 Gợi ý cho bạn: <b>${m.title}</b><br>${renderModCardHtml(m)}`);
     return;
   }
 
+  // =============================================
+  //    CÓ THỂ SỬA: THÔNG TIN DONATE
+  // =============================================
   if(cmd==="donate"){
-    // show QR image + account info
     const html = `
       <b>💝 Ủng hộ XMOD</b><br>
       <img src="https://i.postimg.cc/YqG9JCtp/i-Pay-Fri-Aug-22-10-47-44-GMT-07-00-2025.jpg" alt="QR" style="width:180px;border-radius:8px;margin-top:8px"><br>
@@ -351,40 +374,47 @@ function handleCommand(input){
     return;
   }
 
+  // =============================================
+  //    CÓ THỂ SỬA: THÔNG BÁO UPDATE
+  // =============================================
   if(cmd==="update"){
     addBotMsg("🆕 Cập nhật: Đã thêm mod <b>" + MODS[0].title + "</b> và pack Resources 17.8.");
     return;
   }
 
+  // LỆNH YOUTUBE
   if(cmd==="youtube"){
     addBotMsg(`🎬 Kênh YouTube: <a href="https://youtube.com/@xmod-b7i" target="_blank">XMOD Official</a>`);
     return;
   }
 
+  // =============================================
+  //    CÓ THỂ SỬA: CÁC CÂU CHÉM GIÓ
+  // =============================================
   if(cmd==="chém gió" || cmd==="chem gio"){
     const jokes = [
       "⚡ Nakroth mà ăn sét Toro thì gánh team luôn!",
       "Mình là XMOD GPT, chuyên gia mod ảo nhưng thực tế thì... mình cũng cần coffee ☕",
       "Bạn mod nhiều thì đừng quên donate để mình khỏi ăn mì gói 😆"
+      // THÊM CÂU CHÉM GIÓ Ở ĐÂY
     ];
     addBotMsg(jokes[Math.floor(Math.random()*jokes.length)]);
     return;
   }
 
-  // fuzzy match: nếu user nhập tên mod có chứa phần keyword, show mod
+  // Tìm kiếm mod theo tên
   const found = MODS.find(m=> m.title.toLowerCase().includes(cmd));
   if(found){
     addBotMsg(`🔎 Mình tìm thấy mod phù hợp:<br>${renderModCardHtml(found)}`);
     return;
   }
 
-  // default: small AI-like reply (fun)
+  // Trả lời mặc định khi không hiểu lệnh
   addBotMsg("Mình chưa hiểu lệnh này 🤔. Gõ <b>help</b> để xem lệnh hoặc thử tên mod bạn muốn.");
 }
 
-/* helper: render a mod card as HTML to show inside chat */
+/* Hàm tạo HTML card cho mod trong chat */
 function renderModCardHtml(m){
-  // Note: keep HTML content safe; thumb and link are controlled by you (MODS array)
   return `
     <div style="display:flex;gap:10px;align-items:center;">
       <div style="width:86px;height:64px;flex:0 0 86px;border-radius:8px;overflow:hidden;border:2px solid rgba(255,255,255,0.04)">
@@ -402,9 +432,9 @@ function renderModCardHtml(m){
   `;
 }
 
-/* =========================
-   UI EVENTS: gửi message, quick buttons
-   ========================= */
+/* =============================================
+   XỬ LÝ SỰ KIỆN: GỬI TIN NHẮN
+   ============================================= */
 const inp = document.getElementById("inp");
 const sendBtn = document.getElementById("sendBtn");
 sendBtn.addEventListener("click", onSend);
@@ -415,19 +445,21 @@ function onSend(){
   if(!text) return;
   addUserMsg(text);
   inp.value="";
-  // small typing indicator
+  
+  // Hiệu ứng "đang gõ"
   const typingDiv = document.createElement("div");
   typingDiv.className = "bubble bot";
   typingDiv.innerHTML = `<div class="typing"></div>`;
   messagesEl.appendChild(typingDiv);
   scrollToBottom();
+  
   setTimeout(()=> {
     typingDiv.remove();
     handleCommand(text);
-  }, 600 + Math.random()*800); // random delay for natural feel
+  }, 600 + Math.random()*800); // Delay ngẫu nhiên
 }
 
-/* bind quick chips */
+/* Xử lý các nút lệnh nhanh */
 document.querySelectorAll(".chip").forEach(el=>{
   el.addEventListener("click", ()=>{
     const c = el.getAttribute("data-cmd");
@@ -436,41 +468,33 @@ document.querySelectorAll(".chip").forEach(el=>{
   });
 });
 
-/* show mod details in chat when click sidebar */
+/* Hiển thị chi tiết mod khi click vào sidebar */
 function showModInChat(m){
   addBotMsg(renderModCardHtml(m), "Thông tin mod");
 }
 
-/* add user msg helper (wrap and save) */
-function addUserMsg(text){
-  const obj = {sender:"user", html: escapeHtml(text)};
-  appendMessageToDom(obj);
-  saveToHistory(obj);
-}
-
-/* bind copy history / clear (optional admin) */
+/* =============================================
+   PHÍM TẮT: CTRL+K XÓA LỊCH SỬ CHAT
+   ============================================= */
 window.addEventListener("keydown", (e)=>{
-  // CTRL+K clears chat (for dev) - comment out if not wanted
   if(e.ctrlKey && e.key.toLowerCase()==='k'){
-    if(confirm("Xóa lịch sử chat?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); }
+    if(confirm("Xóa lịch sử chat?")) { 
+      localStorage.removeItem(STORAGE_KEY); 
+      location.reload(); 
+    }
   }
 });
 
-/* =========================
-   Init: welcome message if chat empty
-   ========================= */
+/* =============================================
+   TIN NHẮN CHÀO MỪNG KHI LẦN ĐẦU TRUY CẬP
+   ============================================= */
 if(HISTORY.length===0){
   addBotMsg("Xin chào 👋! Mình là <b>XMOD Chat</b> — gõ <b>help</b> để xem lệnh. Bạn có thể bấm các nút nhanh bên trên.");
 }
 
-/* =========================
-   TINY: expose for console testing
-   ========================= */
+/* Cho phép truy cập từ console để test */
 window.XMOD = {MODS, addBotMsg, addUserMsg, renderMods, copyLink, openLink};
 
-/* =========================
-   END OF SCRIPT
-   ========================= */
 </script>
 </body>
-  </html>
+</html>
