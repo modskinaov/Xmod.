@@ -1,300 +1,113 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Download Mod</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XMOD - Trang Mod Liên Quân</title>
+  <style>
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg,#3a0ca3,#7209b7,#f72585);
+      color:#fff;
+      min-height:100vh;
+    }
 
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+    /* Header */
+    .header {
+      text-align:center;
+      padding:30px 20px;
+      background:rgba(0,0,0,0.4);
+      box-shadow:0 5px 20px rgba(0,0,0,0.5);
+    }
+    .header img {
+      width:80px;height:80px;
+      border-radius:50%;
+      border:3px solid #f72585;
+      margin-bottom:10px;
+    }
+    .header h1 {
+      font-size:28px;
+      font-weight:bold;
+      letter-spacing:2px;
+      text-shadow:0 0 10px #f72585, 0 0 20px #7209b7;
+    }
 
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            overflow: hidden;
-        }
+    /* Container */
+    .container {padding:20px;max-width:800px;margin:auto;}
 
-        .header {
-            background: #2c3e50;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
+    .card {
+      background:rgba(255,255,255,0.1);
+      border-radius:15px;
+      padding:20px;
+      margin-bottom:20px;
+      box-shadow:0 4px 15px rgba(0,0,0,0.3);
+      transition:0.3s;
+      cursor:pointer;
+    }
+    .card:hover {transform:translateY(-5px);box-shadow:0 8px 30px rgba(0,0,0,0.6);}
+    .card h3 {margin-bottom:10px;font-size:20px;}
+    .card p {font-size:14px;color:#ddd;}
 
-        .avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: #3498db;
-            margin: 0 auto 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            color: white;
-            overflow: hidden;
-        }
+    /* Nút */
+    .btn {
+      display:inline-block;
+      padding:10px 20px;
+      border-radius:8px;
+      margin-top:10px;
+      text-decoration:none;
+      font-weight:bold;
+      background:#7209b7;
+      color:#fff;
+      transition:0.3s;
+      box-shadow:0 0 10px #f72585;
+    }
+    .btn:hover {
+      background:#f72585;
+      box-shadow:0 0 20px #f72585,0 0 40px #7209b7;
+    }
 
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .site-title {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .content {
-            padding: 30px 20px;
-            background: #f8f9fa;
-        }
-
-        .card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: center;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-        }
-
-        .card:active {
-            transform: scale(0.98);
-        }
-
-        .card-icon {
-            font-size: 30px;
-            margin-bottom: 10px;
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-
-        .card-desc {
-            font-size: 14px;
-            color: #7f8c8d;
-        }
-
-        .mod-menu {
-            display: none;
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .mod-option {
-            padding: 12px;
-            background: #ecf0f1;
-            margin: 8px 0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: left;
-        }
-
-        .mod-option:hover {
-            background: #3498db;
-            color: white;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #7f8c8d;
-            font-size: 12px;
-            background: white;
-        }
-
-        .qr-popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .qr-content {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 300px;
-            width: 90%;
-        }
-
-        .qr-image {
-            width: 200px;
-            height: 200px;
-            margin: 10px auto;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-        }
-
-        .close-btn {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-        /* Responsive */
-        @media (max-width: 480px) {
-            body { padding: 0; }
-            .container { border-radius: 0; }
-        }
-    </style>
+    /* Footer */
+    .footer {
+      text-align:center;
+      padding:15px;
+      background:rgba(0,0,0,0.5);
+      margin-top:30px;
+      font-size:14px;
+      color:#ccc;
+    }
+    .footer a {color:#f72585;text-decoration:none;font-weight:bold;}
+  </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="avatar">
-                <!-- SỬA LINK ẢNH TẠI ĐÂY -->
-                <img src="https://i.postimg.cc/T3SYQ8zK/Polish-20250822-083928173.png" alt="Avatar">
-            </div>
-            <!-- SỬA TÊN WEBSITE TẠI ĐÂY -->
-            <div class="site-title">Xmod</div>
-        </div>
+  <!-- Header -->
+  <div class="header">
+    <img src="https://i.postimg.cc/T3SYQ8zK/Polish-20250822-083928173.png" alt="Logo">
+    <h1>⚡ XMOD - Liên Quân Mod ⚡</h1>
+    <p>Kho Modskin Free & Donate 💝</p>
+  </div>
 
-        <!-- Nội dung chính -->
-        <div class="content">
-            <!-- Card Donate - Bấm vào sẽ hiện QR -->
-            <div class="card" onclick="showQRCode()">
-                <div class="card-icon">💝</div>
-                <div class="card-title">DONATE</div>
-                <div class="card-desc">Ủng hộ admin để ra mod nhanh hơn</div>
-            </div>
-
-            <!-- Card Chọn Mod -->
-            <div class="card" onclick="toggleModMenu()">
-                <div class="card-icon">📱</div>
-                <div class="card-title">CHỌN MOD</div>
-                <div class="card-desc">Click để chọn một bản mod</div>
-            </div>
-
-            <!-- Menu Mod (ẩn ban đầu) -->
-            <div class="mod-menu" id="modMenu">
-                <!-- SỬA CÁC LINK MOD TẠI ĐÂY -->
-                <div class="mod-option" onclick="openModLink('https://gofile.io/d/45ZG6L')">
-                    📥 Lấy Mod
-                </div>
-                <div class="mod-option" onclick="openModLink('https://youtube.com/@xmod-b7i?si=71VtBI7t5rnKKvvD')">
-                    📥 Đang Cập Nhật  
-                </div>
-                <div class="mod-option" onclick="openModLink('https://youtube.com/@xmod-b7i?si=71VtBI7t5rnKKvvD')">
-                    📥 Đang cập nhật 
-                </div>
-                <div class="mod-option" onclick="openModLink('https://gofile.io/d/45ZG6L')">
-                    📥 Resouses 17.8
-                </div>
-                <!-- THÊM MOD MỚI TẠI ĐÂY -->
-                <!-- 
-                <div class="mod-option" onclick="openModLink('LINK_CUA_BAN')">
-                    🎯 TÊN MOD MỚI
-                </div>
-                -->
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            <!-- SỬA TÊN CỦA BẠN TẠI ĐÂY -->
-            ©Xmod | Ver 1.0.0
-        </div>
+  <!-- Container -->
+  <div class="container">
+    <!-- Donate -->
+    <div class="card">
+      <h3>💝 Donate</h3>
+      <p>Ủng hộ admin để ra mod nhanh hơn</p>
+      <a class="btn" href="https://i.postimg.cc/YqG9JCtp/i-Pay-Fri-Aug-22-10-47-44-GMT-07-00-2025.jpg" target="_blank">Quét QR</a>
     </div>
 
-    <!-- Popup hiển thị QR Code -->
-    <div class="qr-popup" id="qrPopup">
-        <div class="qr-content">
-            <h3>💝 QR CODE DONATE</h3>
-            <p>Quét mã để ủng hộ</p>
-            <!-- QR Code của bạn -->
-            <img class="qr-image" src="https://i.postimg.cc/V6NZQSTK/Polish-20250822-151434219.jpg" alt="QR Code" id="qrImage">
-            <p><small>Cảm ơn bạn đã ủng hộ! ❤️</small></p>
-            <button class="close-btn" onclick="hideQRCode()">ĐÓNG</button>
-        </div>
+    <!-- Mod List -->
+    <div class="card">
+      <h3>📥 Lấy Mod Có Resouses 17.8</h3>
+      <p>Skin Nakroth kết hợp hiệu ứng Toro sấm sét tím cực đẹp.</p>
+      <a class="btn" href="https://gofile.io/d/45ZG6L" target="_blank">Tải Mod</a>
     </div>
 
-    <script>
-        // ========== SỬA LINK ẢNH QR CODE TẠI ĐÂY ==========
-        function showQRCode() {
-            // Link ảnh QR code của bạn
-            const qrImageUrl = "https://i.postimg.cc/YqG9JCtp/i-Pay-Fri-Aug-22-10-47-44-GMT-07-00-2025.jpg";
-            
-            document.getElementById('qrImage').src = qrImageUrl;
-            document.getElementById('qrPopup').style.display = 'flex';
-        }
+   
 
-        function hideQRCode() {
-            document.getElementById('qrPopup').style.display = 'none';
-        }
-
-        // ========== KHÔNG CẦN SỬA PHẦN DƯỚI ==========
-        function openModLink(url) {
-            window.open(url, '_blank');
-        }
-
-        function toggleModMenu() {
-            const menu = document.getElementById('modMenu');
-            if (menu.style.display === 'none' || menu.style.display === '') {
-                menu.style.display = 'block';
-            } else {
-                menu.style.display = 'none';
-            }
-        }
-
-        // Đóng popup khi click ngoài
-        document.getElementById('qrPopup').addEventListener('click', function(e) {
-            if (e.target === this) {
-                hideQRCode();
-            }
-        });
-
-        // Hiệu ứng loading
-        window.addEventListener('load', function() {
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.5s ease';
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-            }, 100);
-        });
-    </script>
+  <!-- Footer -->
+  <div class="footer">
+    © 2025 XMOD | <a href="https://youtube.com/@xmod-b7i" target="_blank">YouTube</a>
+  </div>
 </body>
 </html>
