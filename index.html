@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Web Của Tôi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #3498db;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .site-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 30px 20px;
+            background: #f8f9fa;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .card:active {
+            transform: scale(0.98);
+        }
+
+        .card-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .card-desc {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        .mod-menu {
+            display: none;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .mod-option {
+            padding: 12px;
+            background: #ecf0f1;
+            margin: 8px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .mod-option:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 12px;
+            background: white;
+        }
+
+        .qr-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .qr-content {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 300px;
+            width: 90%;
+        }
+
+        .qr-image {
+            width: 200px;
+            height: 200px;
+            margin: 10px auto;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .close-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        /* Responsive */
+        @media (max-width: 480px) {
+            body { padding: 0; }
+            .container { border-radius: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="avatar">
+                <!-- SỬA LINK ẢNH TẠI ĐÂY -->
+                <img src="https://i.postimg.cc/T3SYQ8zK/Polish-20250822-083928173.png" alt="Avatar">
+            </div>
+            <!-- SỬA TÊN WEBSITE TẠI ĐÂY -->
+            <div class="site-title">Xmod</div>
+        </div>
+
+        <!-- Nội dung chính -->
+        <div class="content">
+            <!-- Card Donate - Bấm vào sẽ hiện QR -->
+            <div class="card" onclick="showQRCode()">
+                <div class="card-icon">💝</div>
+                <div class="card-title">DONATE</div>
+                <div class="card-desc">Ủng hộ admin để ra mod nhanh hơn</div>
+            </div>
+
+            <!-- Card Chọn Mod -->
+            <div class="card" onclick="toggleModMenu()">
+                <div class="card-icon">📱</div>
+                <div class="card-title">CHỌN MOD</div>
+                <div class="card-desc">Click để chọn một bản mod</div>
+            </div>
+
+            <!-- Menu Mod (ẩn ban đầu) -->
+            <div class="mod-menu" id="modMenu">
+                <!-- SỬA CÁC LINK MOD TẠI ĐÂY -->
+                <div class="mod-option" onclick="openModLink('https://www.mediafire.com/file/8exrrkge8hhms7o/NAKROTH_TLTN-XMOD.zip/file')">
+                    📥 NAKROTH TỬ LÔI THẦN NGƯU
+                </div>
+                <div class="mod-option" onclick="openModLink('https://link-mod-2.com')">
+                    📥 MOD APK Game 2  
+                </div>
+                <div class="mod-option" onclick="openModLink('https://link-mod-3.com')">
+                    📥 MOD APK Game 3
+                </div>
+                <div class="mod-option" onclick="openModLink('https://link-mod-4.com')">
+                    📥 Resouses 17.8
+                </div>
+                <!-- THÊM MOD MỚI TẠI ĐÂY -->
+                <!-- 
+                <div class="mod-option" onclick="openModLink('LINK_CUA_BAN')">
+                    🎯 TÊN MOD MỚI
+                </div>
+                -->
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <!-- SỬA TÊN CỦA BẠN TẠI ĐÂY -->
+            ©TenCuaBan | Ver 1.0.0
+        </div>
+    </div>
+
+    <!-- Popup hiển thị QR Code -->
+    <div class="qr-popup" id="qrPopup">
+        <div class="qr-content">
+            <h3>💝 QR CODE DONATE</h3>
+            <p>Quét mã để ủng hộ</p>
+            <!-- QR Code của bạn -->
+            <img class="qr-image" src="https://i.postimg.cc/YqG9JCtp/i-Pay-Fri-Aug-22-10-47-44-GMT-07-00-2025.jpg" alt="QR Code" id="qrImage">
+            <p><small>Cảm ơn bạn đã ủng hộ! ❤️</small></p>
+            <button class="close-btn" onclick="hideQRCode()">ĐÓNG</button>
+        </div>
+    </div>
+
+    <script>
+        // ========== SỬA LINK ẢNH QR CODE TẠI ĐÂY ==========
+        function showQRCode() {
+            // Link ảnh QR code của bạn
+            const qrImageUrl = "https://i.postimg.cc/YqG9JCtp/i-Pay-Fri-Aug-22-10-47-44-GMT-07-00-2025.jpg";
+            
+            document.getElementById('qrImage').src = qrImageUrl;
+            document.getElementById('qrPopup').style.display = 'flex';
+        }
+
+        function hideQRCode() {
+            document.getElementById('qrPopup').style.display = 'none';
+        }
+
+        // ========== KHÔNG CẦN SỬA PHẦN DƯỚI ==========
+        function openModLink(url) {
+            window.open(url, '_blank');
+        }
+
+        function toggleModMenu() {
+            const menu = document.getElementById('modMenu');
+            if (menu.style.display === 'none' || menu.style.display === '') {
+                menu.style.display = 'block';
+            } else {
+                menu.style.display = 'none';
+            }
+        }
+
+        // Đóng popup khi click ngoài
+        document.getElementById('qrPopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideQRCode();
+            }
+        });
+
+        // Hiệu ứng loading
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
