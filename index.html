@@ -12,28 +12,31 @@
      CÓ THỂ SỬA: MÀU SẮC CHỦ ĐẠO
      =========================== */
   :root{
-    --bg1:#0b0326;           /* Màu nền chính - tím đậm */
-    --grad1:#3a0ca3;         /* Gradient 1 - tím */
-    --grad2:#7209b7;         /* Gradient 2 - tím hồng */
-    --grad3:#f72585;         /* Gradient 3 - hồng */
-    --accent: #f72585;       /* Màu nhấn chính - hồng */
-    --card-bg: rgba(255,255,255,0.06);  /* Nền card trong suốt */
-    --glass: rgba(255,255,255,0.04);    /* Hiệu ứng kính */
-    --muted:#c9c2d9;         /* Màu chữ nhạt */
-    --bot:#1f2240;           /* Màu nền bot */
+    --bg1:#0a0a0a;
+    --bg2:#1a1a1a;
+    --accent: #ffffff;
+    --accent2: #666666;
+    --card-bg: rgba(255,255,255,0.08);
+    --glass: rgba(255,255,255,0.05);
+    --muted:#cccccc;
+    --border: rgba(255,255,255,0.1);
+    --grad2: #7209b7;
+    --grad3: #f72585;
   }
+  
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
     margin:0;
-    font-family: "Segoe UI", Roboto, Arial;
+    font-family: "Segoe UI", Roboto, "Inter", Arial, sans-serif;
     color:#fff;
-    background: linear-gradient(135deg,var(--grad1),var(--grad2),var(--grad3));
+    background: linear-gradient(135deg, var(--bg1), var(--bg2), #2a2a2a);
     -webkit-font-smoothing:antialiased;
     display:flex;
     flex-direction:column;
     min-height:100vh;
   }
+
 
   /* ===========================
      HEADER - PHẦN ĐẦU TRANG
@@ -64,16 +67,19 @@
   /* ===========================
      LAYOUT CHÍNH
      =========================== */
-  .wrap{display:flex;gap:20px;padding:20px;flex:1;max-width:1200px;margin:0 auto;width:100%}
-  .left{
-    flex:1.2;
-    display:flex;
-    flex-direction:column;
-    min-height:400px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
-    border-radius:14px;padding:14px;backdrop-filter: blur(6px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
-  }
+  .wrap{display:flex;gap:20px;padding:20px;flex:1;max-width:800px;margin:0 auto;width:100%}
+.left{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  min-height:400px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+  border-radius:14px;padding:14px;backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+}
+.right{
+  display:none; /* Ẩn sidebar */
+}
 
   /* PHẦN CHAT */
   .chat-window{flex:1;display:flex;flex-direction:column;overflow:hidden;border-radius:10px;background:linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.06));padding:12px}
@@ -112,6 +118,16 @@
   .mod-info p{margin:0;color:var(--muted);font-size:13px}
   .mod-actions{margin-left:auto;display:flex;gap:8px}
   .tiny-btn{padding:8px 10px;border-radius:8px;border:none;background:#7209b7;color:#fff;cursor:pointer;font-weight:700}
+  .music-control{position:fixed; bottom:20px; right:20px; background:var(--card-bg); padding:12px;border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,0.4);backdrop-filter:blur(10px); display:none; z-index:1000; min-width:250px;}
+  .music-control.show{display:block}
+  .music-title{font-size:14px; font-weight:600; color:#fff; margin-bottom:8px;}
+  .music-buttons{display:flex; gap:8px; align-items:center;}
+  .music-btn{padding:6px 10px; border:none; border-radius:6px;background:linear-gradient(90deg,var(--grad2),var(--grad3));color:#fff; cursor:pointer; font-size:11px; font-weight:600;}
+  .volume-control{display:flex; align-items:center; gap:8px; margin-top:8px;}
+  .volume-slider{flex:1; height:4px; background:rgba(255,255,255,0.2); border-radius:2px;}
+  @media(max-width:980px){
+  .music-control{bottom:10px; right:10px; min-width:220px;}
+}  /* ← THÊM DẤU } NÀY */
 
   /* RESPONSIVE CHO MOBILE */
   @media(max-width:980px){
@@ -135,10 +151,26 @@
     </div>
     <div class="hdr-actions">
       <!-- SỬA LINK WEBSITE VÀ YOUTUBE -->
-      <a href="https://modskinaov.github.io/Xmod" target="_blank">Website</a>
+      <a href="https://modskinaov.github.io/Xmod." target="_blank">Website</a>
       <a href="https://youtube.com/@xmod-b7i" target="_blank">YouTube</a>
     </div>
   </div>
+  
+  
+  <!-- ĐIỀU KHIỂN NHẠC NỀN - MỚI THÊM -->
+<div class="music-control" id="musicControl">
+  <div class="music-title" id="musicTitle">🎵 Chưa có nhạc</div>
+  <div class="music-buttons">
+    <button class="music-btn" id="playBtn">▶️ Play</button>
+    <button class="music-btn" id="pauseBtn">⏸️ Pause</button>
+    <button class="music-btn" id="stopBtn">⏹️ Stop</button>
+  </div>
+  <div class="volume-control">
+    <span>🔊</span>
+    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+  </div>
+</div>
+
 
   <!-- LAYOUT CHÍNH -->
   <div class="wrap">
@@ -156,6 +188,9 @@
           <div class="chip" data-cmd="update">update</div>
           <div class="chip" data-cmd="donate">donate</div>
           <div class="chip" data-cmd="chém gió">chém gió</div>
+          <!-- 2 NÚT MỚI THÊM -->
+         <div class="chip" data-cmd="chọn nhạc">chọn nhạc</div>
+         <div class="chip" data-cmd="xóa lịch sử">xóa lịch sử</div>
         </div>
 
         <!-- Khu vực hiển thị tin nhắn -->
@@ -173,7 +208,7 @@
     <div class="right">
       <!-- Panel danh sách mod -->
       <div class="panel">
-        <h3 style="margin:0 0 10px 0">Các mod hiện có</h3>
+        <h3 style="margin:0 0 10px 0">Các mod hiện đang có</h3>
         <div id="modsList">
           <!-- Danh sách mod sẽ được tự động tạo từ JavaScript -->
         </div>
@@ -191,12 +226,15 @@
           <div style="font-size:14px;color:var(--muted)">
             <strong>VietinBank</strong><br>
             0123456789<br>
-            NGUYEN VAN A
+            Mẹ Tôi:)
           </div>
         </div>
       </div>
     </div>
   </div>
+  
+  <!-- AUDIO ELEMENT CHO NHẠC NỀN - MỚI THÊM -->
+<audio id="backgroundMusic" loop></audio>
 
 <script>
 /* =============================================
@@ -204,7 +242,22 @@
    - Thêm/sửa/xóa mod tại đây
    - Mỗi mod cần: id, title, desc, thumb, link
    ============================================= */
+   const MUSIC_LIST = [
+  {
+    id: "music1", title: "legendary ",
+    url: "https://www.dropbox.com/scl/fi/003fj25b92y8jio117ip9/Legends-Never-Die-ft.-Against-The-Current-Worlds-2017-League-of-Legends.mp3?rlkey=s3qb0nb4ypbjj4w8kqrzq1udy&st=xr6vsasb&dl=1" // ← SỬA LINK NHẠC TẠI ĐÂY
+  },
+  {
+    id: "music2", title: "đang update", 
+    url: "THAY_LINK_NHẠC_2_TẠI_ĐÂY.mp3" // ← SỬA LINK NHẠC TẠI ĐÂY
+  },
+  {
+    id: "music3", title: "đang update",
+    url: "THAY_LINK_NHẠC_3_TẠI_ĐÂY.mp3" // ← SỬA LINK NHẠC TẠI ĐÂY
+  }
+];
 const MODS = [
+   
   { 
     id:"m1", 
     title:"Nakroth Tử Lôi Thần Ngưu",           // TÊN MOD
@@ -253,6 +306,54 @@ function renderMods(){
     el.addEventListener("click", ()=> showModInChat(m));
     modsListEl.appendChild(el);
   })
+}
+// HỆ THỐNG NHẠC NỀN - MỚI THÊM
+const audioEl = document.getElementById("backgroundMusic");
+const musicControl = document.getElementById("musicControl");
+const musicTitle = document.getElementById("musicTitle");
+const playBtn = document.getElementById("playBtn");
+const pauseBtn = document.getElementById("pauseBtn");
+const stopBtn = document.getElementById("stopBtn");
+const volumeSlider = document.getElementById("volumeSlider");
+
+let currentMusicIndex = -1;
+audioEl.volume = 0.5;
+
+// Event listeners cho điều khiển nhạc
+playBtn.addEventListener("click", ()=> {
+  if(audioEl.src) {
+    audioEl.play().catch(e => console.log("Không thể phát nhạc:", e));
+    addBotMsg("🎵 Đã phát nhạc");
+  } else {
+    addBotMsg("⚠️ Chưa chọn nhạc. Gõ lệnh <b>chọn nhạc</b> để chọn.");
+  }
+});
+
+pauseBtn.addEventListener("click", ()=> {
+  audioEl.pause();
+  addBotMsg("⏸️ Đã tạm dừng nhạc");
+});
+
+stopBtn.addEventListener("click", ()=> {
+  audioEl.pause();
+  audioEl.currentTime = 0;
+  addBotMsg("⏹️ Đã dừng nhạc");
+});
+
+volumeSlider.addEventListener("input", ()=> {
+  audioEl.volume = volumeSlider.value / 100;
+});
+
+// Hàm chọn nhạc - MỚI THÊM
+function selectMusic(index) {
+  if(index >= 0 && index < MUSIC_LIST.length) {
+    currentMusicIndex = index;
+    const music = MUSIC_LIST[index];
+    audioEl.src = music.url;
+    musicTitle.textContent = `🎵 ${music.title}`;
+    musicControl.classList.add("show");
+    addBotMsg(`🎵 Đã chọn nhạc: <b>${music.title}</b><br>Bấm nút Play để phát nhạc.`);
+  }
 }
 renderMods(); // Tạo danh sách mod
 
@@ -310,6 +411,13 @@ function addBotMsg(html, meta){
 function scrollToBottom(){
   setTimeout(()=> messagesEl.scrollTop = messagesEl.scrollHeight, 80);
 }
+// HÀM XÓA LỊCH SỬ CHAT - MỚI THÊM
+function clearChatHistory() {
+  localStorage.removeItem(STORAGE_KEY);
+  messagesEl.innerHTML = "";
+  HISTORY = [];
+  addBotMsg("🗑️ Đã xóa toàn bộ lịch sử chat!");
+}
 function escapeHtml(str){
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
 }
@@ -330,7 +438,9 @@ function handleCommand(input){
       - <b>donate</b> : Hiển thị QR donate<br>
       - <b>update</b> : Thông báo cập nhật mới<br>
       - <b>youtube</b> : Link kênh XMOD<br>
-      - <b>chém gió</b> : Bot chém gió vui vẻ
+      - <b>chém gió</b> : Bot chém gió vui vẻ<br>
+      - <b>chọn nhạc</b> : Chọn nhạc nền cho website 🎵<br>
+      - <b>xóa lịch sử</b> : Xóa toàn bộ lịch sử chat 🗑️
     `;
     addBotMsg(html);
     return;
@@ -388,113 +498,41 @@ function handleCommand(input){
     return;
   }
 
-  // =============================================
-  //    CÓ THỂ SỬA: CÁC CÂU CHÉM GIÓ
-  // =============================================
-  if(cmd==="chém gió" || cmd==="chem gio"){
-    const jokes = [
-      "⚡ Nakroth mà ăn sét Toro thì gánh team luôn!",
-      "Mình là XMOD GPT, chuyên gia mod ảo nhưng thực tế thì... mình cũng cần coffee ☕",
-      "Bạn mod nhiều thì đừng quên donate để mình khỏi ăn mì gói 😆"
-      // THÊM CÂU CHÉM GIÓ Ở ĐÂY
-    ];
-    addBotMsg(jokes[Math.floor(Math.random()*jokes.length)]);
-    return;
-  }
-
-  // Tìm kiếm mod theo tên
-  const found = MODS.find(m=> m.title.toLowerCase().includes(cmd));
-  if(found){
-    addBotMsg(`🔎 Mình tìm thấy mod phù hợp:<br>${renderModCardHtml(found)}`);
-    return;
-  }
-
-  // Trả lời mặc định khi không hiểu lệnh
-  addBotMsg("Mình chưa hiểu lệnh này 🤔. Gõ <b>help</b> để xem lệnh hoặc thử tên mod bạn muốn.");
-}
-
-/* Hàm tạo HTML card cho mod trong chat */
-function renderModCardHtml(m){
-  return `
-    <div style="display:flex;gap:10px;align-items:center;">
-      <div style="width:86px;height:64px;flex:0 0 86px;border-radius:8px;overflow:hidden;border:2px solid rgba(255,255,255,0.04)">
-        <img src="${m.thumb}" style="width:100%;height:100%;object-fit:cover" alt="${m.title}">
-      </div>
-      <div style="flex:1">
-        <div style="font-weight:700">${m.title}</div>
-        <div style="color:#cbbfdc;font-size:13px;margin-top:6px">${m.desc}</div>
-        <div style="margin-top:8px;display:flex;gap:8px">
-          <a href="${m.link}" target="_blank" style="padding:8px 12px;border-radius:8px;background:linear-gradient(90deg,#7209b7,#f72585);color:#fff;font-weight:700;text-decoration:none">Tải</a>
-          <button onclick="copyLink('${m.link}')" style="padding:8px 12px;border-radius:8px;border:none;background:#2b2b45;color:#fff;cursor:pointer">Sao chép link</button>
-        </div>
-      </div>
-    </div>
+   // LỆNH CHỌN NHẠC - MỚI THÊM
+if(cmd==="chọn nhạc" || cmd==="chon nhac" || cmd==="music"){
+  let html = `
+    <b>🎵 Danh sách nhạc nền:</b><br>
+    Chọn nhạc bằng cách gõ số (VD: gõ "1" để chọn nhạc 1)<br><br>
   `;
-}
-
-/* =============================================
-   XỬ LÝ SỰ KIỆN: GỬI TIN NHẮN
-   ============================================= */
-const inp = document.getElementById("inp");
-const sendBtn = document.getElementById("sendBtn");
-sendBtn.addEventListener("click", onSend);
-inp.addEventListener("keypress", (e)=>{ if(e.key==="Enter") onSend(); });
-
-function onSend(){
-  const text = inp.value.trim();
-  if(!text) return;
-  addUserMsg(text);
-  inp.value="";
-  
-  // Hiệu ứng "đang gõ"
-  const typingDiv = document.createElement("div");
-  typingDiv.className = "bubble bot";
-  typingDiv.innerHTML = `<div class="typing"></div>`;
-  messagesEl.appendChild(typingDiv);
-  scrollToBottom();
-  
-  setTimeout(()=> {
-    typingDiv.remove();
-    handleCommand(text);
-  }, 600 + Math.random()*800); // Delay ngẫu nhiên
-}
-
-/* Xử lý các nút lệnh nhanh */
-document.querySelectorAll(".chip").forEach(el=>{
-  el.addEventListener("click", ()=>{
-    const c = el.getAttribute("data-cmd");
-    inp.value = c;
-    inp.focus();
+  MUSIC_LIST.forEach((music, index) => {
+    html += `<b>${index + 1}</b>. ${music.title}<br>`;
   });
-});
-
-/* Hiển thị chi tiết mod khi click vào sidebar */
-function showModInChat(m){
-  addBotMsg(renderModCardHtml(m), "Thông tin mod");
+  html += `<br><i>Sau khi chọn, dùng nút điều khiển ở góc dưới để phát nhạc.</i>`;
+  addBotMsg(html);
+  return;
 }
 
-/* =============================================
-   PHÍM TẮT: CTRL+K XÓA LỊCH SỬ CHAT
-   ============================================= */
-window.addEventListener("keydown", (e)=>{
-  if(e.ctrlKey && e.key.toLowerCase()==='k'){
-    if(confirm("Xóa lịch sử chat?")) { 
-      localStorage.removeItem(STORAGE_KEY); 
-      location.reload(); 
-    }
-  }
-});
-
-/* =============================================
-   TIN NHẮN CHÀO MỪNG KHI LẦN ĐẦU TRUY CẬP
-   ============================================= */
-if(HISTORY.length===0){
-  addBotMsg("Xin chào 👋! Mình là <b>XMOD Chat</b> — gõ <b>help</b> để xem lệnh. Bạn có thể bấm các nút nhanh bên trên.");
+// XỬ LÝ CHỌN NHẠC THEO SỐ - MỚI THÊM
+const musicNumber = parseInt(cmd);
+if(musicNumber >= 1 && musicNumber <= MUSIC_LIST.length) {
+  selectMusic(musicNumber - 1);
+  return;
 }
 
-/* Cho phép truy cập từ console để test */
-window.XMOD = {MODS, addBotMsg, addUserMsg, renderMods, copyLink, openLink};
+// LỆNH XÓA LỊCH SỬ - MỚI THÊM
+if(cmd==="xóa lịch sử" || cmd==="xoa lich su" || cmd==="clear" || cmd==="xóa chat"){
+  const confirmMsg = `
+    <b>⚠️ Xác nhận xóa lịch sử?</b><br>
+    Gõ <b>"xác nhận xóa"</b> để xóa toàn bộ lịch sử chat.<br>
+    <i>Hành động này không thể hoàn tác!</i>
+  `;
+  addBotMsg(confirmMsg);
+  return;
+}
 
-</script>
-</body>
-</html>
+// XÁC NHẬN XÓA - MỚI THÊM
+if(cmd==="xác nhận xóa" || cmd==="xac nhan xoa" || cmd==="confirm delete"){
+  clearChatHistory();
+  return;
+}
+  /
