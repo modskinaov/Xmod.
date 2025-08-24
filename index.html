@@ -535,4 +535,101 @@ if(cmd==="xác nhận xóa" || cmd==="xac nhan xoa" || cmd==="confirm delete"){
   clearChatHistory();
   return;
 }
-  /
+  // =============================================
+  //    CÓ THỂ SỬA: CÁC CÂU CHÉM GIÓ
+  // =============================================
+  if(cmd==="chém gió" || cmd==="chem gio"){
+  const jokes = [
+    "⚡ Nakroth mà ăn sét Toro thì gánh team luôn!",
+    "Mình là XMOD GPT, chuyên gia mod ảo nhưng thực tế thì... mình cũng cần coffee ☕",
+    "Bạn mod nhiều thì đừng quên donate để mình khỏi ăn mì gói 😆",
+    "🎵 Nghe nhạc trong lúc mod sẽ thấy đã hơn đấy!",
+    "Chat với bot mà vui như chat với crush vậy 😎"
+  ];
+  addBotMsg(jokes[Math.floor(Math.random()*jokes.length)]);
+  return;
+}
+
+// Tìm kiếm mod theo tên
+const found = MODS.find(m=> m.title.toLowerCase().includes(cmd));
+if(found){
+  addBotMsg(`🔎 Mình tìm thấy mod phù hợp:<br>${renderModCardHtml(found)}`);
+  return;
+}
+
+// Trả lời mặc định khi không hiểu lệnh
+addBotMsg("Mình chưa hiểu lệnh này 🤔. Gõ <b>help</b> để xem lệnh hoặc thử tên mod bạn muốn.");
+}
+
+/* Hàm tạo HTML card cho mod trong chat */
+function renderModCardHtml(m){
+  return `
+    <div style="display:flex;gap:10px;align-items:center;">
+      <div style="width:86px;height:64px;flex:0 0 86px;border-radius:8px;overflow:hidden;border:2px solid rgba(255,255,255,0.04)">
+        <img src="${m.thumb}" style="width:100%;height:100%;object-fit:cover" alt="${m.title}">
+      </div>
+      <div style="flex:1">
+        <div style="font-weight:700">${m.title}</div>
+        <div style="color:#cbbfdc;font-size:13px;margin-top:6px">${m.desc}</div>
+        <div style="margin-top:8px;display:flex;gap:8px">
+          <a href="${m.link}" target="_blank" style="padding:8px 12px;border-radius:8px;background:linear-gradient(90deg,#7209b7,#f72585);color:#fff;font-weight:700;text-decoration:none">Tải</a>
+          <button onclick="copyLink('${m.link}')" style="padding:8px 12px;border-radius:8px;border:none;background:#2b2b45;color:#fff;cursor:pointer">Sao chép link</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* XỬ LÝ SỰ KIỆN: GỬI TIN NHẮN */
+const inp = document.getElementById("inp");
+const sendBtn = document.getElementById("sendBtn");
+sendBtn.addEventListener("click", onSend);
+inp.addEventListener("keypress", (e)=>{ if(e.key==="Enter") onSend(); });
+
+function onSend(){
+  const text = inp.value.trim();
+  if(!text) return;
+  addUserMsg(text);
+  inp.value="";
+  
+  const typingDiv = document.createElement("div");
+  typingDiv.className = "bubble bot";
+  typingDiv.innerHTML = `<div class="typing"></div>`;
+  messagesEl.appendChild(typingDiv);
+  scrollToBottom();
+  
+  setTimeout(()=> {
+    typingDiv.remove();
+    handleCommand(text);
+  }, 600 + Math.random()*800);
+}
+
+document.querySelectorAll(".chip").forEach(el=>{
+  el.addEventListener("click", ()=>{
+    const c = el.getAttribute("data-cmd");
+    inp.value = c;
+    inp.focus();
+  });
+});
+
+function showModInChat(m){
+  addBotMsg(renderModCardHtml(m), "Thông tin mod");
+}
+
+window.addEventListener("keydown", (e)=>{
+  if(e.ctrlKey && e.key.toLowerCase()==='k'){
+    if(confirm("Xóa lịch sử chat?")) { 
+      clearChatHistory();
+    }
+  }
+});
+
+if(HISTORY.length===0){
+  addBotMsg("Xin chào 👋! Mình là <b>XMOD Chat</b> — gõ <b>help</b> để xem lệnh. Bạn có thể bấm các nút nhanh bên trên.<br><br>🎵 <i>Thử lệnh 'chọn nhạc' để nghe nhạc nền nhé!</i>");
+}
+
+window.XMOD = {MODS, MUSIC_LIST, addBotMsg, addUserMsg, renderMods, copyLink, openLink, selectMusic, clearChatHistory};
+
+</script>
+</body>
+</html>
