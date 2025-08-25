@@ -558,7 +558,7 @@ if(found){
 }
 
 // Trả lời mặc định khi không hiểu lệnh
-addBotMsg("Mình chưa hiểu lệnh này 🤔. Gõ <b>help</b> để xem lệnh hoặc thử tên mod bạn muốn.");
+  callOpenAI(cmd); // gọi AI khi không khớp lệnh nào
 }
 
 /* Hàm tạo HTML card cho mod trong chat */
@@ -630,6 +630,40 @@ if(HISTORY.length===0){
 
 window.XMOD = {MODS, MUSIC_LIST, addBotMsg, addUserMsg, renderMods, copyLink, openLink, selectMusic, clearChatHistory};
 
+// ================================
+// Gọi OpenAI nếu không khớp lệnh
+// ================================
+async function callOpenAI(userText){
+  addBotMsg("⏳ Đang hỏi AI, chờ chút nhé...");
+  
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // ⚠️ ĐỔI API_KEY của bạn tại đây (chỉ test cá nhân, không public web)
+        "Authorization": "Bearer YOUR_API_KEY_HERE"
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",   // hoặc gpt-4o-mini nếu có
+        messages: [
+          {role: "system", content: "Bạn là trợ lý web XMOD, chuyên hỗ trợ mod skin Liên Quân, nhưng cũng có thể trả lời tự do."},
+          {role: "user", content: userText}
+        ],
+        max_tokens: 500,
+        temperature: 0.8
+      })
+    });
+    
+    const data = await res.json();
+    const reply = data.choices?.[0]?.message?.content || "❌ AI không trả lời được vì đây không phải là trí tuệ nhân tạo như chatgpt,Gemini,grock vân vân nên không thể trả lời hoặc trò chuyện với bạn trừ những lệnh được lập trình sẵn ,nếu muốn giống chatgpt thì donate một triệu tôi tìm cách làm liền.";
+    addBotMsg(reply);
+    
+  } catch(err){
+    console.error(err);
+    addBotMsg("⚠️ Lỗi khi gọi OpenAI. Kiểm tra API Key hoặc mạng!");
+  }
+}
 </script>
 </body>
 </html>
