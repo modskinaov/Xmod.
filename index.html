@@ -84,19 +84,90 @@
   /* PHẦN CHAT */
   .chat-window{flex:1;display:flex;flex-direction:column;overflow:hidden;border-radius:10px;background:linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.06));padding:12px}
   .messages{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:8px}
-  .bubble{max-width:80%;padding:12px 14px;border-radius:16px;line-height:1.4;word-break:break-word}
+  .bubble{max-width:80%;padding:12px 14px;border-radius:16px;line-height:1.4;word-break:break-word;animation:slideIn 0.3s ease}
   .bubble.user{align-self:flex-end;background:linear-gradient(90deg,var(--grad2),var(--grad3));box-shadow: 0 6px 18px rgba(247,37,133,0.15)}
   .bubble.bot{align-self:flex-start;background:var(--card-bg);box-shadow:0 4px 18px rgba(0,0,0,0.35)}
   .bubble.bot a{color:var(--accent);text-decoration:underline}
+  @keyframes slideIn{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
 
   .meta {font-size:12px;color:var(--muted);margin-bottom:6px}
   .typing {height:10px;width:40px;border-radius:5px;background:linear-gradient(90deg,#ffffff33,#ffffff11);animation: blink 1s infinite}
   @keyframes blink{0%{opacity:0.2}50%{opacity:1}100%{opacity:0.2}}
+  .bubble {
+  animation: bounceIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes bounceIn {
+  0% { opacity: 0; transform: translateY(20px) scale(0.8); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Typing dots realistic */
+.typing-dots {
+  display: inline-flex; gap: 4px;
+}
+.typing-dots span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #fff; animation: typingBounce 1.4s infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 80%, 100% { opacity: 0.3; }
+  40% { opacity: 1; }
+}
+
+/* Hover effects cho mod cards */
+.mod-card {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.mod-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+/* Button ripple effect */
+.btn-send, .tiny-btn {
+  position: relative; overflow: hidden;
+}
+.btn-send:before, .tiny-btn:before {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  width: 0; height: 0; background: rgba(255,255,255,0.3);
+  border-radius: 50%; transition: all 0.6s;
+  transform: translate(-50%, -50%);
+}
+.btn-send:active:before, .tiny-btn:active:before {
+  width: 300px; height: 300px;
+}
+
+/* Glow effect cho input focus */
+.input-row input:focus {
+  box-shadow: 0 0 20px rgba(114,9,183,0.4), 0 0 40px rgba(247,37,133,0.2);
+  transform: scale(1.02);
+}
+
+/* Particle background */
+.header::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.1), transparent),
+              radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.05), transparent);
+  animation: twinkle 4s linear infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
 
   /* PHẦN NHẬP LIỆU */
-  .input-row{display:flex;gap:8px;padding:10px;border-top:1px solid rgba(255,255,255,0.03);align-items:center}
-  .input-row input{flex:1;padding:12px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff;outline:none}
-  .btn-send{padding:10px 16px;border-radius:30px;border:none;background:linear-gradient(90deg,var(--grad2),var(--grad3));color:#fff;font-weight:700;cursor:pointer;box-shadow:0 8px 30px rgba(247,37,133,0.12)}
+  .input-row input{flex:1;padding:12px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:#fff;outline:none;transition:all 0.3s ease}
+  .input-row input:focus{border-color:var(--grad2);box-shadow:0 0 20px rgba(114,9,183,0.3)}
+  .btn-send{padding:10px 16px;border-radius:30px;border:none;background:linear-gradient(90deg,var(--grad2),var(--grad3));color:#fff;font-weight:700;cursor:pointer;box-shadow:0 8px 30px rgba(247,37,133,0.12);transition:transform 0.2s ease}
+  .btn-send:hover{transform:translateY(-2px)}
 
   /* NÚT LỆNH NHANH */
   .quick{display:flex;gap:8px;padding:10px 0;flex-wrap:wrap}
@@ -125,6 +196,8 @@
   .music-btn{padding:6px 10px; border:none; border-radius:6px;background:linear-gradient(90deg,var(--grad2),var(--grad3));color:#fff; cursor:pointer; font-size:11px; font-weight:600;}
   .volume-control{display:flex; align-items:center; gap:8px; margin-top:8px;}
   .volume-slider{flex:1; height:4px; background:rgba(255,255,255,0.2); border-radius:2px;}
+  .toast{position:fixed;top:20px;right:20px;background:var(--card-bg);padding:12px 16px;border-radius:10px;color:#fff;z-index:1001;backdrop-filter:blur(10px);transform:translateX(400px);transition:transform 0.3s ease}
+  .toast.show{transform:translateX(0)}
   @media(max-width:980px){
   .music-control{bottom:10px; right:10px; min-width:220px;}
 }  /* ← THÊM DẤU } NÀY */
@@ -191,6 +264,11 @@
           <!-- 2 NÚT MỚI THÊM -->
          <div class="chip" data-cmd="chọn nhạc">chọn nhạc</div>
          <div class="chip" data-cmd="xóa lịch sử">xóa lịch sử</div>
+         <div class="chip" data-cmd="thống kê">thống kê</div>
+         <div class="chip" data-cmd="random mod">random mod</div>
+         <div class="chip" data-cmd="trivia">trivia</div>
+         <div class="chip" data-cmd="guide">guide</div>
+         <div class="chip" data-cmd="lucky draw">lucky draw</div>
         </div>
 
         <!-- Khu vực hiển thị tin nhắn -->
@@ -316,6 +394,33 @@ const pauseBtn = document.getElementById("pauseBtn");
 const stopBtn = document.getElementById("stopBtn");
 const volumeSlider = document.getElementById("volumeSlider");
 
+// thống kế
+// Enhanced features 
+let chatStats = {
+  totalMessages: 0,
+  commandsUsed: {},
+  startTime: Date.now()
+};
+
+const savedStats = localStorage.getItem('xmod_chat_stats');
+if(savedStats) chatStats = JSON.parse(savedStats);
+
+function saveStats() {
+  localStorage.setItem('xmod_chat_stats', JSON.stringify(chatStats));
+}
+
+function showToast(message, duration = 3000) {
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  
+  setTimeout(() => toast.classList.add('show'), 100);
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => document.body.removeChild(toast), 300);
+  }, duration);
+}
 let currentMusicIndex = -1;
 audioEl.volume = 0.5;
 
@@ -399,9 +504,11 @@ function saveToHistory(obj){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(HISTORY));
 }
 function addUserMsg(text){
-  const obj = {sender:"user", html: escapeHtml(text)};
+  const obj = {sender:"user", html: escapeHtml(text), timestamp: Date.now()};
   appendMessageToDom(obj);
   saveToHistory(obj);
+  chatStats.totalMessages++;
+  saveStats();
 }
 function addBotMsg(html, meta){
   const obj = {sender:"bot", html: html, meta: meta || ""};
@@ -427,8 +534,12 @@ function escapeHtml(str){
    ============================================= */
 function handleCommand(input){
   const cmd = input.trim().toLowerCase();
-
+  trackCommand(cmd);
   // LỆNH HELP - Hiển thị trợ giúp
+  function trackCommand(cmd) {
+  chatStats.commandsUsed[cmd] = (chatStats.commandsUsed[cmd] || 0) + 1;
+  saveStats();
+}
   if(cmd==="help"){
     const html = `
       <b>Danh sách lệnh:</b><br>
@@ -440,12 +551,31 @@ function handleCommand(input){
       - <b>youtube</b> : Link kênh XMOD<br>
       - <b>chém gió</b> : Bot chém gió vui vẻ<br>
       - <b>chọn nhạc</b> : Chọn nhạc nền cho website 🎵<br>
-      - <b>xóa lịch sử</b> : Xóa toàn bộ lịch sử chat 🗑️
+      - <b>xóa lịch sử</b> : Xóa toàn bộ lịch sử chat 🗑️<br>
+      - <b>thống kê</b> : thống kê 📠<br>
     `;
     addBotMsg(html);
     return;
   }
-
+  //lệnh thống kê
+  if(cmd==="thống kê" || cmd==="stats"){
+  const uptime = Math.floor((Date.now() - chatStats.startTime) / 1000 / 60);
+  const topCommands = Object.entries(chatStats.commandsUsed)
+    .sort((a,b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([cmd, count]) => `• ${cmd}: ${count} lần`)
+    .join('<br>');
+  
+  const html = `
+    <b>📊 Thống kê sử dụng:</b><br>
+    💬 Tổng tin nhắn: <b>${chatStats.totalMessages}</b><br>
+    ⏰ Thời gian online: <b>${uptime} phút</b><br>
+    🔥 Lệnh dùng nhiều nhất:<br>
+    ${topCommands || '• Chưa có dữ liệu'}
+  `;
+  addBotMsg(html);
+  return;
+}
   // LỆNH LAYMOD - Lấy mod mới nhất (mod đầu tiên trong danh sách)
   if(cmd==="laymod"){
     const m = MODS[0];
@@ -483,6 +613,82 @@ function handleCommand(input){
     addBotMsg(html);
     return;
   }
+  // LỆNH RANDOM MOD với animation
+if(cmd==="random mod" || cmd==="random"){
+  addBotMsg("🎲 Đang lắc xúc xắc...");
+  setTimeout(()=> {
+    const m = MODS[Math.floor(Math.random()*MODS.length)];
+    addBotMsg(`🎯 May mắn của bạn: <b>${m.title}</b><br>${renderModCardHtml(m)}`);
+  }, 1500);
+  return;
+}
+
+// LỆNH TRIVIA về Liên Quân
+if(cmd==="trivia"){
+  const questions = [
+    "Nakroth có bao nhiêu skill? Trả lời: 4 skill (3 skill thường + 1 nội tại)",
+    "Tướng nào được gọi là Thần Rừng? Trả lời: NAKROTH",
+    "Map Liên Quân có bao nhiêu làn? Trả lời: không biết"
+  ];
+  const q = questions[Math.floor(Math.random()*questions.length)];
+  addBotMsg(`🧠 Câu hỏi: ${q}`);
+  return;
+}
+
+// LỆNH GUIDE hướng dẫn
+if(cmd==="guide"){
+  const html = `
+    <b>📋 Hướng dẫn cài mod:</b><br>
+    1. Tải file mod về máy<br>
+    2. Giải nén bằng <br>
+    3. Copy vào thư mục game<br>
+    4. Khởi động game và thưởng thức!<br>
+    <i>⚠️ Nhớ backup file gốc trước khi cài</i>
+  `;
+  addBotMsg(html);
+  return;
+}
+
+// LỆNH SEARCH tìm mod
+if(cmd.startsWith("search ") || cmd.startsWith("tim ")){
+  const query = cmd.replace("search ", "").replace("tim ", "");
+  const results = MODS.filter(m => 
+    m.title.toLowerCase().includes(query.toLowerCase()) ||
+    m.desc.toLowerCase().includes(query.toLowerCase())
+  );
+  
+  if(results.length > 0){
+    let html = `🔍 Tìm thấy ${results.length} mod:<br>`;
+    results.forEach(m => html += renderModCardHtml(m) + "<br>");
+    addBotMsg(html);
+  } else {
+    addBotMsg(`❌ Không tìm thấy mod nào với từ khóa: <b>${query}</b>`);
+  }
+  return;
+}
+
+// LỆNH LUCKY DRAW
+if(cmd==="lucky" || cmd==="lucky draw"){
+  const prizes = [
+    "🎁 Bạn trúng: giải nhất,chúc mừng(không có gì hết!",
+    "🏆 Bạn trúng: giải hai!", 
+    "💎 Bạn trúng: giải 3!",
+    "🎯 Bạn trúng: giải 4"
+  ];
+  addBotMsg("🎰 Đang quay số...");
+  setTimeout(()=> {
+    const prize = prizes[Math.floor(Math.random()*prizes.length)];
+    addBotMsg(prize);
+  }, 2000);
+  return;
+}
+
+// LỆNH REQUEST yêu cầu mod
+if(cmd.startsWith("request ")){
+  const modName = cmd.replace("request ", "");
+  addBotMsg(`📝 Đã ghi nhận yêu cầu mod: <b>${modName}</b><br>Admin sẽ xem xét và cập nhật trong phiên bản sau!`);
+  return;
+}
 
   // =============================================
   //    CÓ THỂ SỬA: THÔNG BÁO UPDATE
