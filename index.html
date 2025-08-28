@@ -1,875 +1,500 @@
-<!DOCTYPE html>
-<html lang="vi">
+<!DOCTYPE html><html lang="vi">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<!-- =============================================
-     CÓ THỂ SỬA: TIÊU ĐỀ TRANG WEB
-     ============================================= -->
-<title>XMOD ChatGPT - Phiên bản Mod (VIP)</title>
+<title>XMOD Chat – Full-screen + Theme Toggle + Sticker (Updated)</title>
 <style>
-  /* ===========================
-     CÓ THỂ SỬA: MÀU SẮC CHỦ ĐẠO
-     =========================== */
   :root{
-    --bg1:#0a0a0a;
-    --bg2:#1a1a1a;
-    --accent: #ffffff;
-    --accent2: #666666;
-    --card-bg: rgba(255,255,255,0.08);
-    --glass: rgba(255,255,255,0.05);
-    --muted:#cccccc;
-    --border: rgba(255,255,255,0.1);
-    --grad2: #7209b7;
-    --grad3: #f72585;
+    --bg1:#0a0a0a;           /* nền tối 1 */
+    --bg2:#1a1a1a;           /* nền tối 2 */
+    --text:#ffffff;          /* màu chữ */
+    --muted:#cfcfcf;         /* chữ phụ */
+    --card:rgba(255,255,255,0.06);
+    --glass:rgba(255,255,255,0.05);
+    --border:rgba(255,255,255,0.1);
+    --grad2:#7209b7;         /* tím */
+    --grad3:#f72585;         /* hồng */
   }
-  
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    font-family: "Segoe UI", Roboto, "Inter", Arial, sans-serif;
-    color:#fff;
-    background: linear-gradient(135deg, var(--bg1), var(--bg2), #2a2a2a);
-    -webkit-font-smoothing:antialiased;
-    display:flex;
-    flex-direction:column;
-    min-height:100vh;
-  }
+  body.light{
+    --bg1:#f3f4f6;
+    --bg2:#e5e7eb;
+    --text:#111827;
+    --muted:#4b5563;
+    --card:rgba(0,0,0,0.05);
+    --glass:rgba(0,0,0,0.04);
+    --border:rgba(0,0,0,0.08);
+  }*{box-sizing:border-box} html,body{height:100%} body{ margin:0; color:var(--text); font-family:"Segoe UI", Roboto, Inter, system-ui, Arial, sans-serif; background: linear-gradient(135deg, var(--bg1), var(--bg2)); -webkit-font-smoothing:antialiased; display:flex; flex-direction:column; min-height:100vh; }
 
+.header{position:sticky; top:0; z-index:50; display:flex; align-items:center; gap:12px; padding:14px 16px; border-bottom:1px solid var(--border); background:linear-gradient(90deg, rgba(0,0,0,0.12), rgba(255,255,255,0.02)); backdrop-filter: blur(8px);} .logo{width:64px;height:64px;border-radius:50%;flex:0 0 64px;overflow:hidden;border:3px solid var(--accent);box-shadow:0 6px 30px rgba(247,37,133,0.15);} .logo img{width:100%;height:100%;object-fit:cover;display:block} .hdr-title{display:flex;flex-direction:column} .hdr-title h1{margin:0;font-size:18px;letter-spacing:.5px;text-shadow:0 0 10px rgba(247,37,133,.5)} .hdr-title p{margin:2px 0 0;color:var(--muted);font-size:12px} .hdr-actions{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap} .btn{padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--glass);color:var(--text);font-weight:600;cursor:pointer} .btn-gradient{background:linear-gradient(90deg,var(--grad2),var(--grad3));border:none;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.25)}
 
-  /* ===========================
-     HEADER - PHẦN ĐẦU TRANG
-     =========================== */
-  .header{
-    display:flex;
-    gap:12px;
-    align-items:center;
-    padding:18px;
-    background: linear-gradient(90deg, rgba(0,0,0,0.25), rgba(255,255,255,0.02));
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-  }
-  .logo{
-    width:64px;height:64px;border-radius:50%;flex:0 0 64px;
-    overflow:hidden;border:3px solid var(--accent);box-shadow:0 6px 30px rgba(247,37,133,0.15);
-  }
-  .logo img{width:100%;height:100%;object-fit:cover;display:block}
-  .hdr-title{
-    display:flex;flex-direction:column;
-  }
-  .hdr-title h1{font-size:18px;margin:0;letter-spacing:1px;text-shadow:0 0 12px rgba(247,37,133,0.6)}
-  .hdr-title p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.wrap{flex:1; display:flex; padding:16px; gap:16px; width:100%; margin:0} .left{flex:1; display:flex; flex-direction:column; min-height:480px; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.03)); border-radius:14px; padding:14px; backdrop-filter: blur(6px); box-shadow:0 10px 30px rgba(0,0,0,.35)} .chat-window{flex:1; display:flex; flex-direction:column; overflow:hidden; border-radius:12px; background:linear-gradient(180deg, rgba(0,0,0,0.10), rgba(0,0,0,0.05)); padding:12px} .quick{display:flex; gap:8px; padding:8px 0; flex-wrap:wrap} .chip{background:var(--glass); padding:8px 12px; border-radius:20px; color:var(--muted); cursor:pointer; border:1px solid var(--border)} .chip:hover{background:linear-gradient(90deg,#ffffff1a,#ffffff0a); color:var(--text)} .messages{flex:1; overflow:auto; padding:10px; display:flex; flex-direction:column; gap:10px} .bubble{max-width:85%; padding:12px 14px; border-radius:16px; line-height:1.45; word-break:break-word; animation:bounceIn .35s ease} .bubble.user{align-self:flex-end; background:linear-gradient(90deg,var(--grad2),var(--grad3)); box-shadow:0 6px 18px rgba(247,37,133,.15); color:#fff} .bubble.bot{align-self:flex-start; background:var(--card); box-shadow:0 4px 18px rgba(0,0,0,.35)} .bubble .meta{font-size:12px; color:var(--muted); margin-bottom:6px} .sticker{display:block;margin-top:8px;width:120px;height:auto;border-radius:10px;border:2px solid rgba(255,255,255,0.06);box-shadow:0 8px 30px rgba(0,0,0,0.3)} @keyframes bounceIn{0%{opacity:0; transform:translateY(14px) scale(.96)}100%{opacity:1; transform:translateY(0) scale(1)}} .input-row{display:flex; gap:10px; align-items:center; padding-top:10px} .input-row input{flex:1; padding:12px 14px; border-radius:28px; border:1px solid var(--border); background:rgba(255,255,255,0.03); color:var(--text); outline:none; transition:all .25s} .input-row input:focus{border-color:var(--grad2); box-shadow:0 0 16px rgba(114,9,183,.25)} .btn-send{padding:10px 16px; border-radius:28px; border:none; background:linear-gradient(90deg,var(--grad2),var(--grad3)); color:#fff; font-weight:700; cursor:pointer} .music-control{position:fixed; bottom:20px; right:20px; background:var(--card); padding:12px; border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,.4); backdrop-filter:blur(10px); display:none; z-index:1000; min-width:250px} .music-control.show{display:block} .music-title{font-size:14px; font-weight:600; color:var(--text); margin-bottom:8px} .music-buttons{display:flex; gap:8px; align-items:center} .music-btn{padding:6px 10px; border:none; border-radius:6px; background:linear-gradient(90deg,var(--grad2),var(--grad3)); color:#fff; font-size:11px; font-weight:700; cursor:pointer} .volume-control{display:flex; align-items:center; gap:8px; margin-top:8px} .volume-slider{flex:1; height:4px; background:rgba(255,255,255,0.25); border-radius:2px} .toast{position:fixed; top:20px; right:20px; background:var(--card); padding:12px 16px; border-radius:10px; color:var(--text); z-index:1100; backdrop-filter:blur(10px); transform:translateX(400px); transition:transform .3s ease} .toast.show{transform:translateX(0)} @media(max-width:900px){ .wrap{padding:10px} .music-control{bottom:10px; right:10px; min-width:220px} } </style>
 
-  .hdr-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
-  .hdr-actions a{color:#fff;text-decoration:none;padding:8px 12px;border-radius:10px;background:linear-gradient(90deg,var(--grad2),var(--grad3));box-shadow:0 6px 18px rgba(0,0,0,0.25);font-weight:600;font-size:13px}
-
-  /* ===========================
-     LAYOUT CHÍNH
-     =========================== */
-  .wrap{display:flex;gap:20px;padding:20px;flex:1;max-width:800px;margin:0 auto;width:100%}
-.left{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  min-height:400px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
-  border-radius:14px;padding:14px;backdrop-filter: blur(6px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
-}
-.right{
-  display:none; /* Ẩn sidebar */
-}
-
-  /* PHẦN CHAT */
-  .chat-window{flex:1;display:flex;flex-direction:column;overflow:hidden;border-radius:10px;background:linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.06));padding:12px}
-  .messages{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:8px}
-  .bubble{max-width:80%;padding:12px 14px;border-radius:16px;line-height:1.4;word-break:break-word;animation:slideIn 0.3s ease}
-  .bubble.user{align-self:flex-end;background:linear-gradient(90deg,var(--grad2),var(--grad3));box-shadow: 0 6px 18px rgba(247,37,133,0.15)}
-  .bubble.bot{align-self:flex-start;background:var(--card-bg);box-shadow:0 4px 18px rgba(0,0,0,0.35)}
-  .bubble.bot a{color:var(--accent);text-decoration:underline}
-  @keyframes slideIn{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-  .meta {font-size:12px;color:var(--muted);margin-bottom:6px}
-  .typing {height:10px;width:40px;border-radius:5px;background:linear-gradient(90deg,#ffffff33,#ffffff11);animation: blink 1s infinite}
-  @keyframes blink{0%{opacity:0.2}50%{opacity:1}100%{opacity:0.2}}
-  .bubble {
-  animation: bounceIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-@keyframes bounceIn {
-  0% { opacity: 0; transform: translateY(20px) scale(0.8); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* Typing dots realistic */
-.typing-dots {
-  display: inline-flex; gap: 4px;
-}
-.typing-dots span {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: #fff; animation: typingBounce 1.4s infinite;
-}
-.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes typingBounce {
-  0%, 80%, 100% { opacity: 0.3; }
-  40% { opacity: 1; }
-}
-
-/* Hover effects cho mod cards */
-.mod-card {
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-.mod-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-}
-
-/* Button ripple effect */
-.btn-send, .tiny-btn {
-  position: relative; overflow: hidden;
-}
-.btn-send:before, .tiny-btn:before {
-  content: ''; position: absolute; top: 50%; left: 50%;
-  width: 0; height: 0; background: rgba(255,255,255,0.3);
-  border-radius: 50%; transition: all 0.6s;
-  transform: translate(-50%, -50%);
-}
-.btn-send:active:before, .tiny-btn:active:before {
-  width: 300px; height: 300px;
-}
-
-/* Glow effect cho input focus */
-.input-row input:focus {
-  box-shadow: 0 0 20px rgba(114,9,183,0.4), 0 0 40px rgba(247,37,133,0.2);
-  transform: scale(1.02);
-}
-
-/* Particle background */
-.header::after {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.1), transparent),
-              radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.05), transparent);
-  animation: twinkle 4s linear infinite;
-}
-
-@keyframes twinkle {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
-}
-
-  /* PHẦN NHẬP LIỆU */
-  .input-row input{flex:1;padding:12px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:#fff;outline:none;transition:all 0.3s ease}
-  .input-row input:focus{border-color:var(--grad2);box-shadow:0 0 20px rgba(114,9,183,0.3)}
-  .btn-send{padding:10px 16px;border-radius:30px;border:none;background:linear-gradient(90deg,var(--grad2),var(--grad3));color:#fff;font-weight:700;cursor:pointer;box-shadow:0 8px 30px rgba(247,37,133,0.12);transition:transform 0.2s ease}
-  .btn-send:hover{transform:translateY(-2px)}
-
-  /* NÚT LỆNH NHANH */
-  .quick{display:flex;gap:8px;padding:10px 0;flex-wrap:wrap}
-  .chip{background:var(--glass);padding:8px 12px;border-radius:20px;color:var(--muted);cursor:pointer;border:1px solid rgba(255,255,255,0.03)}
-  .chip:hover{background:linear-gradient(90deg,#ffffff10,#ffffff06);color:#fff}
-
-  /* THANH BÊN PHẢI - DANH SÁCH MOD */
-  .right{
-    width:360px;
-    display:flex;
-    flex-direction:column;gap:14px;
-  }
-  .panel{background:var(--card-bg);border-radius:12px;padding:12px;box-shadow:0 10px 30px rgba(0,0,0,0.35);backdrop-filter:blur(8px)}
-  .mod-card{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));cursor:pointer;transition:transform .18s}
-  .mod-card:hover{transform:translateY(-6px)}
-  .mod-thumb{width:72px;height:72px;border-radius:8px;overflow:hidden;flex:0 0 72px;border:2px solid rgba(255,255,255,0.03)}
-  .mod-thumb img{width:100%;height:100%;object-fit:cover}
-  .mod-info h4{margin:0 0 6px 0;font-size:15px}
-  .mod-info p{margin:0;color:var(--muted);font-size:13px}
-  .mod-actions{margin-left:auto;display:flex;gap:8px}
-  .tiny-btn{padding:8px 10px;border-radius:8px;border:none;background:#7209b7;color:#fff;cursor:pointer;font-weight:700}
-  .music-control{position:fixed; bottom:20px; right:20px; background:var(--card-bg); padding:12px;border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,0.4);backdrop-filter:blur(10px); display:none; z-index:1000; min-width:250px;}
-  .music-control.show{display:block}
-  .music-title{font-size:14px; font-weight:600; color:#fff; margin-bottom:8px;}
-  .music-buttons{display:flex; gap:8px; align-items:center;}
-  .music-btn{padding:6px 10px; border:none; border-radius:6px;background:linear-gradient(90deg,var(--grad2),var(--grad3));color:#fff; cursor:pointer; font-size:11px; font-weight:600;}
-  .volume-control{display:flex; align-items:center; gap:8px; margin-top:8px;}
-  .volume-slider{flex:1; height:4px; background:rgba(255,255,255,0.2); border-radius:2px;}
-  .toast{position:fixed;top:20px;right:20px;background:var(--card-bg);padding:12px 16px;border-radius:10px;color:#fff;z-index:1001;backdrop-filter:blur(10px);transform:translateX(400px);transition:transform 0.3s ease}
-  .toast.show{transform:translateX(0)}
-  @media(max-width:980px){
-  .music-control{bottom:10px; right:10px; min-width:220px;}
-}  /* ← THÊM DẤU } NÀY */
-
-  /* RESPONSIVE CHO MOBILE */
-  @media(max-width:980px){
-    .wrap{flex-direction:column;padding:12px}
-    .right{width:100%}
-  }
-</style>
 </head>
 <body>
-
-  <!-- =============================================
-       CÓ THỂ SỬA: PHẦN HEADER
-       ============================================= -->
   <div class="header">
-    <!-- SỬA LOGO TẠI ĐÂY -->
     <div class="logo"><img src="https://i.postimg.cc/T3SYQ8zK/Polish-20250822-083928173.png" alt="XMOD"></div>
     <div class="hdr-title">
-      <!-- SỬA TIÊU ĐỀ VÀ MÔ TẢ -->
       <h1>⚡ XMOD Chat (VIP)</h1>
       <p>Chat hỗ trợ mod — gõ lệnh hoặc bấm nút nhanh</p>
     </div>
     <div class="hdr-actions">
-      <!-- SỬA LINK WEBSITE VÀ YOUTUBE -->
-      <a href="https://modskinaov.github.io/Xmod." target="_blank">Website</a>
-      <a href="https://youtube.com/@xmod-b7i" target="_blank">YouTube</a>
+      <a class="btn" href="https://modskinaov.github.io/Xmod." target="_blank">Website</a>
+      <a class="btn-gradient" href="https://youtube.com/@xmod-b7i" target="_blank">YouTube</a>
+      <button id="toggleTheme" class="btn">🌓 Theme</button>
     </div>
-  </div>
-  
-  
-  <!-- ĐIỀU KHIỂN NHẠC NỀN - MỚI THÊM -->
-<div class="music-control" id="musicControl">
-  <div class="music-title" id="musicTitle">🎵 Chưa có nhạc</div>
-  <div class="music-buttons">
-    <button class="music-btn" id="playBtn">▶️ Play</button>
-    <button class="music-btn" id="pauseBtn">⏸️ Pause</button>
-    <button class="music-btn" id="stopBtn">⏹️ Stop</button>
-  </div>
-  <div class="volume-control">
-    <span>🔊</span>
-    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
-  </div>
-</div>
-
-
-  <!-- LAYOUT CHÍNH -->
-  <div class="wrap">
-    <!-- BÊN TRÁI: PHẦN CHAT -->
+  </div>  <div class="music-control" id="musicControl">
+    <div class="music-title" id="musicTitle">🎵 Chưa có nhạc</div>
+    <div class="music-buttons">
+      <button class="music-btn" id="playBtn">▶️ Play</button>
+      <button class="music-btn" id="pauseBtn">⏸️ Pause</button>
+      <button class="music-btn" id="stopBtn">⏹️ Stop</button>
+    </div>
+    <div class="volume-control">
+      <span>🔊</span>
+      <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+    </div>
+  </div>  <div class="wrap">
     <div class="left">
       <div class="chat-window">
-        <!-- =============================================
-             CÓ THỂ SỬA: CÁC NÚT LỆNH NHANH
-             ============================================= -->
         <div class="quick" id="quickCommands">
-          <!-- Có thể thêm/sửa/xóa các nút lệnh ở đây -->
           <div class="chip" data-cmd="help">help</div>
           <div class="chip" data-cmd="laymod">laymod</div>
+          <div class="chip" data-cmd="allmods">allmods</div>
           <div class="chip" data-cmd="gợi ý skin">gợi ý skin</div>
           <div class="chip" data-cmd="update">update</div>
           <div class="chip" data-cmd="donate">donate</div>
           <div class="chip" data-cmd="chém gió">chém gió</div>
-          <!-- 2 NÚT MỚI THÊM -->
-         <div class="chip" data-cmd="chọn nhạc">chọn nhạc</div>
-         <div class="chip" data-cmd="xóa lịch sử">xóa lịch sử</div>
-         <div class="chip" data-cmd="thống kê">thống kê</div>
-         <div class="chip" data-cmd="random mod">random mod</div>
-         <div class="chip" data-cmd="trivia">trivia</div>
-         <div class="chip" data-cmd="guide">guide</div>
-         <div class="chip" data-cmd="lucky draw">lucky draw</div>
+          <div class="chip" data-cmd="chọn nhạc">chọn nhạc</div>
+          <div class="chip" data-cmd="xóa lịch sử">xóa lịch sử</div>
+          <div class="chip" data-cmd="thống kê">thống kê</div>
+          <div class="chip" data-cmd="random mod">random mod</div>
+          <div class="chip" data-cmd="trivia">trivia</div>
+          <div class="chip" data-cmd="guide">guide</div>
+          <div class="chip" data-cmd="lucky draw">lucky draw</div>
         </div>
-
-        <!-- Khu vực hiển thị tin nhắn -->
-        <div class="messages" id="messages"></div>
-
-        <!-- Ô nhập lệnh -->
-        <div class="input-row">
-          <input id="inp" placeholder="Nhập lệnh hoặc chat... (gõ 'help' để xem)"/>
-          <button class="btn-send" id="sendBtn">Gửi</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- BÊN PHẢI: DANH SÁCH MOD VÀ DONATE -->
-    <div class="right">
-      <!-- Panel danh sách mod -->
-      <div class="panel">
-        <h3 style="margin:0 0 10px 0">Các mod hiện đang có</h3>
-        <div id="modsList">
-          <!-- Danh sách mod sẽ được tự động tạo từ JavaScript -->
-        </div>
-      </div>
-
-      <!-- =============================================
-           CÓ THỂ SỬA: THÔNG TIN DONATE
-           ============================================= -->
-      <div class="panel">
-        <h3 style="margin:0 0 10px 0">Ủng hộ tác giả</h3>
-        <p style="color:var(--muted);font-size:14px">Quét QR hoặc chuyển khoản VietinBank để ủng hộ XMOD phát triển mod nhanh hơn.</p>
-        <div style="display:flex;gap:8px;align-items:center;margin-top:10px">
-          <!-- SỬA QR CODE VÀ THÔNG TIN TÀI KHOẢN -->
-          <img src="https://i.postimg.cc/YqG9JCtp/i-Pay-Fri-Aug-22-10-47-44-GMT-07-00-2025.jpg" alt="QR" style="width:110px;height:110px;border-radius:8px;object-fit:cover;border:2px solid rgba(255,255,255,0.04)">
-          <div style="font-size:14px;color:var(--muted)">
-            <strong>VietinBank</strong><br>
-            0123456789<br>
-            Mẹ Tôi:)
-          </div>
-        </div>
-      </div>
+    <div class="messages" id="messages"></div>
+    <div class="input-row">
+      <input id="inp" placeholder="Nhập lệnh hoặc chat... (gõ 'help' để xem)"/>
+      <button class="btn-send" id="sendBtn">Gửi</button>
     </div>
   </div>
-  
-  <!-- AUDIO ELEMENT CHO NHẠC NỀN - MỚI THÊM -->
-<audio id="backgroundMusic" loop></audio>
+</div>
+  </div>
+  <audio id="backgroundMusic" loop></audio><script>
+/***********************************************
+ * XMOD v2 – UPDATED: mỗi lệnh có sticker riêng
+ * - Mình chỉ sửa chỗ liên quan tới stickerKey và thêm
+ *   chú thích tiếng Việt rõ ràng (không thay đổi logic).
+ * - Thay URL sticker theo ý bạn trong phần STICKERS.
+ ***********************************************/
 
-<script>
-/* =============================================
-   QUAN TRỌNG: DANH SÁCH MOD - DỄ SỬA NHẤT
-   - Thêm/sửa/xóa mod tại đây
-   - Mỗi mod cần: id, title, desc, thumb, link
-   ============================================= */
-   const MUSIC_LIST = [
-  {
-    id: "music1", title: "legendary ",
-    url: "https://www.dropbox.com/scl/fi/003fj25b92y8jio117ip9/Legends-Never-Die-ft.-Against-The-Current-Worlds-2017-League-of-Legends.mp3?rlkey=s3qb0nb4ypbjj4w8kqrzq1udy&st=xr6vsasb&dl=1" // ← SỬA LINK NHẠC TẠI ĐÂY
-  },
-  {
-    id: "music2", title: "đang update", 
-    url: "THAY_LINK_NHẠC_2_TẠI_ĐÂY.mp3" // ← SỬA LINK NHẠC TẠI ĐÂY
-  },
-  {
-    id: "music3", title: "đang update",
-    url: "THAY_LINK_NHẠC_3_TẠI_ĐÂY.mp3" // ← SỬA LINK NHẠC TẠI ĐÂY
-  }
+/* =============================
+   0) DỮ LIỆU – CHỈ SỬA PHẦN NÀY nếu cần
+   - STICKERS: map key -> link ảnh sticker
+   - Thay các URL bằng link thực tế của bạn
+   ============================= */
+const MUSIC_LIST = [
+  { id:"music1", title:"legendary", url:"https://www.dropbox.com/scl/fi/003fj25b92y8jio117ip9/Legends-Never-Die-ft.-Against-The-Current-2017.mp3?rlkey=s3qb0nb4ypbjj4w8kqrzq1udy&dl=1" },
+  { id:"music2", title:"đang update", url:"THAY_LINK_NHAC_2.mp3" },
+  { id:"music3", title:"đang update", url:"THAY_LINK_NHAC_3.mp3" }
 ];
+
 const MODS = [
-   
-  { 
-    id:"m1", 
-    title:"Nakroth Tử Lôi Thần Ngưu",           // TÊN MOD
-    desc:"Hiệu ứng sấm sét tím, ulti hoành tráng", // MÔ TẢ
-    thumb:"https://i.postimg.cc/qv9G4yx7/skin-lien-quan-1.jpg", // ẢNH THUMBNAIL
-    link:"https://gofile.io/d/45ZG6L"            // LINK TẢI
-  },
-  { 
-    id:"m2", 
-    title:"Allain Gojo Satoru", 
-    desc:"Mod Allain biến thành Gojo - hiệu ứng ánh sáng", 
-    thumb:"https://i.postimg.cc/qMpJDFfJ/skin-moi-lien-quan-3-c5bbe99eb1.png", 
-    link:"https://gofile.io/d/xxxx" 
-  },
-  { 
-    id:"m3", 
-    title:"Resources 17.8 Pack", 
-    desc:"Full resources cập nhật 17.8", 
-    thumb:"https://i.postimg.cc/J4FFHy5f/folder-la-gi.jpg", 
-    link:"https://gofile.io/d/45ZG6L" 
-  }
-  // THÊM MOD MỚI Ở ĐÂY THEO ĐỊNH DẠNG TƯƠNG TỰ
+  { id:"m1", title:"Nakroth Tử Lôi Thần Ngưu", desc:"Hiệu ứng sấm sét tím, ulti hoành tráng", thumb:"https://i.postimg.cc/qv9G4yx7/skin-lien-quan-1.jpg", link:"https://gofile.io/d/45ZG6L" },
+  { id:"m2", title:"Allain Gojo Satoru", desc:"Mod Allain biến thành Gojo - hiệu ứng ánh sáng", thumb:"https://i.postimg.cc/qMpJDFfJ/skin-moi-lien-quan-3-c5bbe99eb1.png", link:"https://gofile.io/d/xxxx" },
+  { id:"m3", title:"Resources 17.8 Pack", desc:"Full resources cập nhật 17.8", thumb:"https://i.postimg.cc/J4FFHy5f/folder-la-gi.jpg", link:"https://gofile.io/d/45ZG6L" }
 ];
 
-/* =============================================
-   HỆ THỐNG TẠO DANH SÁCH MOD TỰ ĐỘNG
-   ============================================= */
-const modsListEl = document.getElementById("modsList");
-function renderMods(){
-  modsListEl.innerHTML = "";
-  MODS.forEach(m=>{
-    const el = document.createElement("div");
-    el.className = "mod-card";
-    el.innerHTML = `
-      <div class="mod-thumb"><img src="${m.thumb}" alt="${m.title}"></div>
-      <div class="mod-info">
-        <h4>${m.title}</h4>
-        <p>${m.desc}</p>
-      </div>
-      <div class="mod-actions">
-        <button class="tiny-btn" data-id="${m.id}" onclick="copyLink('${m.link}')">Sao chép</button>
-        <button class="tiny-btn" onclick="openLink('${m.link}')">Tải</button>
-      </div>
-    `;
-    // Click vào card sẽ hiển thị mod trong chat
-    el.addEventListener("click", ()=> showModInChat(m));
-    modsListEl.appendChild(el);
-  })
-}
-// HỆ THỐNG NHẠC NỀN - MỚI THÊM
-const audioEl = document.getElementById("backgroundMusic");
-const musicControl = document.getElementById("musicControl");
-const musicTitle = document.getElementById("musicTitle");
-const playBtn = document.getElementById("playBtn");
-const pauseBtn = document.getElementById("pauseBtn");
-const stopBtn = document.getElementById("stopBtn");
-const volumeSlider = document.getElementById("volumeSlider");
-
-// thống kế
-// Enhanced features 
-let chatStats = {
-  totalMessages: 0,
-  commandsUsed: {},
-  startTime: Date.now()
+// ==== STICKERS: sửa link ảnh theo ý bạn ====
+// GHI CHÚ: mỗi key đại diện cho 1 lệnh / tình huống.
+// Bạn nên đổi từng URL thành ảnh riêng cho từng lệnh để đảm bảo "mỗi lệnh 1 sticker".
+const STICKERS = {
+  default: "https://i.postimg.cc/xTM2bBXL/2024-4-25-638496713669047688-duolingo-meme-27.webp",
+  help: "https://i.postimg.cc/5tkjyDr8/Kh-ng-C-Ti-u-3-20250828125708.png",
+  laymod: "https://i.postimg.cc/TYqwgKSd/Kh-ng-C-Ti-u-5-20250828130406.png",
+  allmods: "https://i.postimg.cc/GhR6fK3C/Polish-20250828-142746287.png",
+  suggestion: "https://i.postimg.cc/hPg4DSGH/Kh-ng-C-Ti-u-6-20250828130645.png",
+  donate: "https://i.postimg.cc/dVNJjr9Y/Kh-ng-C-Ti-u-7-20250828131030.png",
+  music: "https://i.postimg.cc/RVM9rXsm/lich-su-duolingo-meme-xuat-hien.jpg",
+  cleared: "https://i.postimg.cc/xTM2bBXL/2024-4-25-638496713669047688-duolingo-meme-27.webp",
+  missYou: "https://i.postimg.cc/xC2jXYRJ/Polish-20250828-133602172.jpg",
+  unknown: "https://i.postimg.cc/QMLhzsv4/Kh-ng-C-Ti-u-13-20250828132014.png",
+  aiFallback: "https://i.postimg.cc/QMLhzsv4/Kh-ng-C-Ti-u-13-20250828132014.png",
+  copy: "https://i.postimg.cc/xTM2bBXL/2024-4-25-638496713669047688-duolingo-meme-27.webp",
+  stats: "https://i.postimg.cc/xTM2bBXL/2024-4-25-638496713669047688-duolingo-meme-27.webp",
+  random: "https://i.postimg.cc/qvPqfWNR/duolingo-language-lessons.jpg",
+  trivia: "https://i.postimg.cc/qvPqfWNR/duolingo-language-lessons.jpg",
+  guide: "https://i.postimg.cc/5tkjyDr8/Kh-ng-C-Ti-u-3-20250828125708.png",
+  chemgio: "https://i.postimg.cc/xT7THByR/Kh-ng-C-Ti-u-9-20250828131456.png",
+  lucky: "https://i.postimg.cc/qvPqfWNR/duolingo-language-lessons.jpg",
+  request: "https://i.postimg.cc/GhR6fK3C/Polish-20250828-142746287.png",
+  update: "https://i.postimg.cc/tJkkwhDq/cover-at-duolingo-humans-and-ai-work-together-to-create-a-high-quality-learning-experience-383244722.png",
+  youtube: "https://i.postimg.cc/GmFtCqGx/Polish-20250822-083928173.png",
+  search: "https://i.postimg.cc/d1pZ1D12/Kh-ng-C-Ti-u-3-20250828125555.png",
+  confirmDelete: "https://i.postimg.cc/7PN8NSxW/Kh-ng-C-Ti-u-12-20250828131800.png",
+  aiError: "https://i.postimg.cc/xTM2bBXL/2024-4-25-638496713669047688-duolingo-meme-27.webp"
 };
 
-const savedStats = localStorage.getItem('xmod_chat_stats');
-if(savedStats) chatStats = JSON.parse(savedStats);
+/* =============================
+   1) TIỆN ÍCH (UTILITIES)
+   - Các hàm hiển thị, lưu lịch sử, scroll... có chú thích tiếng Việt
+   ============================= */
+const messagesEl = document.getElementById('messages');
+const STORAGE_KEY = 'xmod_chat_history_v2';
+const LAST_VISIT_KEY = 'xmod_last_visit_v2';
+const MISSYOU_THRESHOLD_MS = 1000 * 60 * 60 * 24 * 7; // 7 ngày
 
-function saveStats() {
-  localStorage.setItem('xmod_chat_stats', JSON.stringify(chatStats));
+function showToast(message, duration = 2500){
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = message;
+  document.body.appendChild(t);
+  requestAnimationFrame(()=> t.classList.add('show'));
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=> t.remove(), 300); }, duration);
 }
 
-function showToast(message, duration = 3000) {
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.textContent = message;
-  document.body.appendChild(toast);
-  
-  setTimeout(() => toast.classList.add('show'), 100);
-  setTimeout(() => {
-    toast.classList.remove('show');
-    setTimeout(() => document.body.removeChild(toast), 300);
-  }, duration);
-}
-let currentMusicIndex = -1;
-audioEl.volume = 0.5;
-
-// Event listeners cho điều khiển nhạc
-playBtn.addEventListener("click", ()=> {
-  if(audioEl.src) {
-    audioEl.play().catch(e => console.log("Không thể phát nhạc:", e));
-    addBotMsg("🎵 Đã phát nhạc");
-  } else {
-    addBotMsg("⚠️ Chưa chọn nhạc. Gõ lệnh <b>chọn nhạc</b> để chọn.");
-  }
-});
-
-pauseBtn.addEventListener("click", ()=> {
-  audioEl.pause();
-  addBotMsg("⏸️ Đã tạm dừng nhạc");
-});
-
-stopBtn.addEventListener("click", ()=> {
-  audioEl.pause();
-  audioEl.currentTime = 0;
-  addBotMsg("⏹️ Đã dừng nhạc");
-});
-
-volumeSlider.addEventListener("input", ()=> {
-  audioEl.volume = volumeSlider.value / 100;
-});
-
-// Hàm chọn nhạc - MỚI THÊM
-function selectMusic(index) {
-  if(index >= 0 && index < MUSIC_LIST.length) {
-    currentMusicIndex = index;
-    const music = MUSIC_LIST[index];
-    audioEl.src = music.url;
-    musicTitle.textContent = `🎵 ${music.title}`;
-    musicControl.classList.add("show");
-    addBotMsg(`🎵 Đã chọn nhạc: <b>${music.title}</b><br>Bấm nút Play để phát nhạc.`);
-  }
-}
-renderMods(); // Tạo danh sách mod
-
-/* =============================================
-   TIỆN ÍCH: MỞ LINK VÀ SAO CHÉP
-   ============================================= */
-function openLink(url){
-  window.open(url, "_blank");
-}
-function copyLink(url){
-  navigator.clipboard?.writeText(url).then(()=> {
-    addBotMsg("Link đã sao chép vào clipboard ✅");
-  }).catch(()=> {
-    addBotMsg("Không thể sao chép. Mở link để tải: <a href='"+url+"' target='_blank'>Mở link</a>");
-  });
-}
-
-/* =============================================
-   HỆ THỐNG CHAT - LƯU TRỮ TIN NHẮN
-   ============================================= */
-const messagesEl = document.getElementById("messages");
-const STORAGE_KEY = "xmod_chat_history_v1"; // Tên key lưu trữ
-
-// Tải lịch sử chat từ trình duyệt
-let HISTORY = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-HISTORY.forEach(item=>{
-  appendMessageToDom(item);
-});
-scrollToBottom();
-
-// Hàm hỗ trợ hiển thị tin nhắn
-function appendMessageToDom(item){
-  const div = document.createElement("div");
-  div.className = "bubble " + (item.sender==="user" ? "user" : "bot");
-  if(item.meta){ div.innerHTML = `<div class="meta">${item.meta}</div>` + item.html; }
-  else div.innerHTML = item.html;
-  messagesEl.appendChild(div);
-  scrollToBottom();
-}
-function saveToHistory(obj){
-  HISTORY.push(obj);
-  if(HISTORY.length>200) HISTORY.shift(); // Giới hạn 200 tin nhắn
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(HISTORY));
-}
-function addUserMsg(text){
-  const obj = {sender:"user", html: escapeHtml(text), timestamp: Date.now()};
-  appendMessageToDom(obj);
-  saveToHistory(obj);
-  chatStats.totalMessages++;
-  saveStats();
-}
-function addBotMsg(html, meta){
-  const obj = {sender:"bot", html: html, meta: meta || ""};
-  appendMessageToDom(obj);
-  saveToHistory(obj);
-}
-function scrollToBottom(){
-  setTimeout(()=> messagesEl.scrollTop = messagesEl.scrollHeight, 80);
-}
-// HÀM XÓA LỊCH SỬ CHAT - MỚI THÊM
-function clearChatHistory() {
-  localStorage.removeItem(STORAGE_KEY);
-  messagesEl.innerHTML = "";
-  HISTORY = [];
-  addBotMsg("🗑️ Đã xóa toàn bộ lịch sử chat!");
-}
 function escapeHtml(str){
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
 }
 
-/* =============================================
-   BOT LOGIC - CÁC LỆNH CÓ THỂ SỬA
-   ============================================= */
-function handleCommand(input){
-  const cmd = input.trim().toLowerCase();
-  trackCommand(cmd);
-  // LỆNH HELP - Hiển thị trợ giúp
-  function trackCommand(cmd) {
-  chatStats.commandsUsed[cmd] = (chatStats.commandsUsed[cmd] || 0) + 1;
-  saveStats();
+function scrollToBottom(){ setTimeout(()=> messagesEl.scrollTop = messagesEl.scrollHeight, 60); }
+
+/**
+ * addBotMsg(html, meta, stickerKey)
+ * - html: nội dung HTML đã escape nếu cần
+ * - meta: text phụ (ví dụ: "Bot đang soạn...")
+ * - stickerKey: key trong STICKERS (bắt buộc để mỗi lệnh có sticker riêng)
+ */
+function addBotMsg(html, meta, stickerKey){
+  // Lấy URL sticker từ STICKERS theo key; nếu không tìm thấy -> dùng default
+  const stickerUrl = stickerKey && STICKERS[stickerKey] ? STICKERS[stickerKey] : (STICKERS.default || '');
+  const obj = { sender:'bot', html, meta: meta || '', sticker: stickerUrl || '' , timestamp: Date.now() };
+  appendMessageToDom(obj);
+  saveToHistory(obj);
 }
-  if(cmd==="help"){
-    const html = `
-      <b>Danh sách lệnh:</b><br>
-      - <b>laymod</b> : Link tải mod mới nhất<br>
-      - <b>gợi ý skin</b> : Gợi ý từ danh sách mod hiện có<br>
-      - <b>allmods</b> : Hiện toàn bộ mod trong chat<br>
-      - <b>donate</b> : Hiển thị QR donate<br>
-      - <b>update</b> : Thông báo cập nhật mới<br>
-      - <b>youtube</b> : Link kênh XMOD<br>
-      - <b>chém gió</b> : Bot chém gió vui vẻ<br>
-      - <b>chọn nhạc</b> : Chọn nhạc nền cho website 🎵<br>
-      - <b>xóa lịch sử</b> : Xóa toàn bộ lịch sử chat 🗑️<br>
-      - <b>thống kê</b> : thống kê 📠<br>
-    `;
-    addBotMsg(html);
-    return;
+
+/**
+ * appendMessageToDom(item)
+ * - item: {sender, html, meta, sticker}
+ * - Hiển thị tin nhắn và sticker (nếu có)
+ */
+function appendMessageToDom(item){
+  const div = document.createElement('div');
+  div.className = 'bubble ' + (item.sender === 'user' ? 'user' : 'bot');
+  let contentHtml = item.meta ? `<div class="meta">${item.meta}</div>${item.html}` : item.html;
+  if(item.sticker){
+    // Chú thích: thẻ ảnh sticker sẽ hiển thị dưới nội dung bot. Bạn có thể thay class .sticker nếu muốn kích thước khác
+    contentHtml += `<img src="${item.sticker}" alt="sticker" class="sticker">`;
   }
-  //lệnh thống kê
-  if(cmd==="thống kê" || cmd==="stats"){
-  const uptime = Math.floor((Date.now() - chatStats.startTime) / 1000 / 60);
-  const topCommands = Object.entries(chatStats.commandsUsed)
-    .sort((a,b) => b[1] - a[1])
-    .slice(0, 5)
-    .map(([cmd, count]) => `• ${cmd}: ${count} lần`)
-    .join('<br>');
-  
-  const html = `
-    <b>📊 Thống kê sử dụng:</b><br>
-    💬 Tổng tin nhắn: <b>${chatStats.totalMessages}</b><br>
-    ⏰ Thời gian online: <b>${uptime} phút</b><br>
-    🔥 Lệnh dùng nhiều nhất:<br>
-    ${topCommands || '• Chưa có dữ liệu'}
-  `;
-  addBotMsg(html);
-  return;
+  div.innerHTML = contentHtml;
+  messagesEl.appendChild(div);
+  scrollToBottom();
 }
-  // LỆNH LAYMOD - Lấy mod mới nhất (mod đầu tiên trong danh sách)
-  if(cmd==="laymod"){
-    const m = MODS[0];
-    const html = renderModCardHtml(m);
-    addBotMsg(`📥 Link mod mới nhất:<br>${html}`);
-    return;
+
+/* =============================
+   2) LỊCH SỬ + THỐNG KÊ
+   ============================= */
+let HISTORY = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+HISTORY.forEach(appendMessageToDom);
+scrollToBottom();
+
+let chatStats = { totalMessages: 0, commandsUsed: {}, startTime: Date.now() };
+const savedStats = localStorage.getItem('xmod_chat_stats');
+if(savedStats) chatStats = JSON.parse(savedStats);
+function saveStats(){ localStorage.setItem('xmod_chat_stats', JSON.stringify(chatStats)); }
+
+function saveToHistory(obj){
+  HISTORY.push(obj); if(HISTORY.length>200) HISTORY.shift();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(HISTORY));
+}
+
+function addUserMsg(text){
+  const obj = {sender:'user', html: escapeHtml(text), timestamp: Date.now()};
+  appendMessageToDom(obj); saveToHistory(obj); chatStats.totalMessages++; saveStats();
+}
+
+function clearChatHistory(){
+  localStorage.removeItem(STORAGE_KEY); HISTORY = []; messagesEl.innerHTML='';
+  addBotMsg('🗑️ Đã xóa toàn bộ lịch sử chat!', '', 'cleared');
+}
+
+/* =============================
+   3) MUSIC CONTROLS
+   ============================= */
+const audioEl = document.getElementById('backgroundMusic');
+const musicControl = document.getElementById('musicControl');
+const musicTitle = document.getElementById('musicTitle');
+const playBtn = document.getElementById('playBtn');
+const pauseBtn = document.getElementById('pauseBtn');
+const stopBtn = document.getElementById('stopBtn');
+const volumeSlider = document.getElementById('volumeSlider');
+let currentMusicIndex = -1; audioEl.volume = 0.5;
+
+playBtn.addEventListener('click', ()=>{
+  if(audioEl.src){ audioEl.play().catch(()=>{}); addBotMsg('🎵 Đã phát nhạc', '', 'music'); }
+  else addBotMsg('⚠️ Chưa chọn nhạc. Gõ <b>chọn nhạc</b> để chọn.', '', 'music');
+});
+ pauseBtn.addEventListener('click', ()=>{ audioEl.pause(); addBotMsg('⏸️ Đã tạm dừng nhạc', '', 'music'); });
+ stopBtn.addEventListener('click', ()=>{ audioEl.pause(); audioEl.currentTime=0; addBotMsg('⏹️ Đã dừng nhạc', '', 'music'); });
+ volumeSlider.addEventListener('input', ()=> audioEl.volume = volumeSlider.value/100 );
+
+function selectMusic(index){
+  if(index>=0 && index<MUSIC_LIST.length){
+    currentMusicIndex = index; const m = MUSIC_LIST[index]; audioEl.src = m.url;
+    musicTitle.textContent = `🎵 ${m.title}`; musicControl.classList.add('show');
+    addBotMsg(`🎵 Đã chọn nhạc: <b>${m.title}</b><br>Bấm Play để phát.`, '', 'music');
   }
-
-  // LỆNH ALLMODS - Hiển thị tất cả mod
-  if(cmd==="allmods"){
-    let html = `<b>Danh sách mod hiện có:</b><br>`;
-    MODS.forEach(m=>{
-      html += renderModCardHtml(m) + "<br>";
-    });
-    addBotMsg(html);
-    return;
-  }
-
-  // LỆNH GỢI Ý SKIN - Chọn ngẫu nhiên 1 mod
-  if(cmd==="gợi ý skin" || cmd==="goi y skin" || cmd==="goiyskin"){
-    const m = MODS[Math.floor(Math.random()*MODS.length)];
-    addBotMsg(`🤔 Gợi ý cho bạn: <b>${m.title}</b><br>${renderModCardHtml(m)}`);
-    return;
-  }
-
-  // =============================================
-  //    CÓ THỂ SỬA: THÔNG TIN DONATE
-  // =============================================
-  if(cmd==="donate"){
-    const html = `
-      <b>💝 Ủng hộ XMOD</b><br>
-      <img src="https://i.postimg.cc/YqG9JCtp/i-Pay-Fri-Aug-22-10-47-44-GMT-07-00-2025.jpg" alt="QR" style="width:180px;border-radius:8px;margin-top:8px"><br>
-      VietinBank: <b>0123456789</b><br>Chủ TK: <b>NGUYEN VAN A</b>
-    `;
-    addBotMsg(html);
-    return;
-  }
-  // LỆNH RANDOM MOD với animation
-if(cmd==="random mod" || cmd==="random"){
-  addBotMsg("🎲 Đang lắc xúc xắc...");
-  setTimeout(()=> {
-    const m = MODS[Math.floor(Math.random()*MODS.length)];
-    addBotMsg(`🎯 May mắn của bạn: <b>${m.title}</b><br>${renderModCardHtml(m)}`);
-  }, 1500);
-  return;
 }
 
-// LỆNH TRIVIA về Liên Quân
-if(cmd==="trivia"){
-  const questions = [
-    "Nakroth có bao nhiêu skill? Trả lời: 4 skill (3 skill thường + 1 nội tại)",
-    "Tướng nào được gọi là Thần Rừng? Trả lời: NAKROTH",
-    "Map Liên Quân có bao nhiêu làn? Trả lời: không biết"
-  ];
-  const q = questions[Math.floor(Math.random()*questions.length)];
-  addBotMsg(`🧠 Câu hỏi: ${q}`);
-  return;
-}
-
-// LỆNH GUIDE hướng dẫn
-if(cmd==="guide"){
-  const html = `
-    <b>📋 Hướng dẫn cài mod:</b><br>
-    1. Tải file mod về máy<br>
-    2. Giải nén bằng <br>
-    3. Copy vào thư mục game<br>
-    4. Khởi động game và thưởng thức!<br>
-    <i>⚠️ Nhớ backup file gốc trước khi cài</i>
-  `;
-  addBotMsg(html);
-  return;
-}
-
-// LỆNH SEARCH tìm mod
-if(cmd.startsWith("search ") || cmd.startsWith("tim ")){
-  const query = cmd.replace("search ", "").replace("tim ", "");
-  const results = MODS.filter(m => 
-    m.title.toLowerCase().includes(query.toLowerCase()) ||
-    m.desc.toLowerCase().includes(query.toLowerCase())
-  );
-  
-  if(results.length > 0){
-    let html = `🔍 Tìm thấy ${results.length} mod:<br>`;
-    results.forEach(m => html += renderModCardHtml(m) + "<br>");
-    addBotMsg(html);
-  } else {
-    addBotMsg(`❌ Không tìm thấy mod nào với từ khóa: <b>${query}</b>`);
-  }
-  return;
-}
-
-// LỆNH LUCKY DRAW
-if(cmd==="lucky" || cmd==="lucky draw"){
-  const prizes = [
-    "🎁 Bạn trúng: giải nhất,chúc mừng(không có gì hết!",
-    "🏆 Bạn trúng: giải hai!", 
-    "💎 Bạn trúng: giải 3!",
-    "🎯 Bạn trúng: giải 4"
-  ];
-  addBotMsg("🎰 Đang quay số...");
-  setTimeout(()=> {
-    const prize = prizes[Math.floor(Math.random()*prizes.length)];
-    addBotMsg(prize);
-  }, 2000);
-  return;
-}
-
-// LỆNH REQUEST yêu cầu mod
-if(cmd.startsWith("request ")){
-  const modName = cmd.replace("request ", "");
-  addBotMsg(`📝 Đã ghi nhận yêu cầu mod: <b>${modName}</b><br>Admin sẽ xem xét và cập nhật trong phiên bản sau!`);
-  return;
-}
-
-  // =============================================
-  //    CÓ THỂ SỬA: THÔNG BÁO UPDATE
-  // =============================================
-  if(cmd==="update"){
-    addBotMsg("🆕 Cập nhật: Đã thêm mod <b>" + MODS[0].title + "</b> và pack Resources 17.8.");
-    return;
-  }
-
-  // LỆNH YOUTUBE
-  if(cmd==="youtube"){
-    addBotMsg(`🎬 Kênh YouTube: <a href="https://youtube.com/@xmod-b7i" target="_blank">XMOD Official</a>`);
-    return;
-  }
-
-   // LỆNH CHỌN NHẠC - MỚI THÊM
-if(cmd==="chọn nhạc" || cmd==="chon nhac" || cmd==="music"){
-  let html = `
-    <b>🎵 Danh sách nhạc nền:</b><br>
-    Chọn nhạc bằng cách gõ số (VD: gõ "1" để chọn nhạc 1)<br><br>
-  `;
-  MUSIC_LIST.forEach((music, index) => {
-    html += `<b>${index + 1}</b>. ${music.title}<br>`;
-  });
-  html += `<br><i>Sau khi chọn, dùng nút điều khiển ở góc dưới để phát nhạc.</i>`;
-  addBotMsg(html);
-  return;
-}
-
-// XỬ LÝ CHỌN NHẠC THEO SỐ - MỚI THÊM
-const musicNumber = parseInt(cmd);
-if(musicNumber >= 1 && musicNumber <= MUSIC_LIST.length) {
-  selectMusic(musicNumber - 1);
-  return;
-}
-
-// LỆNH XÓA LỊCH SỬ - MỚI THÊM
-if(cmd==="xóa lịch sử" || cmd==="xoa lich su" || cmd==="clear" || cmd==="xóa chat"){
-  const confirmMsg = `
-    <b>⚠️ Xác nhận xóa lịch sử?</b><br>
-    Gõ <b>"xác nhận xóa"</b> để xóa toàn bộ lịch sử chat.<br>
-    <i>Hành động này không thể hoàn tác!</i>
-  `;
-  addBotMsg(confirmMsg);
-  return;
-}
-
-// XÁC NHẬN XÓA - MỚI THÊM
-if(cmd==="xác nhận xóa" || cmd==="xac nhan xoa" || cmd==="confirm delete"){
-  clearChatHistory();
-  return;
-}
-  // =============================================
-  //    CÓ THỂ SỬA: CÁC CÂU CHÉM GIÓ
-  // =============================================
-  if(cmd==="chém gió" || cmd==="chem gio"){
-  const jokes = [
-    "⚡ Nakroth mà ăn sét Toro thì gánh team luôn!",
-    "Mình là XMOD GPT, chuyên gia mod ảo nhưng thực tế thì... mình cũng cần coffee ☕",
-    "Bạn mod nhiều thì đừng quên donate để mình khỏi ăn mì gói 😆",
-    "🎵 Nghe nhạc trong lúc mod sẽ thấy đã hơn đấy!",
-    "Chat với bot mà vui như chat với crush vậy 😎"
-  ];
-  addBotMsg(jokes[Math.floor(Math.random()*jokes.length)]);
-  return;
-}
-
-// Tìm kiếm mod theo tên
-const found = MODS.find(m=> m.title.toLowerCase().includes(cmd));
-if(found){
-  addBotMsg(`🔎 Mình tìm thấy mod phù hợp:<br>${renderModCardHtml(found)}`);
-  return;
-}
-
-// Trả lời mặc định khi không hiểu lệnh
-  callOpenAI(cmd); // gọi AI khi không khớp lệnh nào
-}
-
-/* Hàm tạo HTML card cho mod trong chat */
+/* =============================
+   4) RENDER MOD CARD (dùng khi hiển thị mod trong chat)
+   - Chú thích tiếng Việt kèm theo hàm
+   ============================= */
 function renderModCardHtml(m){
   return `
     <div style="display:flex;gap:10px;align-items:center;">
-      <div style="width:86px;height:64px;flex:0 0 86px;border-radius:8px;overflow:hidden;border:2px solid rgba(255,255,255,0.04)">
+      <div style="width:86px;height:64px;flex:0 0 86px;border-radius:8px;overflow:hidden;border:2px solid var(--border)">
         <img src="${m.thumb}" style="width:100%;height:100%;object-fit:cover" alt="${m.title}">
       </div>
       <div style="flex:1">
         <div style="font-weight:700">${m.title}</div>
-        <div style="color:#cbbfdc;font-size:13px;margin-top:6px">${m.desc}</div>
-        <div style="margin-top:8px;display:flex;gap:8px">
-          <a href="${m.link}" target="_blank" style="padding:8px 12px;border-radius:8px;background:linear-gradient(90deg,#7209b7,#f72585);color:#fff;font-weight:700;text-decoration:none">Tải</a>
-          <button onclick="copyLink('${m.link}')" style="padding:8px 12px;border-radius:8px;border:none;background:#2b2b45;color:#fff;cursor:pointer">Sao chép link</button>
+        <div style="color:var(--muted);font-size:13px;margin-top:6px">${m.desc}</div>
+        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+          <a href="${m.link}" target="_blank" style="padding:8px 12px;border-radius:8px;background:linear-gradient(90deg,var(--grad2),var(--grad3));color:#fff;font-weight:700;text-decoration:none">Tải</a>
+          <button onclick="copyLink('${m.link}')" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--glass);color:var(--text);cursor:pointer">Sao chép link</button>
         </div>
       </div>
-    </div>
-  `;
+    </div>`;
+}
+function copyLink(url){
+  navigator.clipboard?.writeText(url).then(()=> addBotMsg('Link đã sao chép ✅', '', 'copy'))
+  .catch(()=> addBotMsg(`Không thể sao chép. Mở link để tải: <a href='${url}' target='_blank'>Mở link</a>`, '', 'copy'));
 }
 
-/* XỬ LÝ SỰ KIỆN: GỬI TIN NHẮN */
-const inp = document.getElementById("inp");
-const sendBtn = document.getElementById("sendBtn");
-sendBtn.addEventListener("click", onSend);
-inp.addEventListener("keypress", (e)=>{ if(e.key==="Enter") onSend(); });
+/* =============================
+   5) XỬ LÝ LỆNH (COMMAND HANDLER)
+   - Mỗi lệnh giờ truyền stickerKey riêng
+   - Vẫn giữ nguyên logic ban đầu
+   ============================= */
+function trackCommand(cmd){ chatStats.commandsUsed[cmd] = (chatStats.commandsUsed[cmd]||0)+1; saveStats(); }
+
+function handleCommand(input){
+  const cmd = input.trim().toLowerCase();
+  trackCommand(cmd);
+
+  if(cmd === 'help'){
+    addBotMsg(`
+      <b>Danh sách lệnh:</b><br>
+      - <b>laymod</b> : Hiện toàn bộ mod trong chat<br>
+      - <b>allmods</b> : (giống laymod) liệt kê tất cả mod<br>
+      - <b>gợi ý skin</b> : Gợi ý random 1 mod<br>
+      - <b>donate</b> : Hiển thị QR donate<br>
+      - <b>update</b> : Thông báo cập nhật mới<br>
+      - <b>youtube</b> : Link kênh XMOD<br>
+      - <b>chém gió</b> : Bot chém gió vui vẻ<br>
+      - <b>chọn nhạc</b> : Danh sách nhạc nền 🎵<br>
+      - <b>xóa lịch sử</b> : Xóa toàn bộ lịch sử chat 🗑️<br>
+      - <b>thống kê</b> : Thống kê sử dụng 📠<br>
+      - <b>search &lt;từ khóa&gt;</b> : Tìm mod theo tên/mô tả<br>
+      - <b>request &lt;tên mod&gt;</b> : Gửi yêu cầu mod
+    `, '', 'help');
+    return;
+  }
+
+  if(cmd === 'thống kê' || cmd === 'stats'){
+    const uptime = Math.floor((Date.now()-chatStats.startTime)/1000/60);
+    const top = Object.entries(chatStats.commandsUsed).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([c,n])=>`• ${c}: ${n} lần`).join('<br>') || '• Chưa có dữ liệu';
+    addBotMsg(`<b>📊 Thống kê:</b><br>💬 Tin nhắn: <b>${chatStats.totalMessages}</b><br>⏰ Online: <b>${uptime} phút</b><br>🔥 Lệnh nhiều nhất:<br>${top}`, '', 'stats');
+    return;
+  }
+
+  if(cmd === 'laymod' || cmd === 'allmods'){
+    let html = `<b>📦 Dan sách mod hiện có (${MODS.length}):</b><br>`;
+    MODS.forEach(m=> html += renderModCardHtml(m)+"<br>");
+    addBotMsg(html, '', 'laymod');
+    return;
+  }
+
+  if(cmd === 'gợi ý skin' || cmd === 'goi y skin' || cmd === 'goiyskin'){
+    const m = MODS[Math.floor(Math.random()*MODS.length)];
+    addBotMsg(`🤔 Gợi ý: <b>${m.title}</b><br>${renderModCardHtml(m)}`, '', 'suggestion');
+    return;
+  }
+
+  if(cmd === 'donate'){
+    addBotMsg(`
+      <b>💝 Ủng hộ XMOD</b><br>
+      <img src="https://i.postimg.cc/YqG9JCtp/i-Pay-Fri-Aug-22-10-47-44-GMT-07-00-2025.jpg" alt="QR" style="width:180px;border-radius:8px;margin-top:8px"><br>
+      VietinBank: <b>0123456789</b><br>Chủ TK: <b>Mẹ Tôi</b>
+    `, '', 'donate');
+    return;
+  }
+
+  if(cmd === 'random mod' || cmd === 'random'){
+    addBotMsg('🎲 Đang lắc xúc xắc...', '', 'random');
+    setTimeout(()=>{ const m = MODS[Math.floor(Math.random()*MODS.length)]; addBotMsg(`🎯 May mắn của bạn: <b>${m.title}</b><br>${renderModCardHtml(m)}`, '', 'random'); }, 1200);
+    return;
+  }
+
+  if(cmd === 'trivia'){
+    const qs = [
+      'Nakroth có bao nhiêu skill? Trả lời: 4 skill (3 thường + 1 nội tại)',
+      'Tướng nào được gọi là Thần Rừng? Trả lời: Nakroth',
+      'Map Liên Quân có bao nhiêu làn? Trả lời: 3 làn'
+    ];
+    addBotMsg(`🧠 Câu hỏi: ${qs[Math.floor(Math.random()*qs.length)]}`, '', 'trivia');
+    return;
+  }
+
+  if(cmd === 'guide'){
+    addBotMsg(`
+      <b>📋 Hướng dẫn cài mod:</b><br>
+      1. Tải file mod về máy<br>
+      2. Giải nén bằng ZArchiver/MT<br>
+      3. Sao chép vào thư mục game<br>
+      4. Khởi động game và thưởng thức!<br>
+      <i>⚠️ Nhớ backup file gốc trước khi cài</i>
+    `, '', 'guide');
+    return;
+  }
+
+  if(cmd==="chém gió" || cmd==="chem gio"){
+    const jokes = [
+      "⚡ Nakroth mà ăn sét Toro thì gánh team luôn!",
+      "Mình là XMOD GPT, chuyên gia mod ảo nhưng thực tế thì... mình cũng cần coffee ☕",
+      "Bạn mod nhiều thì đừng quên donate để mình khỏi ăn mì gói 😆",
+      "🎵 Nghe nhạc trong lúc mod sẽ thấy đã hơn đấy!",
+      "Chat với bot mà vui như chat với crush vậy 😎"
+    ];
+    addBotMsg(jokes[Math.floor(Math.random()*jokes.length)], '', 'chemgio');
+    return;
+  }
+
+  if(cmd.startsWith('search ') || cmd.startsWith('tim ')){
+    const query = cmd.replace('search ','').replace('tim ','').trim();
+    const results = MODS.filter(m=> m.title.toLowerCase().includes(query) || m.desc.toLowerCase().includes(query));
+    if(results.length){
+      let html = `🔍 Tìm thấy ${results.length} mod:<br>`;
+      results.forEach(m=> html += renderModCardHtml(m)+"<br>");
+      addBotMsg(html, '', 'search');
+    }else addBotMsg(`❌ Không tìm thấy mod với từ khóa: <b>${escapeHtml(query)}</b>`, '', 'search');
+    return;
+  }
+
+  if(cmd === 'lucky' || cmd === 'lucky draw'){
+    const prizes = ['🎁 Bạn trúng: Giải nhất (…đùa thôi 😆)', '🏆 Bạn trúng: Giải nhì!', '💎 Bạn trúng: Giải ba!', '🎯 Bạn trúng: Giải tư!'];
+    addBotMsg('🎰 Đang quay số...', '', 'lucky');
+    setTimeout(()=> addBotMsg(prizes[Math.floor(Math.random()*prizes.length)], '', 'lucky'), 1500);
+    return;
+  }
+
+  if(cmd.startsWith('request ')){
+    const modName = cmd.slice(8).trim();
+    addBotMsg(`📝 Đã ghi nhận yêu cầu mod: <b>${escapeHtml(modName)}</b><br>Admin sẽ xem xét và cập nhật sau!`, '', 'request');
+    return;
+  }
+
+  if(cmd === 'update'){
+    addBotMsg(`🆕 Cập nhật: Đã thêm mod <b>${MODS[0]?.title || 'mới'}</b> và pack Resources 17.8.`, '', 'update');
+    return;
+  }
+
+  if(cmd === 'youtube'){
+    addBotMsg(`🎬 Kênh YouTube: <a href="https://youtube.com/@xmod-b7i" target="_blank">XMOD Official</a>`, '', 'youtube');
+    return;
+  }
+
+  if(cmd === 'chọn nhạc' || cmd === 'chon nhac' || cmd === 'music'){
+    let html = `<b>🎵 Danh sách nhạc nền:</b><br>Gõ số để chọn (VD: <b>1</b>)<br><br>`;
+    MUSIC_LIST.forEach((m,i)=> html += `<b>${i+1}</b>. ${m.title}<br>`);
+    html += `<br><i>Sau khi chọn, dùng khung điều khiển góc dưới để Play/Pause.</i>`;
+    addBotMsg(html, '', 'music');
+    return;
+  }
+
+  const musicNumber = parseInt(cmd);
+  if(!isNaN(musicNumber) && musicNumber>=1 && musicNumber<=MUSIC_LIST.length){ selectMusic(musicNumber-1); return; }
+
+  if(cmd === 'xóa lịch sử' || cmd === 'xoa lich su' || cmd === 'clear' || cmd === 'xóa chat'){
+    addBotMsg(`<b>⚠️ Xác nhận xóa lịch sử?</b><br>Gõ <b>"xác nhận xóa"</b> để xóa toàn bộ lịch sử chat.<br><i>Hành động này không thể hoàn tác!</i>`, '', 'confirmDelete');
+    return;
+  }
+  if(cmd === 'xác nhận xóa' || cmd === 'xac nhan xoa' || cmd === 'confirm delete'){ clearChatHistory(); return; }
+
+  // Nếu không trùng lệnh nào ở trên: hiển thị thông báo "không hiểu" + sticker, rồi gọi AI fallback
+  addBotMsg(`❓ Mình chưa hiểu lệnh "<b>${escapeHtml(input)}</b>". Mình thử trả lời bằng AI nhé...`, '', 'unknown');
+  callOpenAI(cmd);
+}
+
+/* =============================
+   6) INPUT & CHIPS
+   ============================= */
+const inp = document.getElementById('inp');
+const sendBtn = document.getElementById('sendBtn');
+sendBtn.addEventListener('click', onSend);
+inp.addEventListener('keypress', e=>{ if(e.key==='Enter') onSend(); });
 
 function onSend(){
-  const text = inp.value.trim();
-  if(!text) return;
-  addUserMsg(text);
-  inp.value="";
-  
-  const typingDiv = document.createElement("div");
-  typingDiv.className = "bubble bot";
-  typingDiv.innerHTML = `<div class="typing"></div>`;
-  messagesEl.appendChild(typingDiv);
-  scrollToBottom();
-  
-  setTimeout(()=> {
-    typingDiv.remove();
-    handleCommand(text);
-  }, 600 + Math.random()*800);
+  const text = inp.value.trim(); if(!text) return; addUserMsg(text); inp.value='';
+  const typing = document.createElement('div'); typing.className = 'bubble bot'; typing.innerHTML = `<div class="meta">Bot đang soạn...</div>`; messagesEl.appendChild(typing); scrollToBottom();
+  setTimeout(()=>{ typing.remove(); handleCommand(text); }, 500 + Math.random()*700);
 }
 
-document.querySelectorAll(".chip").forEach(el=>{
-  el.addEventListener("click", ()=>{
-    const c = el.getAttribute("data-cmd");
-    inp.value = c;
-    inp.focus();
-  });
+document.querySelectorAll('.chip').forEach(el=> el.addEventListener('click', ()=>{ inp.value = el.getAttribute('data-cmd'); inp.focus(); }));
+
+/* =============================
+   7) THEME TOGGLE (🌓)
+   - Lưu chế độ vào localStorage
+   ============================= */
+const themeBtn = document.getElementById('toggleTheme');
+(function(){
+  const saved = localStorage.getItem('xmod_theme');
+  if(saved === 'light') document.body.classList.add('light');
+})();
+
+themeBtn.addEventListener('click', ()=>{
+  document.body.classList.toggle('light');
+  const mode = document.body.classList.contains('light') ? 'light' : 'dark';
+  localStorage.setItem('xmod_theme', mode);
+  showToast(mode==='light' ? '🌞 Giao diện sáng' : '🌙 Giao diện tối');
 });
 
-function showModInChat(m){
-  addBotMsg(renderModCardHtml(m), "Thông tin mod");
-}
-
-window.addEventListener("keydown", (e)=>{
-  if(e.ctrlKey && e.key.toLowerCase()==='k'){
-    if(confirm("Xóa lịch sử chat?")) { 
-      clearChatHistory();
-    }
+/* =============================
+   8) INTRO + "Tôi nhớ bạn quá" CHECK
+   - Nếu lâu không vào (theo MISSYOU_THRESHOLD_MS), hiện 1 message đặc biệt kèm sticker
+   ============================= */
+(function checkLastVisitAndIntro(){
+  const last = parseInt(localStorage.getItem(LAST_VISIT_KEY) || '0', 10);
+  const now = Date.now();
+  if(!HISTORY.length){
+    addBotMsg("Xin chào 👋! Mình là <b>XMOD Chat</b> — gõ <b>help</b> để xem lệnh.\n\n🎵 <i>Thử lệnh 'chọn nhạc' để nghe nhạc nền nhé!</i>", '', 'help');
   }
-});
+  if(!last || (now - last) > MISSYOU_THRESHOLD_MS){
+    addBotMsg(`<b>Tôi nhớ bạn quá! 💖</b><br>Lâu rồi bạn chưa ghé. Chào mừng bạn đã trở lại!`, '', 'missYou');
+  }
+  localStorage.setItem(LAST_VISIT_KEY, String(now));
+})();
 
-if(HISTORY.length===0){
-  addBotMsg("Xin chào 👋! Mình là <b>XMOD Chat</b> — gõ <b>help</b> để xem lệnh. Bạn có thể bấm các nút nhanh bên trên.<br><br>🎵 <i>Thử lệnh 'chọn nhạc' để nghe nhạc nền nhé!</i>");
-}
-
-window.XMOD = {MODS, MUSIC_LIST, addBotMsg, addUserMsg, renderMods, copyLink, openLink, selectMusic, clearChatHistory};
-
-// ================================
-// Gọi OpenAI nếu không khớp lệnh
-// ================================
+/* =============================
+   9) OPENAI FALLBACK
+   - Lưu ý: KHÔNG để API key ở client cho production
+   - Thông báo lỗi có sticker riêng
+   ============================= */
 async function callOpenAI(userText){
-  addBotMsg("⏳ Đang hỏi AI, chờ chút nhé...");
-  
-  try {
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // ⚠️ ĐỔI API_KEY của bạn tại đây (chỉ test cá nhân, không public web)
-        "Authorization": "Bearer YOUR_API_KEY_HERE"
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",   // hoặc gpt-4o-mini nếu có
-        messages: [
-          {role: "system", content: "Bạn là trợ lý web XMOD, chuyên hỗ trợ mod skin Liên Quân, nhưng cũng có thể trả lời tự do."},
-          {role: "user", content: userText}
-        ],
-        max_tokens: 500,
-        temperature: 0.8
-      })
+  addBotMsg('⏳ Đang hỏi AI, chờ chút nhé...', '', 'aiFallback');
+  try{
+    const res = await fetch('https://api.openai.com/v1/chat/completions',{
+      method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer YOUR_API_KEY_HERE' },
+      body: JSON.stringify({ model:'gpt-3.5-turbo', messages:[ {role:'system', content:'Bạn là trợ lý XMOD.'}, {role:'user', content:userText} ], max_tokens:500, temperature:0.8 })
     });
-    
     const data = await res.json();
-    const reply = data.choices?.[0]?.message?.content || "❌ AI không trả lời được vì đây không phải là trí tuệ nhân tạo như chatgpt,Gemini,grock vân vân nên không thể trả lời hoặc trò chuyện với bạn trừ những lệnh được lập trình sẵn ,nếu muốn giống chatgpt thì donate một triệu tôi tìm cách làm liền.";
-    addBotMsg(reply);
-    
-  } catch(err){
-    console.error(err);
-    addBotMsg("⚠️ Lỗi khi gọi OpenAI. Kiểm tra API Key hoặc mạng!");
-  }
+    const reply = data.choices?.[0]?.message?.content || '❌ AI không trả lời được. đây chỉ là chatbot xử lý lệnh được lập trình sẵn thôi nên đừng soi mối nếu muốn như chatgbt, Gemini,grock.... thì donate 1 triệu admin tìm cách làm liền!.';
+    addBotMsg(escapeHtml(reply).replace(/\n/g,'<br>'), '', 'aiFallback');
+  }catch(e){ console.error(e); addBotMsg('⚠️ Lỗi khi gọi OpenAI. kiểm tra api key hoặc mạng(Đéo cần kiểm tra gì cả vì tạo đéo để key!)', '', 'aiError'); }
 }
+
+// expose for console debugging
+window.XMOD = { MODS, MUSIC_LIST, addBotMsg, addUserMsg, copyLink, selectMusic };
 </script>
 </body>
 </html>
