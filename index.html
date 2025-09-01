@@ -1,61 +1,1141 @@
-<!DOCTYPE html><html lang="vi">
+<!DOCTYPE html>
+<html lang="vi">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>XMOD Chat – Full-screen + Theme Toggle + Sticker (Updated)</title>
 <style>
-  :root{
-    --bg1:#0a0a0a;           /* nền tối 1 */
-    --bg2:#1a1a1a;           /* nền tối 2 */
-    --text:#ffffff;          /* màu chữ */
-    --muted:#cfcfcf;         /* chữ phụ */
-    --card:rgba(255,255,255,0.06);
-    --glass:rgba(255,255,255,0.05);
-    --border:rgba(255,255,255,0.1);
-    --grad2:#7209b7;         /* tím */
-    --grad3:#f72585;         /* hồng */
+/* ================================
+   PHẦN 1: CSS CƠ BẢN & VARIABLES
+   - Màu sắc chủ đạo
+   - Reset styles
+   - Layout cơ bản
+   ================================ */
+
+:root{
+  /* THEME COLORS - Màu giao diện */
+  --bg1:#0a0a0a;           /* nền tối 1 */
+  --bg2:#1a1a1a;           /* nền tối 2 */
+  --text:#ffffff;          /* màu chữ chính */
+  --muted:#cfcfcf;         /* chữ phụ/mờ */
+  --card:rgba(255,255,255,0.06);      /* nền thẻ */
+  --glass:rgba(255,255,255,0.05);     /* hiệu ứng kính */
+  --border:rgba(255,255,255,0.1);     /* đường viền */
+  
+  /* GRADIENT COLORS - Màu gradient */
+  --grad2:#7209b7;         /* tím đậm */
+  --grad3:#f72585;         /* hồng đậm */
+}
+
+/* LIGHT THEME - Giao diện sáng */
+body.light{
+  --bg1:#f3f4f6;
+  --bg2:#e5e7eb;
+  --text:#111827;
+  --muted:#4b5563;
+  --card:rgba(0,0,0,0.05);
+  --glass:rgba(0,0,0,0.04);
+  --border:rgba(0,0,0,0.08);
+}
+
+/* RESET & BASE STYLES - Thiết lập cơ bản */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  color: var(--text);
+  font-family: "Segoe UI", Roboto, Inter, system-ui, Arial, sans-serif;
+  background: linear-gradient(135deg, var(--bg1), var(--bg2));
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ================================
+   HEADER - Thanh đầu trang
+   - Logo, tiêu đề, nút chức năng
+   ================================ */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(90deg, rgba(0,0,0,0.12), rgba(255,255,255,0.02));
+  backdrop-filter: blur(8px);
+}
+
+.logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  flex: 0 0 64px;
+  overflow: hidden;
+  border: 3px solid var(--grad3);
+  box-shadow: 0 6px 30px rgba(247,37,133,0.15);
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hdr-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.hdr-title h1 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 10px rgba(247,37,133,.5);
+}
+
+.hdr-title p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.hdr-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* BUTTONS - Các nút bấm */
+.btn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--glass);
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.btn:hover {
+  background: var(--card);
+  transform: translateY(-1px);
+}
+
+.btn-gradient {
+  background: linear-gradient(90deg, var(--grad2), var(--grad3));
+  border: none;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+}
+
+.btn-gradient:hover {
+  box-shadow: 0 8px 25px rgba(0,0,0,.35);
+}
+
+/* ================================
+   MAIN LAYOUT - Bố cục chính
+   - Container chính
+   - Cột trái (chat)
+   ================================ */
+.wrap {
+  flex: 1;
+  display: flex;
+  padding: 16px;
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+}
+
+.left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 480px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.03));
+  border-radius: 14px;
+  padding: 14px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+.chat-window {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.10), rgba(0,0,0,0.05));
+  padding: 12px;
+}
+
+/* ================================
+   QUICK COMMANDS - Lệnh nhanh
+   - Các chip lệnh có sẵn
+   ================================ */
+.quick {
+  display: flex;
+  gap: 8px;
+  padding: 8px 0;
+  flex-wrap: wrap;
+}
+
+.chip {
+  background: var(--glass);
+  padding: 8px 12px;
+  border-radius: 20px;
+  color: var(--muted);
+  cursor: pointer;
+  border: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+.chip:hover {
+  background: linear-gradient(90deg, #ffffff1a, #ffffff0a);
+  color: var(--text);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ================================
+   MESSAGES - Khu vực tin nhắn
+   - Container tin nhắn
+   - Bubble chat
+   ================================ */
+.messages {
+  flex: 1;
+  overflow: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.bubble {
+  max-width: 85%;
+  padding: 12px 14px;
+  border-radius: 16px;
+  line-height: 1.45;
+  word-break: break-word;
+  animation: bounceIn 0.35s ease;
+  position: relative;
+}
+
+.bubble.user {
+  align-self: flex-end;
+  background: linear-gradient(90deg, var(--grad2), var(--grad3));
+  box-shadow: 0 6px 18px rgba(247,37,133,.15);
+  color: #fff;
+  border-bottom-right-radius: 6px;
+}
+
+.bubble.bot {
+  align-self: flex-start;
+  background: var(--card);
+  box-shadow: 0 4px 18px rgba(0,0,0,.35);
+  border-bottom-left-radius: 6px;
+  color: var(--text);
+}
+
+.bubble .meta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  opacity: 0.8;
+}
+
+.bubble.bot .meta {
+  color: rgba(255,255,255,0.6);
+}
+
+/* STICKER - Ảnh sticker trong chat */
+.sticker {
+  display: block;
+  margin-top: 8px;
+  width: 120px;
+  height: auto;
+  border-radius: 10px;
+  border: 2px solid rgba(255,255,255,0.06);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  transition: transform 0.25s ease;
+}
+
+.sticker:hover {
+  transform: scale(1.05);
+}
+
+/* ANIMATIONS - Hiệu ứng động */
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
   }
-  body.light{
-    --bg1:#f3f4f6;
-    --bg2:#e5e7eb;
-    --text:#111827;
-    --muted:#4b5563;
-    --card:rgba(0,0,0,0.05);
-    --glass:rgba(0,0,0,0.04);
-    --border:rgba(0,0,0,0.08);
-  }*{box-sizing:border-box} html,body{height:100%} body{ margin:0; color:var(--text); font-family:"Segoe UI", Roboto, Inter, system-ui, Arial, sans-serif; background: linear-gradient(135deg, var(--bg1), var(--bg2)); -webkit-font-smoothing:antialiased; display:flex; flex-direction:column; min-height:100vh; }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
-.header{position:sticky; top:0; z-index:50; display:flex; align-items:center; gap:12px; padding:14px 16px; border-bottom:1px solid var(--border); background:linear-gradient(90deg, rgba(0,0,0,0.12), rgba(255,255,255,0.02)); backdrop-filter: blur(8px);} .logo{width:64px;height:64px;border-radius:50%;flex:0 0 64px;overflow:hidden;border:3px solid var(--accent);box-shadow:0 6px 30px rgba(247,37,133,0.15);} .logo img{width:100%;height:100%;object-fit:cover;display:block} .hdr-title{display:flex;flex-direction:column} .hdr-title h1{margin:0;font-size:18px;letter-spacing:.5px;text-shadow:0 0 10px rgba(247,37,133,.5)} .hdr-title p{margin:2px 0 0;color:var(--muted);font-size:12px} .hdr-actions{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap} .btn{padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--glass);color:var(--text);font-weight:600;cursor:pointer} .btn-gradient{background:linear-gradient(90deg,var(--grad2),var(--grad3));border:none;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+/* ================================
+   INPUT AREA - Khu vực nhập liệu
+   - Ô input + nút gửi
+   ================================ */
+.input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  margin-top: 10px;
+}
 
-.wrap{flex:1; display:flex; padding:16px; gap:16px; width:100%; margin:0} .left{flex:1; display:flex; flex-direction:column; min-height:480px; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.03)); border-radius:14px; padding:14px; backdrop-filter: blur(6px); box-shadow:0 10px 30px rgba(0,0,0,.35)} .chat-window{flex:1; display:flex; flex-direction:column; overflow:hidden; border-radius:12px; background:linear-gradient(180deg, rgba(0,0,0,0.10), rgba(0,0,0,0.05)); padding:12px} .quick{display:flex; gap:8px; padding:8px 0; flex-wrap:wrap} .chip{background:var(--glass); padding:8px 12px; border-radius:20px; color:var(--muted); cursor:pointer; border:1px solid var(--border)} .chip:hover{background:linear-gradient(90deg,#ffffff1a,#ffffff0a); color:var(--text)} .messages{flex:1; overflow:auto; padding:10px; display:flex; flex-direction:column; gap:10px} .bubble{max-width:85%; padding:12px 14px; border-radius:16px; line-height:1.45; word-break:break-word; animation:bounceIn .35s ease} .bubble.user{align-self:flex-end; background:linear-gradient(90deg,var(--grad2),var(--grad3)); box-shadow:0 6px 18px rgba(247,37,133,.15); color:#fff} .bubble.bot{align-self:flex-start; background:var(--card); box-shadow:0 4px 18px rgba(0,0,0,.35)} .bubble .meta{font-size:12px; color:var(--muted); margin-bottom:6px} .sticker{display:block;margin-top:8px;width:120px;height:auto;border-radius:10px;border:2px solid rgba(255,255,255,0.06);box-shadow:0 8px 30px rgba(0,0,0,0.3)} @keyframes bounceIn{0%{opacity:0; transform:translateY(14px) scale(.96)}100%{opacity:1; transform:translateY(0) scale(1)}} .input-row{display:flex; gap:10px; align-items:center; padding-top:10px} .input-row input{flex:1; padding:12px 14px; border-radius:28px; border:1px solid var(--border); background:rgba(255,255,255,0.03); color:var(--text); outline:none; transition:all .25s} .input-row input:focus{border-color:var(--grad2); box-shadow:0 0 16px rgba(114,9,183,.25)} .btn-send{padding:10px 16px; border-radius:28px; border:none; background:linear-gradient(90deg,var(--grad2),var(--grad3)); color:#fff; font-weight:700; cursor:pointer} .music-control{position:fixed; bottom:20px; right:20px; background:var(--card); padding:12px; border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,.4); backdrop-filter:blur(10px); display:none; z-index:1000; min-width:250px} .music-control.show{display:block} .music-title{font-size:14px; font-weight:600; color:var(--text); margin-bottom:8px} .music-buttons{display:flex; gap:8px; align-items:center} .music-btn{padding:6px 10px; border:none; border-radius:6px; background:linear-gradient(90deg,var(--grad2),var(--grad3)); color:#fff; font-size:11px; font-weight:700; cursor:pointer} .volume-control{display:flex; align-items:center; gap:8px; margin-top:8px} .volume-slider{flex:1; height:4px; background:rgba(255,255,255,0.25); border-radius:2px} .toast{position:fixed; top:20px; right:20px; background:var(--card); padding:12px 16px; border-radius:10px; color:var(--text); z-index:1100; backdrop-filter:blur(10px); transform:translateX(400px); transition:transform .3s ease} .toast.show{transform:translateX(0)} @media(max-width:900px){ .wrap{padding:10px} .music-control{bottom:10px; right:10px; min-width:220px} } </style>
+.input-row input {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 28px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  color: var(--text);
+  outline: none;
+  transition: all 0.25s ease;
+  font-size: 14px;
+}
 
+.input-row input:focus {
+  border-color: var(--grad2);
+  box-shadow: 0 0 16px rgba(114,9,183,.25);
+  background: rgba(255,255,255,0.05);
+}
+
+.input-row input::placeholder {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+.btn-send {
+  padding: 10px 16px;
+  border-radius: 28px;
+  border: none;
+  background: linear-gradient(90deg, var(--grad2), var(--grad3));
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-size: 14px;
+}
+
+.btn-send:hover {
+  box-shadow: 0 6px 20px rgba(114,9,183,.35);
+  transform: translateY(-1px);
+}
+
+.btn-send:active {
+  transform: translateY(0);
+}
+<!-- 
+==============================================
+PHẦN 2: CSS CHO CÁC COMPONENTS MỚI
+- Music Control Panel
+- Toast Notifications  
+- Duolingo-style Cards
+- Mod Selection Cards
+- Responsive Design
+==============================================
+-->
+<style>
+/* ================================
+   MUSIC CONTROL PANEL - Bảng điều khiển nhạc
+   - Floating panel góc dưới phải
+   - Play/Pause/Stop controls
+   - Volume slider
+   ================================ */
+.music-control {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px; /* Thu nhỏ */
+  height: 60px;
+  border-radius: 50%;
+  background: var(--grad2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.music-control:hover {
+  width: 280px; /* Mở rộng khi hover */
+  height: auto;
+  border-radius: 16px;
+}
+
+.music-control {
+  display: none; /* Ẩn mặc định */
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  /* ... giữ nguyên CSS khác */
+}
+
+.music-control.show {
+  display: block; /* Chỉ hiện khi có class 'show' */
+}
+
+@keyframes slideInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.music-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.music-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.music-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--grad2), var(--grad3));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.music-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+}
+
+.music-btn:active {
+  transform: translateY(0);
+}
+
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.volume-control span {
+  font-size: 16px;
+}
+
+.volume-slider {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, var(--grad2), var(--grad3));
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: all 0.25s ease;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, var(--grad2), var(--grad3));
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* ================================
+   TOAST NOTIFICATIONS - Thông báo nổi
+   - Xuất hiện góc trên phải
+   - Tự động ẩn sau vài giây
+   ================================ */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--card);
+  padding: 14px 18px;
+  border-radius: 12px;
+  color: var(--text);
+  z-index: 1100;
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  transform: translateX(400px);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+  font-size: 14px;
+  max-width: 300px;
+}
+
+.toast.show {
+  transform: translateX(0);
+}
+
+.toast::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(90deg, var(--grad2), var(--grad3));
+  border-radius: 2px;
+}
+
+/* ================================
+   DUOLINGO-STYLE CARDS - Thẻ kiểu Duolingo
+   - Gradient background đẹp mắt
+   - Progress indicators
+   - Stats display
+   ================================ */
+.duo-card {
+  background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 14px;
+  position: relative;
+  overflow: hidden;
+  color: white;
+  box-shadow: 0 12px 40px rgba(66, 133, 244, 0.35);
+  animation: cardSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid rgba(255,255,255,0.1);
+}
+
+/* Hiệu ứng sáng bóng trên thẻ */
+.duo-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.duo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.duo-title {
+  font-size: 20px;
+  font-weight: 800;
+  text-shadow: 0 3px 6px rgba(0,0,0,0.3);
+  letter-spacing: 0.5px;
+}
+
+.duo-subtitle {
+  font-size: 15px;
+  opacity: 0.95;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.duo-mascot {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  border: 3px solid rgba(255,255,255,0.3);
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Progress indicators - Thanh tiến độ */
+.duo-progress {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  position: relative;
+  z-index: 2;
+  justify-content: center;
+}
+
+.progress-day {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  position: relative;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+.progress-day.completed {
+  background: rgba(255,255,255,0.95);
+  color: #4285f4;
+  box-shadow: 0 4px 12px rgba(255,255,255,0.3);
+}
+
+.progress-day.today {
+  background: #ff6b35;
+  animation: pulse 2s infinite;
+  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.5);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Stats section - Phần thống kê */
+.duo-stats {
+  display: flex;
+  gap: 20px;
+  margin-top: 16px;
+  position: relative;
+  z-index: 2;
+  justify-content: center;
+}
+
+.stat-item {
+  text-align: center;
+  flex: 1;
+  padding: 8px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(5px);
+}
+
+.stat-number {
+  font-size: 22px;
+  font-weight: 800;
+  display: block;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.stat-label {
+  font-size: 12px;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+@keyframes cardSlideIn {
+  0% { 
+    opacity: 0; 
+    transform: translateY(30px) scale(0.9); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+/* ================================
+   ACHIEVEMENT CARD - Thẻ thành tích
+   - Dành cho các thông báo đặc biệt
+   ================================ */
+.achievement-card {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  border-radius: 20px;
+  padding: 24px;
+  margin-top: 14px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(240, 147, 251, 0.35);
+  animation: cardSlideIn 0.6s ease-out;
+  border: 2px solid rgba(255,255,255,0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.achievement-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { transform: rotate(0deg); opacity: 0.3; }
+  50% { transform: rotate(180deg); opacity: 0.1; }
+}
+
+.achievement-icon {
+  font-size: 52px;
+  margin-bottom: 12px;
+  animation: bounce 1s ease-out;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-12px); }
+  60% { transform: translateY(-6px); }
+}
+
+.achievement-card h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* ================================
+   MOD SELECTION CARD - Thẻ chọn mod
+   - Giao diện giống app mobile
+   - Danh sách mod với avatar
+   ================================ */
+.mod-selection-wrapper {
+  background: 
+    linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+    url('https://i.postimg.cc/j2RkpqPK/13314.jpg') center/cover no-repeat;
+  border-radius: 24px;
+  padding: 24px;
+  margin-top: 16px;
+  position: relative;
+  overflow: hidden;
+  border: 4px solid rgba(255, 105, 180, 0.3);
+  animation: cardSlideIn 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 16px 48px rgba(255, 20, 147, 0.4);
+}
+
+/* Pattern background */
+
+
+.mod-item-new {
+  max-width: 100%;
+  flex-wrap: wrap; /* Cho phép xuống dòng */
+}
+
+.mod-details {
+  min-width: 0;
+  flex: 1;
+}
+
+.download-btn-new {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+@keyframes backgroundMove {
+  0% { background-position: 0 0, 15px 15px; }
+  100% { background-position: 30px 30px, 45px 45px; }
+}
+
+.mod-header-new {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 10;
+  color: white;
+}
+
+.mod-icon-new {
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  border: 3px solid rgba(255,255,255,0.3);
+  backdrop-filter: blur(5px);
+}
+
+.mod-title-new {
+  font-size: 26px;
+  font-weight: 800;
+  text-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  letter-spacing: 1.5px;
+}
+
+.mod-subtitle-new {
+  font-size: 16px;
+  opacity: 0.95;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.mod-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  z-index: 10;
+}
+
+/* Individual mod item */
+.mod-item-new {
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid rgba(255,255,255,0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover shine effect */
+.mod-item-new::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transition: left 0.7s ease;
+}
+
+.mod-item-new:hover::before {
+  left: 100%;
+}
+
+.mod-item-new:hover {
+  transform: translateY(-6px);
+  background: rgba(0,0,0,0.45);
+  border-color: rgba(255,255,255,0.35);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+
+/* Character avatar */
+.mod-character-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 3px solid rgba(255,255,255,0.3);
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.mod-character-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.mod-item-new:hover .mod-character-avatar img {
+  transform: scale(1.1);
+}
+
+/* Mod details */
+.mod-details {
+  flex: 1;
+  min-width: 0;  /* Thêm dòng này */
+  white-space: nowrap; /* Hoặc thêm dòng này để text không xuống dòng */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mod-character-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 4px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mod-skin-name {
+  font-size: 19px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 8px;
+  text-shadow: 0 3px 6px rgba(0,0,0,0.6);
+  line-height: 1.2;
+}
+
+.mod-features-list {
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* Download buttons with different colors */
+.download-btn-new {
+  background: linear-gradient(135deg, #00d4ff 0%, #00b8d4 100%);
+  color: white;
+  border: none;
+  border-radius: 28px;
+  padding: 14px 22px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.5px;
+}
+
+.download-btn-new::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  transition: left 0.6s ease;
+}
+
+.download-btn-new:hover::before {
+  left: 100%;
+}
+
+.download-btn-new:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 212, 255, 0.6);
+}
+
+/* Button color variations */
+.download-btn-new.btn-purple {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.download-btn-new.btn-purple:hover {
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.6);
+}
+
+.download-btn-new.btn-orange {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+}
+
+.download-btn-new.btn-orange:hover {
+  box-shadow: 0 10px 30px rgba(245, 87, 108, 0.6);
+}
+
+.download-btn-new.btn-yellow {
+  background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+  box-shadow: 0 6px 20px rgba(255, 216, 155, 0.4);
+}
+
+.download-btn-new.btn-yellow:hover {
+  box-shadow: 0 10px 30px rgba(255, 216, 155, 0.6);
+}
+
+.download-btn-new.btn-green {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  box-shadow: 0 6px 20px rgba(168, 237, 234, 0.4);
+}
+
+.download-btn-new.btn-green:hover {
+  box-shadow: 0 10px 30px rgba(168, 237, 234, 0.6);
+}
+
+/* ================================
+   RESPONSIVE DESIGN - Thiết kế responsive
+   - Tối ưu cho màn hình nhỏ
+   ================================ */
+@media (max-width: 900px) {
+  .wrap {
+    padding: 12px;
+  }
+  
+  .header {
+    padding: 12px 14px;
+  }
+  
+  .hdr-title h1 {
+    font-size: 16px;
+  }
+  
+  .hdr-title p {
+    font-size: 11px;
+  }
+  
+  .music-control {
+    bottom: 12px;
+    right: 12px;
+    min-width: 250px;
+    padding: 14px;
+  }
+  
+  .toast {
+    top: 12px;
+    right: 12px;
+    max-width: 250px;
+  }
+  
+  .mod-character-avatar {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .mod-skin-name {
+    font-size: 17px;
+  }
+  
+  .download-btn-new {
+    padding: 12px 18px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 600px) {
+  .chip {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  
+  .bubble {
+    max-width: 92%;
+  }
+  
+  .duo-card, .mod-selection-wrapper {
+    padding: 18px;
+  }
+  
+  .mod-title-new {
+    font-size: 22px;
+  }
+  
+  .mod-item-new {
+    padding: 14px;
+  }
+}
+</style>
+
+<!-- 
+==============================================
+HOÀN THÀNH PHẦN 2!
+CSS cho tất cả components mới đã được thêm:
+✅ Music Control Panel với volume slider
+✅ Toast Notifications với animation
+✅ Duolingo Cards với progress và stats
+✅ Mod Selection Cards với hover effects
+✅ Responsive design cho mobile
+✅ Nhiều animation và transitions mượt mà
+
+Tiếp tục với PHẦN 3: JavaScript Data & Utilities
+==============================================
+-->
+</style>
 </head>
 <body>
+  <!-- HEADER - Thanh đầu trang -->
   <div class="header">
-    <div class="logo"><img src="https://i.postimg.cc/T3SYQ8zK/Polish-20250822-083928173.png" alt="XMOD"></div>
+    <div class="logo">
+      <img src="https://i.postimg.cc/T3SYQ8zK/Polish-20250822-083928173.png" alt="XMOD">
+    </div>
     <div class="hdr-title">
       <h1>⚡ XMOD Chat (VIP)</h1>
       <p>Chat hỗ trợ mod — gõ lệnh hoặc bấm nút nhanh</p>
     </div>
     <div class="hdr-actions">
       <a class="btn" href="https://modskinaov.github.io/Xmod." target="_blank">Website</a>
-      <a class="btn-gradient" href="https://youtube.com/@xmod-b7i" target="_blank">YouTube</a>
+      <a class="btn btn-gradient" href="https://youtube.com/@xmod-b7i" target="_blank">YouTube</a>
       <button id="toggleTheme" class="btn">🌓 Theme</button>
+      <button id="toggleMusic" class="btn">🎵</button>
     </div>
-  </div>  <div class="music-control" id="musicControl">
-    <div class="music-title" id="musicTitle">🎵 Chưa có nhạc</div>
-    <div class="music-buttons">
-      <button class="music-btn" id="playBtn">▶️ Play</button>
-      <button class="music-btn" id="pauseBtn">⏸️ Pause</button>
-      <button class="music-btn" id="stopBtn">⏹️ Stop</button>
-    </div>
-    <div class="volume-control">
-      <span>🔊</span>
-      <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
-    </div>
-  </div>  <div class="wrap">
+  </div>
+
+  <!-- MAIN CONTAINER - Container chính -->
+  <div class="wrap">
     <div class="left">
       <div class="chat-window">
+        <!-- QUICK COMMANDS - Lệnh nhanh -->
         <div class="quick" id="quickCommands">
           <div class="chip" data-cmd="help">help</div>
           <div class="chip" data-cmd="laymod">laymod</div>
@@ -72,44 +1152,124 @@
           <div class="chip" data-cmd="guide">guide</div>
           <div class="chip" data-cmd="lucky draw">lucky draw</div>
         </div>
-    <div class="messages" id="messages"></div>
-    <div class="input-row">
-      <input id="inp" placeholder="Nhập lệnh hoặc chat... (gõ 'help' để xem)"/>
-      <button class="btn-send" id="sendBtn">Gửi</button>
+
+        <!-- MESSAGES AREA - Khu vực hiển thị tin nhắn -->
+        <div class="messages" id="messages"></div>
+
+        <!-- INPUT AREA - Khu vực nhập tin nhắn -->
+        <div class="input-row">
+          <input id="inp" placeholder="Nhập lệnh hoặc chat... (gõ 'help' để xem)" />
+          <button class="btn-send" id="sendBtn">Gửi</button>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+
+  <!-- AUDIO ELEMENT - Phần tử âm thanh (ẩn) -->
+  <audio id="backgroundMusic" loop></audio>
+  <!-- Thêm Music Control Panel vào body -->
+<div class="music-control" id="musicControl">
+  <div class="music-title" id="musicTitle">🎵 Chưa có nhạc</div>
+  <div class="music-buttons">
+    <button class="music-btn" id="playBtn">▶️ Play</button>
+    <button class="music-btn" id="pauseBtn">⏸️ Pause</button>
+    <button class="music-btn" id="stopBtn">⏹️ Stop</button>
   </div>
-  <audio id="backgroundMusic" loop></audio><script>
+  <div class="volume-control">
+    <span>🔊</span>
+    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+  </div>
+</div>
+<!-- 
+==============================================
+PHẦN 3: JAVASCRIPT DATA & UTILITY FUNCTIONS
+- Dữ liệu: Music, Mods, Stickers
+- Utility functions
+- Card creation functions
+- History management
+==============================================
+-->
+<script>
 /***********************************************
- * XMOD v2 – UPDATED: mỗi lệnh có sticker riêng
- * - Mình chỉ sửa chỗ liên quan tới stickerKey và thêm
- *   chú thích tiếng Việt rõ ràng (không thay đổi logic).
- * - Thay URL sticker theo ý bạn trong phần STICKERS.
+ * XMOD CHAT v3.0 - PHẦN 3: DỮ LIỆU & TIỆN ÍCH
+ * - Tất cả dữ liệu cấu hình
+ * - Các hàm tiện ích cơ bản
+ * - Tạo cards và components
+ * - Quản lý lịch sử chat
  ***********************************************/
 
-/* =============================
-   0) DỮ LIỆU – CHỈ SỬA PHẦN NÀY nếu cần
-   - STICKERS: map key -> link ảnh sticker
-   - Thay các URL bằng link thực tế của bạn
-   ============================= */
+/* ================================
+   PHẦN 1: DỮ LIỆU CẤU HÌNH
+   - Thay đổi các URL và thông tin tại đây
+   ================================ */
+//nhạc
+document.getElementById('toggleMusic').addEventListener('click', () => {
+  musicControl.classList.toggle('show');
+});
+// DANH SÁCH NHẠC NỀN - Thay link nhạc thực tế tại đây
 const MUSIC_LIST = [
-  { id:"music1", title:"legendary", url:"https://www.dropbox.com/scl/fi/003fj25b92y8jio117ip9/Legends-Never-Die-ft.-Against-The-Current-2017.mp3?rlkey=s3qb0nb4ypbjj4w8kqrzq1udy&dl=1" },
-  { id:"music2", title:"đang update", url:"THAY_LINK_NHAC_2.mp3" },
-  { id:"music3", title:"đang update", url:"THAY_LINK_NHAC_3.mp3" }
+  { 
+    id: "music1", 
+    title: "Legendary", 
+    url: "https://www.dropbox.com/scl/fi/003fj25b92y8jio117ip9/Legends-Never-Die-ft.-Against-The-Current-2017.mp3?rlkey=s3qb0nb4ypbjj4w8kqrzq1udy&dl=1" 
+  },
+  { 
+    id: "music2", 
+    title: "Updating", 
+    url: "THAY_LINK_NHAC_2.mp3" // Thay bằng link thực tế
+  },
+  { 
+    id: "music3", 
+    title: "Updating", 
+    url: "THAY_LINK_NHAC_3.mp3" // Thay bằng link thực tế
+  }
 ];
 
+// DANH SÁCH MOD - Cập nhật thông tin mod tại đây
 const MODS = [
-  { id:"m1", title:"Nakroth Giả Kim Thuật Sư", desc:"Hiệu ứng sáng tạo mới lạ", thumb:"https://i.postimg.cc/L5K9dVrK/53202.jpg", link:"https://www.mediafire.com/file/lahx0a7mbghy3wl/NAKROTH_GKTS-XMOD.zip/file" },
-  { id:"m2", title:"Alchemist Blade", desc:"Hiệu ứng sáng tạo mới lạ", thumb:"https://i.postimg.cc/L5K9dVrK/53202.jpg", link:"https://www.mediafire.com/file/bpgspvstitdpk4o/Alchemist_Blade.7z/file" },
-  { id:"m3", title:"Resources 28.8 Pack", desc:"Full resources cập nhật 28.8", thumb:"https://i.postimg.cc/J4FFHy5f/folder-la-gi.jpg", link:"https://www.mediafire.com/file/oi7bhkm1fqbb1p8/Resources_28.8.zip/file" }
+  { 
+    id: "m1", 
+    title: "NAKROTH GKTS", 
+    desc: "Hiệu ứng lửa đẹp mắt với sound effects", 
+    thumb: "https://i.postimg.cc/L5K9dVrK/53202.jpg", 
+    link: "https://www.mediafire.com/file/lahx0a7mbghy3wl/NAKROTH_GKTS-XMOD.zip/file" 
+  },
+  { 
+    id: "m2", 
+    title: "nak", 
+    desc: "Phế", 
+    thumb: "https://i.postimg.cc/L5K9dVrK/53202.jpg", 
+    link: "https://www.mediafire.com/file/bpgspvstitdpk4o/Alchemist_Blade.7z/file" 
+  },
+  { 
+    id: "m3", 
+    title: "Resouses", 
+    desc: "Resouses", 
+    thumb: "https://i.postimg.cc/YSCWv57R/lien-quan-x-conan-lich-ra-mat-tat-ca-cac-skin-collab-1.webp", 
+    link: "https://www.mediafire.com/file/oi7bhkm1fqbb1p8/Resources_28.8.zip/file" 
+  },
+  { 
+    id: "m4", 
+    title: "Xapk", 
+    desc: "Nữ thần bảo vệ với shield effects", 
+    thumb: "https://i.postimg.cc/YSCWv57R/lien-quan-x-conan-lich-ra-mat-tat-ca-cac-skin-collab-1.webp", 
+    link: "https://d.apkpure.com/b/XAPK/com.garena.game.kgvn?version=latest" 
+  },
+  { 
+    id: "m5", 
+    title: "Extra", 
+    desc: "Chiến binh dũng mãnh với armor mới", 
+    thumb: "https://i.postimg.cc/YSCWv57R/lien-quan-x-conan-lich-ra-mat-tat-ca-cac-skin-collab-1.webp", 
+    link: "https://www.mediafire.com/file/zypb3bboxx9dg42/Extra.zip/file" 
+  }
 ];
 
-// ==== STICKERS: sửa link ảnh theo ý bạn ====
-// GHI CHÚ: mỗi key đại diện cho 1 lệnh / tình huống.
-// Bạn nên đổi từng URL thành ảnh riêng cho từng lệnh để đảm bảo "mỗi lệnh 1 sticker".
+// DANH SÁCH STICKER CHO TỪNG LỆNH - Thay URL sticker tại đây
 const STICKERS = {
+  // Sticker mặc định
   default: "https://i.postimg.cc/xTM2bBXL/2024-4-25-638496713669047688-duolingo-meme-27.webp",
+  
+  // Sticker cho từng lệnh cụ thể
   help: "https://i.postimg.cc/5tkjyDr8/Kh-ng-C-Ti-u-3-20250828125708.png",
   laymod: "https://i.postimg.cc/TYqwgKSd/Kh-ng-C-Ti-u-5-20250828130406.png",
   allmods: "https://i.postimg.cc/GhR6fK3C/Polish-20250828-142746287.png",
@@ -135,366 +1295,1012 @@ const STICKERS = {
   aiError: "https://i.postimg.cc/xTM2bBXL/2024-4-25-638496713669047688-duolingo-meme-27.webp"
 };
 
-/* =============================
-   1) TIỆN ÍCH (UTILITIES)
-   - Các hàm hiển thị, lưu lịch sử, scroll... có chú thích tiếng Việt
-   ============================= */
+/* ================================
+   PHẦN 2: CÁC BIẾN TOÀN CỤC
+   - DOM elements
+   - Storage keys
+   - Cấu hình hệ thống
+   ================================ */
+
+// DOM ELEMENTS - Các phần tử giao diện
 const messagesEl = document.getElementById('messages');
-const STORAGE_KEY = 'xmod_chat_history_v2';
-const LAST_VISIT_KEY = 'xmod_last_visit_v2';
-const MISSYOU_THRESHOLD_MS = 1000 * 60 * 60 * 24 * 7; // 7 ngày
+const audioEl = document.getElementById('backgroundMusic');
+const musicControl = document.getElementById('musicControl');
 
-function showToast(message, duration = 2500){
-  const t = document.createElement('div');
-  t.className = 'toast';
-  t.textContent = message;
-  document.body.appendChild(t);
-  requestAnimationFrame(()=> t.classList.add('show'));
-  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=> t.remove(), 300); }, duration);
-}
+// STORAGE KEYS - Khóa lưu trữ localStorage
+const STORAGE_KEY = 'xmod_chat_history_v3';
+const LAST_VISIT_KEY = 'xmod_last_visit_v3';
+const STATS_KEY = 'xmod_chat_stats_v3';
+const THEME_KEY = 'xmod_theme_v3';
 
-function escapeHtml(str){
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-}
+// CẤU HÌNH HỆ THỐNG
+const MISSYOU_THRESHOLD_MS = 1000 * 60 * 60 * 24 * 7; // 7 ngày để hiện "nhớ bạn"
+const MAX_HISTORY_ITEMS = 200; // Giới hạn lịch sử chat
+const TOAST_DURATION = 2500; // Thời gian hiển thị toast (ms)
 
-function scrollToBottom(){ setTimeout(()=> messagesEl.scrollTop = messagesEl.scrollHeight, 60); }
+// BIẾN TRẠNG THÁI
+let HISTORY = []; // Lịch sử chat
+let currentMusicIndex = -1; // Chỉ số bài nhạc hiện tại
+let chatStats = { 
+  totalMessages: 0, 
+  commandsUsed: {}, 
+  startTime: Date.now() 
+};
+
+/* ================================
+   PHẦN 3: UTILITY FUNCTIONS - HÀM TIỆN ÍCH
+   - Hiển thị toast
+   - Xử lý HTML
+   - Cuộn xuống cuối
+   ================================ */
 
 /**
- * addBotMsg(html, meta, stickerKey)
- * - html: nội dung HTML đã escape nếu cần
- * - meta: text phụ (ví dụ: "Bot đang soạn...")
- * - stickerKey: key trong STICKERS (bắt buộc để mỗi lệnh có sticker riêng)
+ * Hiển thị thông báo toast góc trên phải
+ * @param {string} message - Nội dung thông báo
+ * @param {number} duration - Thời gian hiển thị (ms)
  */
-function addBotMsg(html, meta, stickerKey){
-  // Lấy URL sticker từ STICKERS theo key; nếu không tìm thấy -> dùng default
-  const stickerUrl = stickerKey && STICKERS[stickerKey] ? STICKERS[stickerKey] : (STICKERS.default || '');
-  const obj = { sender:'bot', html, meta: meta || '', sticker: stickerUrl || '' , timestamp: Date.now() };
+function showToast(message, duration = TOAST_DURATION) {
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  
+  // Trigger animation
+  requestAnimationFrame(() => toast.classList.add('show'));
+  
+  // Auto remove
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 400);
+  }, duration);
+}
+
+/**
+ * Escape HTML để tránh XSS
+ * @param {string} str - Chuỗi cần escape
+ * @returns {string} - Chuỗi đã escape
+ */
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/\n/g, '<br>');
+}
+
+/**
+ * Cuộn xuống cuối khu vực tin nhắn
+ */
+function scrollToBottom() {
+  setTimeout(() => {
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }, 60);
+}
+
+/**
+ * Tạo ID ngẫu nhiên
+ * @returns {string} - ID ngẫu nhiên
+ */
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
+
+/**
+ * Format số với dấu phẩy
+ * @param {number} num - Số cần format
+ * @returns {string} - Số đã format
+ */
+function formatNumber(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+/* ================================
+   PHẦN 4: MESSAGE FUNCTIONS - HÀM TIN NHẮN
+   - Thêm tin nhắn bot
+   - Thêm tin nhắn user  
+   - Hiển thị tin nhắn
+   ================================ */
+
+/**
+ * Thêm tin nhắn bot với sticker
+ * @param {string} html - Nội dung HTML
+ * @param {string} meta - Text phụ (VD: "Bot đang soạn...")
+ * @param {string} stickerKey - Key sticker trong STICKERS
+ */
+function addBotMsg(html, meta = '', stickerKey = 'default') {
+  const stickerUrl = STICKERS[stickerKey] || STICKERS.default || '';
+  const obj = {
+    id: generateId(),
+    sender: 'bot',
+    html: html,
+    meta: meta,
+    sticker: stickerUrl,
+    timestamp: Date.now()
+  };
+  
   appendMessageToDom(obj);
   saveToHistory(obj);
 }
 
 /**
- * appendMessageToDom(item)
- * - item: {sender, html, meta, sticker}
- * - Hiển thị tin nhắn và sticker (nếu có)
+ * Thêm tin nhắn user
+ * @param {string} text - Nội dung tin nhắn
  */
-function appendMessageToDom(item){
+function addUserMsg(text) {
+  const obj = {
+    id: generateId(),
+    sender: 'user',
+    html: escapeHtml(text),
+    timestamp: Date.now()
+  };
+  
+  appendMessageToDom(obj);
+  saveToHistory(obj);
+  
+  // Cập nhật thống kê
+  chatStats.totalMessages++;
+  saveStats();
+}
+
+/**
+ * Hiển thị tin nhắn lên DOM
+ * @param {object} item - Object tin nhắn
+ */
+function appendMessageToDom(item) {
   const div = document.createElement('div');
   div.className = 'bubble ' + (item.sender === 'user' ? 'user' : 'bot');
-  let contentHtml = item.meta ? `<div class="meta">${item.meta}</div>${item.html}` : item.html;
-  if(item.sticker){
-    // Chú thích: thẻ ảnh sticker sẽ hiển thị dưới nội dung bot. Bạn có thể thay class .sticker nếu muốn kích thước khác
-    contentHtml += `<img src="${item.sticker}" alt="sticker" class="sticker">`;
+  div.setAttribute('data-id', item.id);
+  
+  // Tạo nội dung tin nhắn
+  let contentHtml = item.meta ? 
+    `<div class="meta">${item.meta}</div>${item.html}` : 
+    item.html;
+  
+  // Thêm sticker nếu có
+  if (item.sticker && item.sender === 'bot') {
+    contentHtml += `<img src="${item.sticker}" alt="sticker" class="sticker" loading="lazy">`;
   }
+  
   div.innerHTML = contentHtml;
   messagesEl.appendChild(div);
   scrollToBottom();
 }
 
-/* =============================
-   2) LỊCH SỬ + THỐNG KÊ
-   ============================= */
-let HISTORY = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-HISTORY.forEach(appendMessageToDom);
-scrollToBottom();
+/* ================================
+   PHẦN 5: HISTORY MANAGEMENT - QUẢN LÝ LỊCH SỬ
+   - Lưu/tải lịch sử
+   - Thống kê sử dụng
+   ================================ */
 
-let chatStats = { totalMessages: 0, commandsUsed: {}, startTime: Date.now() };
-const savedStats = localStorage.getItem('xmod_chat_stats');
-if(savedStats) chatStats = JSON.parse(savedStats);
-function saveStats(){ localStorage.setItem('xmod_chat_stats', JSON.stringify(chatStats)); }
-
-function saveToHistory(obj){
-  HISTORY.push(obj); if(HISTORY.length>200) HISTORY.shift();
+/**
+ * Lưu tin nhắn vào lịch sử
+ * @param {object} obj - Object tin nhắn
+ */
+function saveToHistory(obj) {
+  HISTORY.push(obj);
+  
+  // Giới hạn số lượng tin nhắn
+  if (HISTORY.length > MAX_HISTORY_ITEMS) {
+    HISTORY.shift();
+  }
+  
   localStorage.setItem(STORAGE_KEY, JSON.stringify(HISTORY));
 }
 
-function addUserMsg(text){
-  const obj = {sender:'user', html: escapeHtml(text), timestamp: Date.now()};
-  appendMessageToDom(obj); saveToHistory(obj); chatStats.totalMessages++; saveStats();
+/**
+ * Tải lịch sử từ localStorage
+ */
+function loadHistory() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      HISTORY = JSON.parse(saved);
+      HISTORY.forEach(item => appendMessageToDom(item));
+      scrollToBottom();
+    }
+  } catch (error) {
+    console.warn('Không thể tải lịch sử:', error);
+    HISTORY = [];
+  }
 }
 
-function clearChatHistory(){
-  localStorage.removeItem(STORAGE_KEY); HISTORY = []; messagesEl.innerHTML='';
+/**
+ * Xóa toàn bộ lịch sử chat
+ */
+function clearChatHistory() {
+  localStorage.removeItem(STORAGE_KEY);
+  HISTORY = [];
+  messagesEl.innerHTML = '';
   addBotMsg('🗑️ Đã xóa toàn bộ lịch sử chat!', '', 'cleared');
 }
 
-/* =============================
-   3) MUSIC CONTROLS
-   ============================= */
-const audioEl = document.getElementById('backgroundMusic');
-const musicControl = document.getElementById('musicControl');
+/**
+ * Lưu thống kê sử dụng
+ */
+function saveStats() {
+  localStorage.setItem(STATS_KEY, JSON.stringify(chatStats));
+}
+
+/**
+ * Tải thống kê từ localStorage
+ */
+function loadStats() {
+  try {
+    const saved = localStorage.getItem(STATS_KEY);
+    if (saved) {
+      chatStats = { ...chatStats, ...JSON.parse(saved) };
+    }
+  } catch (error) {
+    console.warn('Không thể tải thống kê:', error);
+  }
+}
+
+/**
+ * Theo dõi việc sử dụng lệnh
+ * @param {string} cmd - Tên lệnh
+ */
+function trackCommand(cmd) {
+  chatStats.commandsUsed[cmd] = (chatStats.commandsUsed[cmd] || 0) + 1;
+  saveStats();
+}
+
+/* ================================
+   PHẦN 6: CARD CREATION FUNCTIONS - TẠO CARDS
+   - Duolingo-style cards
+   - Achievement cards
+   - Mod selection cards
+   ================================ */
+
+/**
+ * Tạo thẻ Duolingo-style với progress và stats
+ * @param {string} title - Tiêu đề chính
+ * @param {string} subtitle - Tiêu đề phụ
+ * @param {number} days - Số ngày streak
+ * @param {string} mascotEmoji - Emoji mascot
+ * @returns {string} - HTML string
+ */
+function createDuoCard(title, subtitle, days = 59, mascotEmoji = '🦉') {
+  // Tạo progress days (5 ngày gần nhất)
+  const dayNames = ['T5', 'T6', 'T7', 'CN', 'T2'];
+  const progressDays = dayNames.map((dayName, index) => {
+    const isCompleted = index < 4; // 4 ngày đầu đã hoàn thành
+    const isToday = index === 4; // Ngày cuối là hôm nay
+    const className = isCompleted ? 'completed' : (isToday ? 'today' : '');
+    return `<div class="progress-day ${className}">${dayName}</div>`;
+  }).join('');
+  
+  // Tính toán stats
+  const weeks = Math.floor(days / 7);
+  const totalCommands = chatStats.totalMessages || 0;
+  
+  return `
+    <div class="duo-card">
+      <div class="duo-header">
+        <div>
+          <div class="duo-title">🔥 ${days} ${title}</div>
+          <div class="duo-subtitle">${subtitle}</div>
+        </div>
+        <div class="duo-mascot">${mascotEmoji}</div>
+      </div>
+      <div class="duo-progress">
+        ${progressDays}
+      </div>
+      <div class="duo-stats">
+        <div class="stat-item">
+          <span class="stat-number">${weeks}</span>
+          <span class="stat-label">Tuần</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">${days}</span>
+          <span class="stat-label">Ngày</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">${totalCommands}</span>
+          <span class="stat-label">Lệnh</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Tạo thẻ achievement với icon lớn
+ * @param {string} title - Tiêu đề achievement
+ * @param {string} icon - Icon emoji
+ * @returns {string} - HTML string
+ */
+function createAchievementCard(title, icon = '🏆') {
+  return `
+    <div class="achievement-card">
+      <div class="achievement-icon">${icon}</div>
+      <h3>${title}</h3>
+    </div>
+  `;
+}
+
+/**
+ * Tạo thẻ mod selection giống giao diện app
+ * @returns {string} - HTML string
+ */
+function createModSelectionCard() {
+  const buttonColors = ['', 'btn-purple', 'btn-orange', 'btn-yellow', 'btn-green'];
+  
+  const modItems = MODS.map((mod, index) => {
+    const buttonColor = buttonColors[index % buttonColors.length];
+    
+    // Tách tên nhân vật và tên skin
+    const titleParts = mod.title.split(' ');
+    const character = titleParts[0] || 'Unknown';
+    const skinName = titleParts.slice(1).join(' ') || 'skin';
+    
+    return `
+      <div class="mod-item-new">
+        <div class="mod-character-avatar">
+          <img src="${mod.thumb}" alt="${character}" 
+               onerror="this.parentNode.innerHTML='<div style=&quot;width:100%;height:100%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:bold;color:white;border-radius:15px;&quot;>${character.charAt(0)}</div>'">
+        </div>
+        <div class="mod-details">
+          <div class="mod-character-name">${character}</div>
+          <div class="mod-skin-name">${skinName}</div>
+          <div class="mod-features-list">Effects</div>
+        </div>
+        <button class="download-btn-new ${buttonColor}" onclick="window.open('${mod.link}', '_blank')">
+          Tải xuống
+        </button>
+      </div>
+    `;
+  }).join('');
+
+  return `
+  <div class="mod-selection-wrapper">
+      <div class="mod-header-new">
+        <div class="mod-icon-new">x</div>
+        <div>
+          <div class="mod-title-new">CHỌN MOD</div>
+          <div class="mod-subtitle-new">Click để chọn một bản mod</div>
+        </div>
+      </div>
+      <div class="mod-grid">
+        ${modItems}
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Render mod card HTML truyền thống (cho lệnh khác)
+ * @param {object} mod - Object mod
+ * @returns {string} - HTML string
+ */
+function renderModCardHtml(mod) {
+  return `
+    <div style="display:flex;gap:12px;align-items:center;margin:8px 0;padding:12px;background:var(--glass);border-radius:12px;border:1px solid var(--border);">
+      <div style="width:60px;height:60px;flex:0 0 60px;border-radius:10px;overflow:hidden;border:2px solid var(--border)">
+        <img src="${mod.thumb}" style="width:100%;height:100%;object-fit:cover" alt="${mod.title}" 
+             onerror="this.style.display='none'; this.parentNode.innerHTML='<div style=&quot;width:100%;height:100%;background:var(--grad2);display:flex;align-items:center;justify-content:center;font-weight:bold;color:white;border-radius:8px;&quot;>${mod.title.charAt(0)}</div>'">
+      </div>
+      <div style="flex:1">
+        <div style="font-weight:700;margin-bottom:4px;">${mod.title}</div>
+        <div style="color:var(--muted);font-size:13px;margin-bottom:8px;">${mod.desc}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="${mod.link}" target="_blank" style="padding:6px 12px;border-radius:6px;background:linear-gradient(90deg,var(--grad2),var(--grad3));color:#fff;font-weight:700;text-decoration:none;font-size:12px;">Tải</a>
+          <button onclick="copyLink('${mod.link}')" style="padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:var(--glass);color:var(--text);cursor:pointer;font-size:12px;">Copy</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Copy link vào clipboard
+ * @param {string} url - URL cần copy
+ */
+function copyLink(url) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url)
+      .then(() => addBotMsg('✅ Link đã sao chép!', '', 'copy'))
+      .catch(() => fallbackCopy(url));
+  } else {
+    fallbackCopy(url);
+  }
+}
+
+/**
+ * Fallback copy method
+ * @param {string} url - URL cần copy
+ */
+function fallbackCopy(url) {
+  addBotMsg(`📋 Không thể tự động sao chép. Link: <br><code style="background:var(--glass);padding:4px 8px;border-radius:4px;font-size:12px;">${url}</code>`, '', 'copy');
+}
+
+// Khởi tạo khi trang load
+document.addEventListener('DOMContentLoaded', function() {
+  loadStats();
+  loadHistory();
+  console.log('✅ XMOD Chat Phần 3 đã tải xong - Data & Utilities');
+});
+</script>
+<!-- 
+==============================================
+PHẦN 4 (CUỐI): MAIN LOGIC & EVENT HANDLERS
+- Command handlers (xử lý lệnh)
+- Music controls
+- Event listeners
+- OpenAI integration
+- Initialization
+==============================================
+-->
+<script>
+/* ================================
+   PHẦN 1: MUSIC CONTROLS - ĐIỀU KHIỂN NHẠC
+   - Play/Pause/Stop
+   - Volume control
+   - Music selection
+   ================================ */
+
+// DOM elements cho music control
 const musicTitle = document.getElementById('musicTitle');
 const playBtn = document.getElementById('playBtn');
 const pauseBtn = document.getElementById('pauseBtn');
 const stopBtn = document.getElementById('stopBtn');
 const volumeSlider = document.getElementById('volumeSlider');
-let currentMusicIndex = -1; audioEl.volume = 0.5;
 
-playBtn.addEventListener('click', ()=>{
-  if(audioEl.src){ audioEl.play().catch(()=>{}); addBotMsg('🎵 Đã phát nhạc', '', 'music'); }
-  else addBotMsg('⚠️ Chưa chọn nhạc. Gõ <b>chọn nhạc</b> để chọn.', '', 'music');
-});
- pauseBtn.addEventListener('click', ()=>{ audioEl.pause(); addBotMsg('⏸️ Đã tạm dừng nhạc', '', 'music'); });
- stopBtn.addEventListener('click', ()=>{ audioEl.pause(); audioEl.currentTime=0; addBotMsg('⏹️ Đã dừng nhạc', '', 'music'); });
- volumeSlider.addEventListener('input', ()=> audioEl.volume = volumeSlider.value/100 );
+// Thiết lập ban đầu
+audioEl.volume = 0.5;
 
-function selectMusic(index){
-  if(index>=0 && index<MUSIC_LIST.length){
-    currentMusicIndex = index; const m = MUSIC_LIST[index]; audioEl.src = m.url;
-    musicTitle.textContent = `🎵 ${m.title}`; musicControl.classList.add('show');
-    addBotMsg(`🎵 Đã chọn nhạc: <b>${m.title}</b><br>Bấm Play để phát.`, '', 'music');
+/**
+ * Chọn nhạc theo index
+ * @param {number} index - Index trong MUSIC_LIST
+ */
+function selectMusic(index) {
+  if (index >= 0 && index < MUSIC_LIST.length) {
+    currentMusicIndex = index;
+    const music = MUSIC_LIST[index];
+    audioEl.src = music.url;
+    musicTitle.textContent = `🎵 ${music.title}`;
+    musicControl.classList.add('show');
+    
+    addBotMsg(`🎵 Đã chọn nhạc: <b>${music.title}</b><br>Bấm Play để phát nhạc.`, '', 'music');
   }
 }
 
-/* =============================
-   4) RENDER MOD CARD (dùng khi hiển thị mod trong chat)
-   - Chú thích tiếng Việt kèm theo hàm
-   ============================= */
-function renderModCardHtml(m){
-  return `
-    <div style="display:flex;gap:10px;align-items:center;">
-      <div style="width:86px;height:64px;flex:0 0 86px;border-radius:8px;overflow:hidden;border:2px solid var(--border)">
-        <img src="${m.thumb}" style="width:100%;height:100%;object-fit:cover" alt="${m.title}">
-      </div>
-      <div style="flex:1">
-        <div style="font-weight:700">${m.title}</div>
-        <div style="color:var(--muted);font-size:13px;margin-top:6px">${m.desc}</div>
-        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
-          <a href="${m.link}" target="_blank" style="padding:8px 12px;border-radius:8px;background:linear-gradient(90deg,var(--grad2),var(--grad3));color:#fff;font-weight:700;text-decoration:none">Tải</a>
-          <button onclick="copyLink('${m.link}')" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--glass);color:var(--text);cursor:pointer">Sao chép link</button>
-        </div>
-      </div>
-    </div>`;
-}
-function copyLink(url){
-  navigator.clipboard?.writeText(url).then(()=> addBotMsg('Link đã sao chép ✅', '', 'copy'))
-  .catch(()=> addBotMsg(`Không thể sao chép. Mở link để tải: <a href='${url}' target='_blank'>Mở link</a>`, '', 'copy'));
-}
+// Event listeners cho music controls
+playBtn.addEventListener('click', () => {
+  if (audioEl.src) {
+    audioEl.play()
+      .then(() => addBotMsg('▶️ Đang phát nhạc...', '', 'music'))
+      .catch(() => addBotMsg('❌ Lỗi phát nhạc. Kiểm tra link nhạc.', '', 'music'));
+  } else {
+    addBotMsg('⚠️ Chưa chọn nhạc. Gõ <b>chọn nhạc</b> để chọn.', '', 'music');
+  }
+});
 
-/* =============================
-   5) XỬ LÝ LỆNH (COMMAND HANDLER)
-   - Mỗi lệnh giờ truyền stickerKey riêng
-   - Vẫn giữ nguyên logic ban đầu
-   ============================= */
-function trackCommand(cmd){ chatStats.commandsUsed[cmd] = (chatStats.commandsUsed[cmd]||0)+1; saveStats(); }
+pauseBtn.addEventListener('click', () => {
+  audioEl.pause();
+  addBotMsg('⏸️ Đã tạm dừng nhạc', '', 'music');
+});
 
-function handleCommand(input){
+stopBtn.addEventListener('click', () => {
+  audioEl.pause();
+  audioEl.currentTime = 0;
+  addBotMsg('⏹️ Đã dừng nhạc', '', 'music');
+});
+
+volumeSlider.addEventListener('input', () => {
+  audioEl.volume = volumeSlider.value / 100;
+});
+
+/* ================================
+   PHẦN 2: COMMAND HANDLERS - XỬ LÝ LỆNH
+   - Tất cả lệnh chat bot
+   - Sử dụng cards mới
+   ================================ */
+
+/**
+ * Xử lý lệnh từ user input
+ * @param {string} input - Lệnh từ user
+ */
+function handleCommand(input) {
   const cmd = input.trim().toLowerCase();
   trackCommand(cmd);
 
-  if(cmd === 'help'){
+  // LỆNH HELP - Hiển thị danh sách lệnh
+  if (cmd === 'help') {
+    const helpCard = createDuoCard('Help Guide', 'Đến lúc học lệnh rồi!', 15, '📚');
     addBotMsg(`
-      <b>Danh sách lệnh:</b><br>
-      - <b>laymod</b> : Hiện toàn bộ mod trong chat<br>
-      - <b>allmods</b> : (giống laymod) liệt kê tất cả mod<br>
-      - <b>gợi ý skin</b> : Gợi ý random 1 mod<br>
-      - <b>donate</b> : Hiển thị QR donate<br>
-      - <b>update</b> : Thông báo cập nhật mới<br>
-      - <b>youtube</b> : Link kênh XMOD<br>
-      - <b>chém gió</b> : Bot chém gió vui vẻ<br>
-      - <b>chọn nhạc</b> : Danh sách nhạc nền 🎵<br>
-      - <b>xóa lịch sử</b> : Xóa toàn bộ lịch sử chat 🗑️<br>
-      - <b>thống kê</b> : Thống kê sử dụng 📠<br>
-      - <b>search &lt;từ khóa&gt;</b> : Tìm mod theo tên/mô tả<br>
-      - <b>request &lt;tên mod&gt;</b> : Gửi yêu cầu mod
+      ${helpCard}
+      <b>📋 Danh sách lệnh đầy đủ:</b><br><br>
+      🎮 <b>Mod & Skin:</b><br>
+      • <b>laymod</b> / <b>allmods</b> - Danh sách mod đẹp<br>
+      • <b>gợi ý skin</b> - Random một mod hay<br>
+      • <b>search [tên]</b> - Tìm mod theo tên<br>
+      • <b>random mod</b> - Mod ngẫu nhiên<br><br>
+      🎵 <b>Giải trí:</b><br>
+      • <b>chọn nhạc</b> - Danh sách nhạc nền<br>
+      • <b>chém gió</b> - Chat vui với bot<br>
+      • <b>trivia</b> - Câu hỏi vui<br>
+      • <b>lucky draw</b> - Quay số may mắn<br><br>
+      ⚙️ <b>Hệ thống:</b><br>
+      • <b>thống kê</b> - Xem stats sử dụng<br>
+      • <b>xóa lịch sử</b> - Clear toàn bộ chat<br>
+      • <b>donate</b> - Ủng hộ XMOD<br>
+      • <b>update</b> - Tin tức cập nhật
     `, '', 'help');
     return;
   }
 
-  if(cmd === 'thống kê' || cmd === 'stats'){
-    const uptime = Math.floor((Date.now()-chatStats.startTime)/1000/60);
-    const top = Object.entries(chatStats.commandsUsed).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([c,n])=>`• ${c}: ${n} lần`).join('<br>') || '• Chưa có dữ liệu';
-    addBotMsg(`<b>📊 Thống kê:</b><br>💬 Tin nhắn: <b>${chatStats.totalMessages}</b><br>⏰ Online: <b>${uptime} phút</b><br>🔥 Lệnh nhiều nhất:<br>${top}`, '', 'stats');
+  // LỆNH LAYMOD/ALLMODS - Danh sách mod với card đẹp
+  if (cmd === 'laymod' || cmd === 'allmods') {
+    const modCard = createModSelectionCard();
+    addBotMsg(`${modCard}`, '', 'laymod');
     return;
   }
 
-  if(cmd === 'laymod' || cmd === 'allmods'){
-    let html = `<b>📦 Dan sách mod hiện có (${MODS.length}):</b><br>`;
-    MODS.forEach(m=> html += renderModCardHtml(m)+"<br>");
-    addBotMsg(html, '', 'laymod');
-    return;
-  }
-
-  if(cmd === 'gợi ý skin' || cmd === 'goi y skin' || cmd === 'goiyskin'){
-    const m = MODS[Math.floor(Math.random()*MODS.length)];
-    addBotMsg(`🤔 Gợi ý: <b>${m.title}</b><br>${renderModCardHtml(m)}`, '', 'suggestion');
-    return;
-  }
-
-  if(cmd === 'donate'){
+  // LỆNH THỐNG KÊ - Hiển thị stats với Duo card
+  if (cmd === 'thống kê' || cmd === 'stats') {
+    const uptime = Math.floor((Date.now() - chatStats.startTime) / 1000 / 60);
+    const statsCard = createDuoCard('Thống Kê', 'Bạn đã rất tích cực!', chatStats.totalMessages, '📊');
+    const topCommands = Object.entries(chatStats.commandsUsed)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([cmd, count]) => `• <b>${cmd}</b>: ${count} lần`)
+      .join('<br>') || '• Chưa có dữ liệu';
+    
     addBotMsg(`
-      <b>💝 Ủng hộ XMOD</b><br>
-      <img src="https://i.postimg.cc/YqG9JCtp/i-Pay-Fri-Aug-22-10-47-44-GMT-07-00-2025.jpg" alt="QR" style="width:180px;border-radius:8px;margin-top:8px"><br>
-      VietinBank: <b>xxxxxxx</b><br>Chủ TK: <b>Mẹ Tôi</b>
+      ${statsCard}
+      <br><b>📊 Chi tiết thống kê:</b><br>
+      ⏰ Thời gian online: <b>${uptime} phút</b><br>
+      💬 Tổng tin nhắn: <b>${formatNumber(chatStats.totalMessages)}</b><br>
+      🔥 Top lệnh sử dụng:<br>${topCommands}
+    `, '', 'stats');
+    return;
+  }
+
+  // LỆNH GỢI Ý SKIN - Random mod
+  if (cmd === 'gợi ý skin' || cmd === 'goi y skin' || cmd === 'goiyskin') {
+    const randomMod = MODS[Math.floor(Math.random() * MODS.length)];
+    addBotMsg(`
+      🎯 <b>Gợi ý skin cho bạn:</b><br>
+      ${renderModCardHtml(randomMod)}
+    `, '', 'suggestion');
+    return;
+  }
+
+  // LỆNH DONATE - Thông tin donate với achievement card
+  if (cmd === 'donate') {
+    const donateCard = createAchievementCard('Cảm ơn bạn đã ủng hộ XMOD!', '💝');
+    addBotMsg(`
+      ${donateCard}
+      <b>💝 Ủng hộ phát triển XMOD:</b><br><br>
+      <div style="text-align:center;margin:12px 0;">
+        <img src="https://i.postimg.cc/YqG9JCtp/i-Pay-Fri-Aug-22-10-47-44-GMT-07-00-2025.jpg" 
+             alt="QR Code" style="width:200px;border-radius:12px;border:2px solid var(--border);">
+      </div>
+      🏦 <b>VietinBank:</b> xxxxxxx<br>
+      👤 <b>Chủ TK:</b> Mẹ Tôi<br><br>
+      <i>Mọi đóng góp đều giúp XMOD phát triển tốt hơn! 🙏</i>
     `, '', 'donate');
     return;
   }
 
-  if(cmd === 'random mod' || cmd === 'random'){
-    addBotMsg('🎲 Đang lắc xúc xắc...', '', 'random');
-    setTimeout(()=>{ const m = MODS[Math.floor(Math.random()*MODS.length)]; addBotMsg(`🎯 May mắn của bạn: <b>${m.title}</b><br>${renderModCardHtml(m)}`, '', 'random'); }, 1200);
+  // LỆNH RANDOM MOD
+  if (cmd === 'random mod' || cmd === 'random') {
+    addBotMsg('🎲 Đang lắc xúc xắc chọn mod...', '', 'random');
+    setTimeout(() => {
+      const randomMod = MODS[Math.floor(Math.random() * MODS.length)];
+      addBotMsg(`
+        🎯 <b>May mắn của bạn hôm nay:</b><br>
+        ${renderModCardHtml(randomMod)}
+      `, '', 'random');
+    }, 1200);
     return;
   }
 
-  if(cmd === 'trivia'){
-    const qs = [
-      'Nakroth có bao nhiêu skill? Trả lời: 4 skill (3 thường + 1 nội tại)',
-      'Tướng nào được gọi là Thần Rừng? Trả lời: Nakroth',
-      'Map Liên Quân có bao nhiêu làn? Trả lời: 3 làn'
+  // LỆNH TRIVIA - Câu hỏi vui
+  if (cmd === 'trivia') {
+    const questions = [
+      'Nakroth có bao nhiêu skill? <br><small>Đáp án: 4 skill (3 thường + 1 nội tại)</small>',
+      'Tướng nào được gọi là "Thần Rừng"? <br><small>Đáp án: Nakroth</small>',
+      'Map Liên Quân có bao nhiều làn chính? <br><small>Đáp án: 3 làn</small>',
+      'Vật phẩm nào tăng tốc độ đánh? <br><small>Đáp án: Giày + Găng tay</small>',
+      'Jungle có bao nhiêu buff lớn? <br><small>Đáp án: 2 buff (đỏ + xanh)</small>'
     ];
-    addBotMsg(`🧠 Câu hỏi: ${qs[Math.floor(Math.random()*qs.length)]}`, '', 'trivia');
+    const randomQ = questions[Math.floor(Math.random() * questions.length)];
+    addBotMsg(`🧠 <b>Câu hỏi Liên Quân:</b><br>${randomQ}`, '', 'trivia');
     return;
   }
 
-  if(cmd === 'guide'){
+  // LỆNH GUIDE - Hướng dẫn
+  if (cmd === 'guide') {
+    const guideCard = createDuoCard('Hướng Dẫn', 'Cách cài mod an toàn', 7, '📖');
     addBotMsg(`
-      <b>📋 Hướng dẫn cài mod:</b><br>
-      1. Tải file mod về máy<br>
-      2. Giải nén bằng ZArchiver/MT<br>
-      3. Sao chép vào thư mục game<br>
-      4. Khởi động game và thưởng thức!<br>
-      <i>⚠️ Nhớ backup file gốc trước khi cài</i>
+      ${guideCard}
+      <b>📋 Hướng dẫn cài mod Liên Quân:</b><br><br>
+      <b>1. Chuẩn bị:</b><br>
+      • Tải ZArchiver hoặc RAR<br>
+      • Backup file gốc trước khi cài<br><br>
+      <b>2. Cài đặt:</b><br>
+      • Giải nén file mod<br>
+      • Copy vào thư mục game<br>
+      • Khởi động game<br><br>
+      <b>3. Lưu ý:</b><br>
+      ⚠️ Chỉ dùng mod skin, không hack game<br>
+      🔒 Luôn backup để khôi phục khi cần<br>
+      📱 Tắt tự động cập nhật game
     `, '', 'guide');
     return;
   }
 
-  if(cmd==="chém gió" || cmd==="chem gio"){
+  // LỆNH CHÉM GIÓ - Chat vui
+  if (cmd === 'chém gió' || cmd === 'chem gio') {
     const jokes = [
-      "⚡ Nakroth mà ăn sét Toro thì gánh team luôn!",
-      "Mình là XMOD GPT, chuyên gia mod ảo nhưng thực tế thì... mình cũng cần coffee ☕",
-      "Bạn mod nhiều thì đừng quên donate để mình khỏi ăn mì gói 😆",
-      "🎵 Nghe nhạc trong lúc mod sẽ thấy đã hơn đấy!",
-      "Chat với bot mà vui như chat với crush vậy 😎"
+      "⚡ Nakroth mà có mod Pikachu thì team địch tắt điện luôn!",
+      "🤖 Mình là XMOD GPT - chuyên gia mod ảo nhưng thực tế... cần coffee ☕",
+      "💰 Bạn mod nhiều thì đừng quên donate để admin khỏi ăn mì tôm 😆",
+      "🎵 Nghe nhạc trong lúc chơi mod sẽ thấy đã hơn đấy!",
+      "😎 Chat với bot mà vui như chat với crush vậy này",
+      "🏆 Mod skin đẹp + skill pro = combo bất bại!",
+      "🎮 Game càng đẹp, tâm hồn càng thăng hoa!"
     ];
-    addBotMsg(jokes[Math.floor(Math.random()*jokes.length)], '', 'chemgio');
+    const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+    addBotMsg(randomJoke, '', 'chemgio');
     return;
   }
 
-  if(cmd.startsWith('search ') || cmd.startsWith('tim ')){
-    const query = cmd.replace('search ','').replace('tim ','').trim();
-    const results = MODS.filter(m=> m.title.toLowerCase().includes(query) || m.desc.toLowerCase().includes(query));
-    if(results.length){
-      let html = `🔍 Tìm thấy ${results.length} mod:<br>`;
-      results.forEach(m=> html += renderModCardHtml(m)+"<br>");
+  // LỆNH SEARCH - Tìm kiếm mod
+  if (cmd.startsWith('search ') || cmd.startsWith('tim ')) {
+    const query = cmd.replace('search ', '').replace('tim ', '').trim();
+    const results = MODS.filter(mod => 
+      mod.title.toLowerCase().includes(query) || 
+      mod.desc.toLowerCase().includes(query)
+    );
+    
+    if (results.length) {
+      let html = `🔍 <b>Tìm thấy ${results.length} mod với từ khóa "${escapeHtml(query)}":</b><br><br>`;
+      results.forEach(mod => {
+        html += renderModCardHtml(mod);
+      });
       addBotMsg(html, '', 'search');
-    }else addBotMsg(`❌ Không tìm thấy mod với từ khóa: <b>${escapeHtml(query)}</b>`, '', 'search');
+    } else {
+      addBotMsg(`❌ <b>Không tìm thấy mod</b> với từ khóa: <i>"${escapeHtml(query)}"</i><br><br>💡 Thử tìm với từ khóa khác hoặc gõ <b>allmods</b> để xem tất cả.`, '', 'search');
+    }
     return;
   }
 
-  if(cmd === 'lucky' || cmd === 'lucky draw'){
-    const prizes = ['🎁 Bạn trúng: Giải nhất (…đùa thôi 😆)', '🏆 Bạn trúng: Giải nhì!', '💎 Bạn trúng: Giải ba!', '🎯 Bạn trúng: Giải tư!'];
-    addBotMsg('🎰 Đang quay số...', '', 'lucky');
-    setTimeout(()=> addBotMsg(prizes[Math.floor(Math.random()*prizes.length)], '', 'lucky'), 1500);
+  // LỆNH LUCKY DRAW - Quay số
+  if (cmd === 'lucky' || cmd === 'lucky draw') {
+    const prizes = [
+      '🎁 Chúc mừng! Bạn trúng: <b>Giải đặc biệt</b> - Một nụ cười! 😊',
+      '🏆 Chúc mừng! Bạn trúng: <b>Giải nhất</b> - Vui vẻ cả ngày!',
+      '💎 Chúc mừng! Bạn trúng: <b>Giải nhì</b> - May mắn trong game!',
+      '🎯 Chúc mừng! Bạn trúng: <b>Giải ba</b> - Mod đẹp sắp ra mắt!',
+      '🌟 Chúc mừng! Bạn trúng: <b>Giải khuyến khích</b> - Cảm ơn bạn đã tham gia!'
+    ];
+    addBotMsg('🎰 Đang quay số thăm... chờ chút nhé!', '', 'lucky');
+    setTimeout(() => {
+      const prize = prizes[Math.floor(Math.random() * prizes.length)];
+      addBotMsg(prize, '', 'lucky');
+    }, 1500);
     return;
   }
 
-  if(cmd.startsWith('request ')){
+  // LỆNH REQUEST MOD - Yêu cầu mod mới
+  if (cmd.startsWith('request ')) {
     const modName = cmd.slice(8).trim();
-    addBotMsg(`📝 Đã ghi nhận yêu cầu mod: <b>${escapeHtml(modName)}</b><br>Admin sẽ xem xét và cập nhật sau!`, '', 'request');
+    addBotMsg(`📝 <b>Đã ghi nhận yêu cầu mod:</b><br>"<i>${escapeHtml(modName)}</i>"<br><br>👨‍💻 Admin sẽ xem xét và cập nhật sớm nhất có thể!<br>🙏 Cảm ơn bạn đã góp ý!`, '', 'request');
     return;
   }
 
-  if(cmd === 'update'){
-    addBotMsg(`🆕 Cập nhật: Đã thêm mod <b>${MODS[0]?.title || 'mới'}</b> và pack Resources 28.8.`, '', 'update');
+  // LỆNH UPDATE - Thông tin cập nhật
+  if (cmd === 'update') {
+    const updateCard = createDuoCard('Update Log', 'Tính năng mới đã có!', 3, '🆕');
+    addBotMsg(`
+      ${updateCard}
+      <b>🆕 Cập nhật mới nhất:</b><br><br>
+      ✨ Giao diện chat hoàn toàn mới<br>
+      🎨 Thêm Duolingo-style cards<br>
+      🎵 Hệ thống nhạc nền<br>
+      📊 Thống kê chi tiết hơn<br>
+      🔍 Tìm kiếm mod thông minh<br>
+      📱 Tối ưu cho mobile<br><br>
+      📅 <b>Sắp có:</b> Thêm nhiều mod mới!
+    `, '', 'update');
     return;
   }
 
-  if(cmd === 'youtube'){
-    addBotMsg(`🎬 Kênh YouTube: <a href="https://youtube.com/@xmod-b7i" target="_blank">XMOD Official</a>`, '', 'youtube');
+  // LỆNH YOUTUBE
+  if (cmd === 'youtube') {
+    addBotMsg(`🎬 <b>Kênh YouTube XMOD:</b><br><br>📺 <a href="https://youtube.com/@xmod-b7i" target="_blank" style="color:var(--grad3);font-weight:bold;">XMOD Official Channel</a><br><br>🎥 Xem video hướng dẫn cài mod<br>🔔 Đăng ký để không bỏ lỡ video mới!`, '', 'youtube');
     return;
   }
 
-  if(cmd === 'chọn nhạc' || cmd === 'chon nhac' || cmd === 'music'){
-    let html = `<b>🎵 Danh sách nhạc nền:</b><br>Gõ số để chọn (VD: <b>1</b>)<br><br>`;
-    MUSIC_LIST.forEach((m,i)=> html += `<b>${i+1}</b>. ${m.title}<br>`);
-    html += `<br><i>Sau khi chọn, dùng khung điều khiển góc dưới để Play/Pause.</i>`;
+  // LỆNH CHỌN NHẠC
+  if (cmd === 'chọn nhạc' || cmd === 'chon nhac' || cmd === 'music') {
+    let html = `<b>🎵 Danh sách nhạc nền:</b><br><br>`;
+    html += `<i>Gõ số để chọn nhạc (VD: <b>1</b>, <b>2</b>, <b>3</b>)</i><br><br>`;
+    MUSIC_LIST.forEach((music, index) => {
+      html += `<b>${index + 1}</b>. 🎶 ${music.title}<br>`;
+    });
+    html += `<br>💡 <i>Sau khi chọn, sử dụng panel điều khiển góc dưới để Play/Pause.</i>`;
     addBotMsg(html, '', 'music');
     return;
   }
 
+  // XỬ LÝ CHỌN NHẠC THEO SỐ (1, 2, 3...)
   const musicNumber = parseInt(cmd);
-  if(!isNaN(musicNumber) && musicNumber>=1 && musicNumber<=MUSIC_LIST.length){ selectMusic(musicNumber-1); return; }
-
-  if(cmd === 'xóa lịch sử' || cmd === 'xoa lich su' || cmd === 'clear' || cmd === 'xóa chat'){
-    addBotMsg(`<b>⚠️ Xác nhận xóa lịch sử?</b><br>Gõ <b>"xác nhận xóa"</b> để xóa toàn bộ lịch sử chat.<br><i>Hành động này không thể hoàn tác!</i>`, '', 'confirmDelete');
+  if (!isNaN(musicNumber) && musicNumber >= 1 && musicNumber <= MUSIC_LIST.length) {
+    selectMusic(musicNumber - 1);
     return;
   }
-  if(cmd === 'xác nhận xóa' || cmd === 'xac nhan xoa' || cmd === 'confirm delete'){ clearChatHistory(); return; }
 
-  // Nếu không trùng lệnh nào ở trên: hiển thị thông báo "không hiểu" + sticker, rồi gọi AI fallback
-  addBotMsg(`❓ Mình chưa hiểu lệnh "<b>${escapeHtml(input)}</b>". Mình thử trả lời bằng AI nhé...`, '', 'unknown');
-  callOpenAI(cmd);
+  // LỆNH XÓA LỊCH SỬ - Xác nhận trước khi xóa
+  if (cmd === 'xóa lịch sử' || cmd === 'xoa lich su' || cmd === 'clear' || cmd === 'xóa chat') {
+    addBotMsg(`
+      <b>⚠️ Xác nhận xóa lịch sử?</b><br><br>
+      Gõ <b>"xác nhận xóa"</b> để xóa toàn bộ lịch sử chat.<br>
+      <br><i>⚠️ Hành động này không thể hoàn tác!</i>
+    `, '', 'confirmDelete');
+    return;
+  }
+
+  // XÁC NHẬN XÓA LỊCH SỬ
+  if (cmd === 'xác nhận xóa' || cmd === 'xac nhan xoa' || cmd === 'confirm delete') {
+    clearChatHistory();
+    return;
+  }
+
+  // LỆNH KHÔNG XÁC ĐỊNH - Hiện thông báo và gọi AI
+  addBotMsg(`❓ Mình chưa hiểu lệnh "<b>${escapeHtml(input)}</b>".<br><br>🤖 Để mình thử trả lời bằng AI...`, '', 'unknown');
+  setTimeout(() => callOpenAI(input), 800);
 }
 
-/* =============================
-   6) INPUT & CHIPS
-   ============================= */
+/* ================================
+   PHẦN 3: EVENT LISTENERS - XỬ LÝ SỰ KIỆN
+   - Input handling
+   - Button clicks
+   - Theme toggle
+   ================================ */
+
+// DOM elements cho input
 const inp = document.getElementById('inp');
 const sendBtn = document.getElementById('sendBtn');
-sendBtn.addEventListener('click', onSend);
-inp.addEventListener('keypress', e=>{ if(e.key==='Enter') onSend(); });
 
-function onSend(){
-  const text = inp.value.trim(); if(!text) return; addUserMsg(text); inp.value='';
-  const typing = document.createElement('div'); typing.className = 'bubble bot'; typing.innerHTML = `<div class="meta">Bot đang soạn...</div>`; messagesEl.appendChild(typing); scrollToBottom();
-  setTimeout(()=>{ typing.remove(); handleCommand(text); }, 500 + Math.random()*700);
+/**
+ * Xử lý gửi tin nhắn
+ */
+function onSend() {
+  const text = inp.value.trim();
+  if (!text) return;
+
+  addUserMsg(text);
+  inp.value = '';
+
+  // Hiển thị typing indicator
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'bubble bot';
+  typingDiv.innerHTML = '<div class="meta">Bot đang soạn tin...</div>';
+  typingDiv.id = 'typing-indicator';
+  messagesEl.appendChild(typingDiv);
+  scrollToBottom();
+
+  // Xử lý lệnh sau delay ngẫu nhiên
+  setTimeout(() => {
+    const typingEl = document.getElementById('typing-indicator');
+    if (typingEl) typingEl.remove();
+    handleCommand(text);
+  }, 500 + Math.random() * 700);
 }
 
-document.querySelectorAll('.chip').forEach(el=> el.addEventListener('click', ()=>{ inp.value = el.getAttribute('data-cmd'); inp.focus(); }));
-
-/* =============================
-   7) THEME TOGGLE (🌓)
-   - Lưu chế độ vào localStorage
-   ============================= */
-const themeBtn = document.getElementById('toggleTheme');
-(function(){
-  const saved = localStorage.getItem('xmod_theme');
-  if(saved === 'light') document.body.classList.add('light');
-})();
-
-themeBtn.addEventListener('click', ()=>{
-  document.body.classList.toggle('light');
-  const mode = document.body.classList.contains('light') ? 'light' : 'dark';
-  localStorage.setItem('xmod_theme', mode);
-  showToast(mode==='light' ? '🌞 Giao diện sáng' : '🌙 Giao diện tối');
+// Event listeners cho input
+sendBtn.addEventListener('click', onSend);
+inp.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') onSend();
 });
 
-/* =============================
-   8) INTRO + "Tôi nhớ bạn quá" CHECK
-   - Nếu lâu không vào (theo MISSYOU_THRESHOLD_MS), hiện 1 message đặc biệt kèm sticker
-   ============================= */
-(function checkLastVisitAndIntro(){
-  const last = parseInt(localStorage.getItem(LAST_VISIT_KEY) || '0', 10);
-  const now = Date.now();
-  if(!HISTORY.length){
-    addBotMsg("Xin chào 👋! Mình là <b>XMOD Chat</b> — gõ <b>help</b> để xem lệnh.\n\n🎵 <i>Thử lệnh 'chọn nhạc' để nghe nhạc nền nhé!</i>", '', 'help');
+// Event listeners cho quick command chips
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const cmd = chip.getAttribute('data-cmd');
+    inp.value = cmd;
+    inp.focus();
+  });
+});
+
+// THEME TOGGLE - Chuyển đổi giao diện sáng/tối
+const themeBtn = document.getElementById('toggleTheme');
+
+// Load theme từ localStorage
+(function loadTheme() {
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  if (savedTheme === 'light') {
+    document.body.classList.add('light');
   }
-  if(!last || (now - last) > MISSYOU_THRESHOLD_MS){
-    addBotMsg(`<b>Tôi nhớ bạn quá! 💖</b><br>Lâu rồi bạn chưa ghé. Chào mừng bạn đã trở lại!`, '', 'missYou');
-  }
-  localStorage.setItem(LAST_VISIT_KEY, String(now));
 })();
 
-/* =============================
-   9) OPENAI FALLBACK
-   - Lưu ý: KHÔNG để API key ở client cho production
-   - Thông báo lỗi có sticker riêng
-   ============================= */
-async function callOpenAI(userText){
+// Toggle theme
+themeBtn.addEventListener('click', () => {
+  document.body.classList.toggle('light');
+  const isLight = document.body.classList.contains('light');
+  const mode = isLight ? 'light' : 'dark';
+  
+  localStorage.setItem(THEME_KEY, mode);
+  showToast(isLight ? '☀️ Chuyển sang giao diện sáng' : '🌙 Chuyển sang giao diện tối');
+});
+
+/* ================================
+   PHẦN 4: OPENAI INTEGRATION - TÍCH HỢP AI
+   - Gọi OpenAI API cho câu trả lời thông minh
+   - Fallback khi không hiểu lệnh
+   ================================ */
+
+/**
+ * Gọi OpenAI API để trả lời câu hỏi
+ * @param {string} userText - Câu hỏi từ user
+ */
+async function callOpenAI(userText) {
   addBotMsg('⏳ Đang hỏi AI, chờ chút nhé...', '', 'aiFallback');
-  try{
-    const res = await fetch('https://api.openai.com/v1/chat/completions',{
-      method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer YOUR_API_KEY_HERE' },
-      body: JSON.stringify({ model:'gpt-3.5-turbo', messages:[ {role:'system', content:'Bạn là trợ lý XMOD.'}, {role:'user', content:userText} ], max_tokens:500, temperature:0.8 })
+  
+  try {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer YOUR_API_KEY_HERE' // ⚠️ THAY API KEY THỰC TẾ
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [
+          {
+            role: 'system',
+            content: 'Bạn là trợ lý XMOD, chuyên về mod game Liên Quân Mobile. Trả lời ngắn gọn, thân thiện và hữu ích.'
+          },
+          {
+            role: 'user',
+            content: userText
+          }
+        ],
+        max_tokens: 500,
+        temperature: 0.8
+      })
     });
-    const data = await res.json();
-    const reply = data.choices?.[0]?.message?.content || '❌ AI không trả lời được. đây chỉ là chatbot xử lý lệnh được lập trình sẵn thôi nên đừng soi mối nếu muốn như chatgbt, Gemini,grock.... thì donate 1 triệu admin tìm cách làm liền!.';
-    addBotMsg(escapeHtml(reply).replace(/\n/g,'<br>'), '', 'aiFallback');
-  }catch(e){ console.error(e); addBotMsg('⚠️ Lỗi khi gọi OpenAI. kiểm tra api key hoặc mạng(Đéo cần kiểm tra gì cả vì tạo đéo để key!)', '', 'aiError'); }
+
+    const data = await response.json();
+    const aiReply = data.choices?.[0]?.message?.content || 
+      '❌ AI không thể trả lời donate 1 triệu vnđ admin sẽ tìm cách làm giống chatgpt,grock,Gemini...!. Thử lại sau nhé!';
+    
+    addBotMsg(escapeHtml(aiReply).replace(/\n/g, '<br>'), '', 'aiFallback');
+    
+  } catch (error) {
+    console.error('OpenAI Error:', error);
+    addBotMsg(`
+      ⚠️ <b>Lỗi kết nối AI</b><br><br>
+      Hiện tại bot chỉ xử lý các lệnh được lập trình sẵn.<br>
+      Gõ <b>help</b> để xem danh sách lệnh có sẵn!<br><br>
+      <i>💡 Nếu muốn AI thông minh hơn, hãy donate để admin nâng cấp! 😉</i>
+    `, '', 'aiError');
+  }
 }
 
-// expose for console debugging
-window.XMOD = { MODS, MUSIC_LIST, addBotMsg, addUserMsg, copyLink, selectMusic };
+/* ================================
+   PHẦN 5: INITIALIZATION - KHỞI TẠO
+   - Check "nhớ bạn quá"
+   - Intro message
+   - Expose debug functions
+   ================================ */
+
+/**
+ * Kiểm tra lần truy cập cuối và hiện intro
+ */
+function checkLastVisitAndIntro() {
+  const lastVisit = parseInt(localStorage.getItem(LAST_VISIT_KEY) || '0', 10);
+  const now = Date.now();
+  
+  // Nếu chưa có lịch sử, hiển thị intro
+  if (HISTORY.length === 0) {
+    const welcomeCard = createDuoCard('Chào Mừng!', 'Khám phá thế giới mod cùng XMOD', 1, '👋');
+    addBotMsg(`
+      ${welcomeCard}
+      <b>Xin chào! 👋</b><br><br>
+      Mình là <b>XMOD Chat Bot</b> - trợ lý mod Liên Quân của bạn!<br><br>
+      🎮 Gõ <b>help</b> để xem danh sách lệnh<br>
+      🎵 Thử <b>chọn nhạc</b> để nghe nhạc nền<br>
+      📱 Gõ <b>laymod</b> để xem mod đẹp nhất!<br><br>
+      <i>Hãy khám phá các tính năng mới nhé! ✨</i>
+    `, '', 'help');
+  }
+  
+  // Nếu lâu không vào, hiện tin nhắn "nhớ bạn"
+  if (lastVisit && (now - lastVisit) > MISSYOU_THRESHOLD_MS) {
+    const missYouCard = createAchievementCard('Tôi nhớ bạn quá!', '💖');
+    addBotMsg(`
+      ${missYouCard}
+      <b>Chào mừng bạn trở lại!</b> 🤗<br><br>
+      Lâu rồi không gặp, mình nhớ bạn lắm!<br>
+      Có gì mới không? Thử xem <b>update</b> để biết tính năng mới nhé!
+    `, '', 'missYou');
+  }
+  
+  // Lưu thời gian truy cập hiện tại
+  localStorage.setItem(LAST_VISIT_KEY, String(now));
+}
+
+/**
+ * Khởi tạo toàn bộ ứng dụng
+ */
+function initializeApp() {
+  console.log('🚀 Đang khởi tạo XMOD Chat v3.0...');
+  
+  // Tải dữ liệu đã lưu
+  loadStats();
+  loadHistory();
+  
+  // Kiểm tra và hiển thị intro
+  checkLastVisitAndIntro();
+  
+  // Expose functions to global scope for debugging
+  window.XMOD = {
+    // Data
+    MODS,
+    MUSIC_LIST,
+    STICKERS,
+    
+    // Stats
+    chatStats,
+    HISTORY,
+    
+    // Functions
+    addBotMsg,
+    addUserMsg,
+    copyLink,
+    selectMusic,
+    createDuoCard,
+    createAchievementCard,
+    createModSelectionCard,
+    clearChatHistory,
+    showToast,
+    
+    // Debug
+    debug: {
+      testAllCards: () => {
+        addBotMsg(createDuoCard('Test', 'Testing Duo Card', 30, '🧪'), '', 'default');
+        addBotMsg(createAchievementCard('Test Achievement', '🏆'), '', 'default');
+        addBotMsg(createModSelectionCard(), '', 'default');
+      },
+      simulateTyping: (text) => {
+        addUserMsg(text);
+        setTimeout(() => handleCommand(text), 1000);
+      }
+    }
+  };
+  
+  console.log('✅ XMOD Chat đã sẵn sàng!');
+  console.log('💡 Gõ XMOD.debug.testAllCards() để test các card');
+}
+
+// Khởi tạo khi DOM loaded
+document.addEventListener('DOMContentLoaded', initializeApp);
+
+// Lưu thống kê khi thoát trang
+window.addEventListener('beforeunload', saveStats);
+
+console.log('🎉 XMOD Chat v3.0 - Tất cả phần đã tải xong!');
 </script>
+
+<!-- Thêm Music Control Panel vào body -->
+<div class="music-control" id="musicControl">
+  <div class="music-title" id="musicTitle">🎵 Chưa có nhạc</div>
+  <div class="music-buttons">
+    <button class="music-btn" id="playBtn">▶️ Play</button>
+    <button class="music-btn" id="pauseBtn">⏸️ Pause</button>
+    <button class="music-btn" id="stopBtn">⏹️ Stop</button>
+  </div>
+  <div class="volume-control">
+    <span>🔊</span>
+    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+  </div>
+</div>
+
 </body>
 </html>
