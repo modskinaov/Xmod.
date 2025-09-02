@@ -1236,10 +1236,10 @@ const MODS = [
   },
   { 
     id: "m2", 
-    title: "nak", 
+    title: "NAKROTH TTVT", 
     desc: "Phế", 
-    thumb: "https://i.postimg.cc/L5K9dVrK/53202.jpg", 
-    link: "https://www.mediafire.com/file/bpgspvstitdpk4o/Alchemist_Blade.7z/file" 
+    thumb: "https://i.postimg.cc/7PJd5vbP/16712.jpg", 
+    link: "https://www.mediafire.com/file/l9n4gopwl4ygdbf/NAKROTH_TTVT-XMOD.zip/file" 
   },
   { 
     id: "m3", 
@@ -1333,7 +1333,29 @@ let chatStats = {
    - Xử lý HTML
    - Cuộn xuống cuối
    ================================ */
-
+/**
+ * Tính số ngày streak thực tế từ lần đầu sử dụng
+ * @returns {number} - Số ngày đã sử dụng
+ */
+function calculateStreak() {
+  const firstVisitKey = 'xmod_first_visit_date';
+  const today = new Date().toDateString(); // Lấy ngày hiện tại
+  const savedDate = localStorage.getItem(firstVisitKey);
+  
+  if (!savedDate) {
+    // Lần đầu tiên sử dụng - lưu ngày hôm nay
+    localStorage.setItem(firstVisitKey, today);
+    return 1;
+  }
+  
+  // Tính số ngày chênh lệch
+  const firstDate = new Date(savedDate);
+  const currentDate = new Date(today);
+  const diffTime = currentDate - firstDate;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+  return Math.max(1, diffDays + 1); // +1 vì tính cả ngày đầu
+}
 /**
  * Hiển thị thông báo toast góc trên phải
  * @param {string} message - Nội dung thông báo
@@ -1345,6 +1367,18 @@ function showToast(message, duration = TOAST_DURATION) {
   toast.textContent = message;
   document.body.appendChild(toast);
   
+  /**
+ * Tính số ngày streak thực tế
+ */
+function calculateStreak() {
+  const firstVisit = parseInt(localStorage.getItem('xmod_first_visit') || Date.now().toString());
+  if (!localStorage.getItem('xmod_first_visit')) {
+    localStorage.setItem('xmod_first_visit', firstVisit.toString());
+  }
+  
+  const daysPassed = Math.floor((Date.now() - firstVisit) / (1000 * 60 * 60 * 24));
+  return Math.max(1, daysPassed); // Ít nhất 1 ngày
+}
   // Trigger animation
   requestAnimationFrame(() => toast.classList.add('show'));
   
@@ -1557,21 +1591,51 @@ function trackCommand(cmd) {
  * Tạo thẻ Duolingo-style với progress và stats
  * @param {string} title - Tiêu đề chính
  * @param {string} subtitle - Tiêu đề phụ
- * @param {number} days - Số ngày streak
+ * @param {number|null} days - Số ngày streak (null = tự động tính)
  * @param {string} mascotEmoji - Emoji mascot
  * @returns {string} - HTML string
  */
-function createDuoCard(title, subtitle, days = 59, mascotEmoji = '🦉') {
-  // Tạo progress days (5 ngày gần nhất)
-  const dayNames = ['T5', 'T6', 'T7', 'CN', 'T2'];
-  const progressDays = dayNames.map((dayName, index) => {
-    const isCompleted = index < 4; // 4 ngày đầu đã hoàn thành
-    const isToday = index === 4; // Ngày cuối là hôm nay
-    const className = isCompleted ? 'completed' : (isToday ? 'today' : '');
-    return `<div class="progress-day ${className}">${dayName}</div>`;
-  }).join('');
+function createDuoCard(title, subtitle, days = null, mascotEmoji = '🦉') {
+  // Nếu không truyền days hoặc days = null, tự động tính streak
+  if (days === null || days === undefined) {
+    days = calculateStreak();
+  }
   
-  // Tính toán stats
+  // Tạo progress days (5 ngày gần nhất) - CẬP NHẬT THEO NGÀY THỰC TẾ
+function getRecentDays() {
+  const dayNames = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+  const today = new Date();
+  const recentDays = [];
+  
+  // Lấy 5 ngày gần nhất (từ 4 ngày trước đến hôm nay)
+  for (let i = 4; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(today.getDate() - i);
+    const dayIndex = date.getDay(); // 0 = CN, 1 = T2, ..., 6 = T7
+    const dayName = dayNames[dayIndex];
+    const isToday = i === 0;
+    const isCompleted = i > 0; // Các ngày trước đó đã hoàn thành
+    
+    recentDays.push({
+      name: dayName,
+      isToday: isToday,
+      isCompleted: isCompleted
+    });
+  }
+  
+  return recentDays;
+}
+
+const recentDays = getRecentDays();
+const progressDays = recentDays.map(day => {
+  let className = '';
+  if (day.isCompleted) className = 'completed';
+  else if (day.isToday) className = 'today';
+  
+  return `<div class="progress-day ${className}">${day.name}</div>`;
+}).join('');
+  
+  // Tính toán stats THỰC TẾ
   const weeks = Math.floor(days / 7);
   const totalCommands = chatStats.totalMessages || 0;
   
@@ -1654,7 +1718,7 @@ function createModSelectionCard() {
   }).join('');
 
   return `
-  <div class="mod-selection-wrapper">
+    <div class="mod-selection-wrapper">
       <div class="mod-header-new">
         <div class="mod-icon-new">x</div>
         <div>
@@ -1807,8 +1871,9 @@ function handleCommand(input) {
   trackCommand(cmd);
 
   // LỆNH HELP - Hiển thị danh sách lệnh
-  if (cmd === 'help') {
-    const helpCard = createDuoCard('Help Guide', 'Đến lúc học lệnh rồi!', 15, '📚');
+  // LỆNH HELP - Hiển thị danh sách lệnh
+if (cmd === 'help') {
+  const helpCard = createDuoCard('Help Guide', 'Đến lúc học lệnh rồi!', null, '📚');
     addBotMsg(`
       ${helpCard}
       <b>📋 Danh sách lệnh đầy đủ:</b><br><br>
@@ -1841,7 +1906,7 @@ function handleCommand(input) {
   // LỆNH THỐNG KÊ - Hiển thị stats với Duo card
   if (cmd === 'thống kê' || cmd === 'stats') {
     const uptime = Math.floor((Date.now() - chatStats.startTime) / 1000 / 60);
-    const statsCard = createDuoCard('Thống Kê', 'Bạn đã rất tích cực!', chatStats.totalMessages, '📊');
+    const statsCard = createDuoCard('Thống Kê', 'Bạn đã rất tích cực!', null, '📊');
     const topCommands = Object.entries(chatStats.commandsUsed)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5)
@@ -1914,7 +1979,7 @@ function handleCommand(input) {
 
   // LỆNH GUIDE - Hướng dẫn
   if (cmd === 'guide') {
-    const guideCard = createDuoCard('Hướng Dẫn', 'Cách cài mod an toàn', 7, '📖');
+    const guideCard = createDuoCard('Hướng Dẫn', 'Cách cài mod an toàn', null, '📖');
     addBotMsg(`
       ${guideCard}
       <b>📋 Hướng dẫn cài mod Liên Quân:</b><br><br>
@@ -1995,7 +2060,7 @@ function handleCommand(input) {
 
   // LỆNH UPDATE - Thông tin cập nhật
   if (cmd === 'update') {
-    const updateCard = createDuoCard('Update Log', 'Tính năng mới đã có!', 3, '🆕');
+    const updateCard = createDuoCard('Update Log', 'Tính năng mới đã có!', null, '🆕');
     addBotMsg(`
       ${updateCard}
       <b>🆕 Cập nhật mới nhất:</b><br><br>
@@ -2176,7 +2241,7 @@ async function callOpenAI(userText) {
     console.error('OpenAI Error:', error);
     addBotMsg(`
       ⚠️ <b>Lỗi kết nối AI</b><br><br>
-      Hiện tại bot chỉ xử lý các lệnh được lập trình sẵn.<br>
+    Hiện tại bot chỉ xử lý các lệnh được lập trình sẵn.<br>
       Gõ <b>help</b> để xem danh sách lệnh có sẵn!<br><br>
       <i>💡 Nếu muốn AI thông minh hơn, hãy donate để admin nâng cấp! 😉</i>
     `, '', 'aiError');
@@ -2198,8 +2263,9 @@ function checkLastVisitAndIntro() {
   const now = Date.now();
   
   // Nếu chưa có lịch sử, hiển thị intro
-  if (HISTORY.length === 0) {
-    const welcomeCard = createDuoCard('Chào Mừng!', 'Khám phá thế giới mod cùng XMOD', 1, '👋');
+  // Nếu chưa có lịch sử, hiển thị intro
+if (HISTORY.length === 0) {
+  const welcomeCard = createDuoCard('Chào Mừng!', 'Khám phá thế giới mod cùng XMOD', null, '👋');
     addBotMsg(`
       ${welcomeCard}
       <b>Xin chào! 👋</b><br><br>
