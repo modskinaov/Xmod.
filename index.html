@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title>Chatbot Xmod - White Neon</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -9,9 +11,9 @@
     /* Reset CSS cơ bản */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
-      height: 100%;
-      background: #000;
-      color: #fff;
+  height: 100%;
+  background: url('https://i.postimg.cc/Z5x27g1v/mau-den-thumbnail.jpg') center/cover no-repeat fixed;
+  color: #333;
       font-family: 'Rajdhani', 'Arial', sans-serif;
       overflow: hidden;
       cursor: none; /* Ẩn cursor để dùng custom cursor */
@@ -21,23 +23,12 @@
     
     /* Dynamic animated background mesh */
     .dynamic-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        radial-gradient(circle at 20% 80%, #1a1a1a 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, #333 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, #555 0%, transparent 50%),
-        linear-gradient(135deg, #000 0%, #111 50%, #000 100%);
-      background-size: 400% 400%, 300% 300%, 500% 500%, 100% 100%;
-      animation: 
-        meshMove1 8s ease-in-out infinite,
-        meshMove2 12s ease-in-out infinite,
-        meshMove3 10s ease-in-out infinite;
-      z-index: -10;
-    }
+  display: none;
+}
+
+.circuit-overlay {
+  display: none;
+}
 
     @keyframes meshMove1 {
       0%, 100% { background-position: 0% 50%, 50% 50%, 25% 25%, 0% 0%; }
@@ -76,31 +67,30 @@
     }
 
     /* Custom cursor trail */
-    .cursor {
-      position: fixed;
-      width: 20px;
-      height: 20px;
-      border: 2px solid #ffffff;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 10000;
-      transition: transform 0.1s ease;
-      box-shadow: 
-        0 0 20px #ffffff,
-        inset 0 0 20px rgba(255,255,255,0.2);
-    }
+.cursor {
+  display: none; /* đổi thành block nếu muốn dùng custom cursor */
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  transition: transform 0.1s ease;
+  box-shadow: 0 0 20px #ffffff, inset 0 0 20px rgba(255,255,255,0.2);
+}
 
-    .cursor::before {
-      content: '';
-      position: absolute;
-      top: -10px;
-      left: -10px;
-      width: 40px;
-      height: 40px;
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 50%;
-      animation: cursorPulse 2s infinite;
-    }
+.cursor::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  animation: cursorPulse 2s infinite;
+}
 
     @keyframes cursorPulse {
       0% { transform: scale(0.5); opacity: 1; }
@@ -108,85 +98,20 @@
     }
 
     /* Mouse trail particles */
-    .trail-particle {
-      position: fixed;
-      width: 4px;
-      height: 4px;
-      background: #ffffff;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      box-shadow: 0 0 10px #ffffff;
-    }
+.trail-particle {
+  display: none;
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: #ffffff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  box-shadow: 0 0 10px #ffffff;
+}
 
     /* Dynamic Island with holographic effect */
-    #dynamicIsland {
-  position: fixed;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #000;
-  color: #fff;
-  border-radius: 25px;
-  padding: 8px 16px;
-  font-size: 13px;
-  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.6s cubic-bezier(0.32, 0.72, 0, 1);
-  z-index: 1000;
-  border: 1px solid #333;
-  backdrop-filter: blur(20px);
-  min-width: 120px;
-  justify-content: center;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-}
-
-#dynamicIsland.compact {
-  width: 120px;
-  height: 35px;
-  border-radius: 25px;
-  padding: 8px 12px;
-}
-
-#dynamicIsland.expanded {
-  width: 280px;
-  height: 30px;
-  border-radius: 30px;
-  padding: 12px 20px;
-}
-
-#dynamicIsland.long {
-  width: 200px;
-  height: 45px;
-  border-radius: 27px;
-  padding: 10px 16px;
-}
-
-.dynamic-content {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-  justify-content: center;
-}
-
-.dynamic-icon {
-  font-size: 16px;
-}
-
-.dynamic-text {
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.dynamic-subtext {
-  font-size: 11px;
-  color: #999;
-  margin-left: 4px;
-}
+    
 
 .waveform {
   display: flex;
@@ -227,12 +152,7 @@
       100% { background-position: 50% 50%, 50% 50%; }
     }
 
-    #dynamicIsland.expanded {
-      padding: 12px 24px;
-      border-radius: 30px;
-      box-shadow: 0 12px 35px rgba(255,255,255,0.6);
-      transform: translateX(-50%) scale(1.05);
-    }
+   
 
     /* Data stream effects */
     .data-stream {
@@ -262,13 +182,13 @@
     #chatArea {
       flex: 1;
       overflow-y: auto;
-      padding: 70px 10px 80px 10px;
+      padding: 20px 10px 80px 10px;
       display: flex;
       flex-direction: column;
       gap: 10px;
       height: calc(100vh - 150px);
       position: relative;
-      background: linear-gradient(135deg, #000 0%, #333 25%, #666 50%, #999 75%, #fff 100%);
+      background: transparent;
     }
 
     /* Ripple effect container */
@@ -319,20 +239,17 @@
     }
 
     .message::before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(45deg, 
-        transparent 30%, 
-        rgba(255,255,255,0.3) 50%, 
-        transparent 70%);
-      z-index: -1;
-      border-radius: 20px;
-      animation: holographicBorder 4s linear infinite;
-    }
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+  z-index: -1;
+  border-radius: 20px;
+  animation: holographicBorder 4s linear infinite;
+}
 
     @keyframes message3DEntrance {
       0% {
@@ -368,17 +285,12 @@
       animation-delay: 0s;
     }
 
-    .user {
-      background: 
-        linear-gradient(135deg, rgba(200,200,200,0.1), transparent),
-        linear-gradient(135deg, #4a4a4a, #3a3a3a);
-      box-shadow: 
-        0 4px 15px rgba(200,200,200,0.3),
-        inset 0 1px 0 rgba(200,200,200,0.2);
-      align-self: flex-end;
-      animation-delay: 0.2s;
-      border: 1px solid rgba(200,200,200,0.3);
-    }
+    .bot {
+  background: rgba(255, 255, 255, 0.95);
+  color: #333;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
 
     /* Typewriter effect */
     .typewriter {
@@ -400,88 +312,127 @@
 
     /* Input Area với white neon glow */
     #inputArea {
-      display: flex;
-      padding: 10px 10px;
-      background: 
-        linear-gradient(90deg, rgba(255,255,255,0.1), rgba(200,200,200,0.1)),
-        rgba(17,17,17,0.95);
-      backdrop-filter: blur(20px);
-      gap: 10px;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      border-top: 1px solid #ffffff;
-      box-shadow: 
-        0 -5px 25px rgba(255,255,255,0.3),
-        inset 0 1px 0 rgba(255,255,255,0.1);
-    }
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  width: auto;
+  max-width: none;
+  height: 50px;
+  background: rgba(0,0,0,0.8);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 25px;
+  backdrop-filter: blur(15px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 10px;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(255,255,255,0.2);
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+  #inputArea {
+    bottom: 15px;
+    left: 15px;
+    right: 15px;
+    height: 45px;
+    gap: 8px;
+    padding: 5px 8px;
+  }
+}
 
     #userInput {
-      flex: 1;
-      padding: 12px 16px;
-      border: 2px solid #ffffff;
-      border-radius: 25px;
-      background: rgba(0,0,0,0.8);
-      color: #ffffff;
-      font-size: 14px;
-      font-family: 'Rajdhani', sans-serif;
-      font-weight: 400;
-      transition: all 0.3s ease;
-      position: relative;
-    }
+  flex: 1;
+  min-width: 0; /* Quan trọng để text không tràn */
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 15px;
+  font-family: Arial, sans-serif;
+  padding: 0 10px;
+  text-align: left;
+}
 
+@media (max-width: 768px) {
+  #userInput {
+    font-size: 14px;
+    padding: 0 5px;
+  }
+}
+
+#userInput:focus {
+  outline: none;
+  background: transparent;
+  transform: none;
+  text-shadow: none;
+  box-shadow: none;
+}
+.input-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.icon-item {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.icon-item img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.app-icon {
+  width: 30px;
+  height: 30px;
+  background: url('') center/cover;
+  border-radius: 6px;
+}
+.send-btn:hover div {
+  background: #16a34a !important;
+  transform: scale(1.1);
+}
     #userInput:focus {
-      outline: none;
-      border-color: #ffffff;
-      box-shadow: 
-        0 0 30px rgba(255,255,255,0.6),
-        inset 0 0 20px rgba(255,255,255,0.1);
-      background: rgba(0,0,0,0.9);
-      transform: scale(1.02);
-      text-shadow: 0 0 10px #ffffff;
-    }
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  transform: none !important;
+  text-shadow: none !important;
+}
 
     #userInput::placeholder {
       color: rgba(255,255,255,0.5);
     }
 
     #sendBtn {
-      padding: 12px 20px;
-      background: linear-gradient(45deg, #ffffff, #cccccc);
-      color: #000;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      font-weight: 700;
-      font-family: 'Orbitron', monospace;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 0 20px rgba(255,255,255,0.4);
-    }
+  width: 45px;
+  height: 45px;
+  background: #58cc02;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.2s ease;
+}
 
-    #sendBtn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-      transition: left 0.5s;
-    }
-
-    #sendBtn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 30px rgba(255,255,255,0.8);
-      text-shadow: 0 0 10px rgba(0,0,0,0.8);
-    }
-
-    #sendBtn:hover::before {
-      left: 100%;
-    }
 
     /* Enhanced Mod Cards - FIX ẢNH HIỂN THỊ */
     .mod-card {
@@ -579,17 +530,27 @@
     }
 
     /* Floating particles */
-    .floating-particle {
-      position: fixed;
-      width: 4px;
-      height: 4px;
-      background: #ffffff;
-      border-radius: 50%;
-      pointer-events: none;
-      animation: float 8s infinite ease-in-out;
-      box-shadow: 0 0 10px #ffffff;
-      z-index: 2;
-    }
+.floating-particle {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: #ffffff;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: float 8s infinite ease-in-out;
+  box-shadow: 0 0 10px #ffffff;
+  z-index: 2;
+}
+
+/* Reduce effects on mobile for performance */
+@media (max-width: 768px) {
+  .floating-particle {
+    display: none;
+  }
+  .data-stream {
+    display: none;
+  }
+}
 
     @keyframes float {
       0%, 100% { 
@@ -608,23 +569,7 @@
       }
     }
 
-    /* White neon glow text */
-    .neon-text {
-      color: #ffffff;
-      text-shadow: 
-        0 0 5px #ffffff,
-        0 0 10px #ffffff,
-        0 0 15px #ffffff,
-        0 0 20px #ffffff;
-      animation: neonFlicker 2s infinite alternate;
-      font-family: 'Orbitron', monospace;
-      font-weight: 700;
-    }
-
-    @keyframes neonFlicker {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.8; }
-    }
+   
 
     /* Donate button với white cyberpunk style */
     #donateBtn {
@@ -679,31 +624,6 @@
       box-shadow: 0 0 15px rgba(255,255,255,0.5);
     }
 
-    /* Battery styling */
-    .battery-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 10px 0;
-    }
-
-    .battery-bar {
-      flex: 1;
-      height: 20px;
-      background: #333;
-      border: 1px solid #ffffff;
-      border-radius: 10px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .battery-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #ffffff, #cccccc);
-      box-shadow: 0 0 10px #ffffff;
-      transition: width 0.3s ease;
-    }
-
     /* Responsive */
     @media (max-width: 768px) {
       #chatArea {
@@ -722,12 +642,7 @@
         max-width: 90%;
         font-size: 14px;
       }
-      
-      #dynamicIsland {
-        top: 5px;
-        font-size: 12px;
-        padding: 6px 12px;
-      }
+     
 
       .mod-card {
         flex-direction: column;
@@ -746,7 +661,8 @@
         display: none;
       }
       
-      .data-stream {
+      .data-stream { 
+        display: none; 
         display: none;
       }
     }
@@ -770,35 +686,244 @@
     #chatArea::-webkit-scrollbar-thumb:hover {
       background: rgba(255,255,255,0.8);
     }
-    /* Video character overlay - fixed version */
-#dynamicIsland::after {
-  content: '';
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  background-image: url('https://files.catbox.moe/1jql0f.gif');
-  background-size: cover;
-  background-position: center;
-  border-radius: 50%;
-  opacity: 1;
-  transition: all 0.3s ease;
-  z-index: 2;
+    /* ===== MODAL STYLES - IMPROVED ===== */
+
+/* ===== MODAL CSS MỚI - ĐƠN GIẢN ===== */
+/* ===== CLEANED: MODAL CSS ===== */
+.modal {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0; */
   display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.9);
+  z-index: 999999;
 }
 
-#dynamicIsland.expanded::after,
-#dynamicIsland.message::after,
-#dynamicIsland.music::after,
-#dynamicIsland.charging::after {
-  display: block;
-  opacity: 1;
+.modal.show {
+  display: flex !important;
+}
+
+.modal-content {
+  background: linear-gradient(135deg, #1a1a1a, #000);
+  border: 2px solid #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  position: relative;
+  box-shadow: 0 0 30px rgba(255,255,255,0.5);
+
+  /* Quan trọng để không bị tràn */
+  max-width: 90vw;   /* không rộng quá 90% màn hình */
+  max-height: 90vh;  /* không cao quá 90% màn hình */
+
+  overflow: auto;    /* thêm thanh cuộn nếu nội dung vượt */
+  box-sizing: border-box;
+}
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95vw;      /* hẹp hơn một chút */
+    max-height: 85vh; /* thấp hơn để không che status bar */
+    padding: 15px;
+  }
+}
+
+.modal-close { /* giữ nguyên nếu muốn */
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 28px;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.modal-close:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.2);
+}
+
+.modal-title {
+  color: #ffffff;
+  font-family: 'Orbitron', monospace;
+  margin-bottom: 25px;
+  text-shadow: 0 0 10px #ffffff;
+  font-size: 22px;
+  text-align: center;
+}
+
+.modal-btn {
+  padding: 10px 20px; 
+  background: linear-gradient(45deg, #ffffff, #cccccc); 
+  color: #000; 
+  border: none; 
+  border-radius: 10px; 
+  font-family: 'Orbitron', monospace; 
+  font-weight: 700; 
+  cursor: pointer; 
+  box-shadow: 0 0 15px rgba(255,255,255,0.4);
+  transition: all 0.3s ease;
+  margin: 5px;
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95vw;
+    max-height: 80vh;
+    padding: 20px;
+  }
+}
+   .upload-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 25px;
+  margin-bottom: 25px;
+  text-align: center;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: shine 2s infinite;
+}
+.upload-btn {
+  background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+  background-size: 400% 400%;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+  font-size: 16px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  animation: gradientShift 3s ease infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0,255,255,0.4);
+}
+
+.upload-btn::after {
+  content: '✨';
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  animation: sparkle 1.5s ease-in-out infinite alternate;
+}
+.drag-drop-zone {
+  border: 3px dashed #00ffff;
+  border-radius: 15px;
+  padding: 30px;
+  margin: 15px 0;
+  background: rgba(0, 255, 255, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.drag-drop-zone:hover {
+  background: rgba(0, 255, 255, 0.1);
+  border-color: #ff0080;
+}
+
+.drag-drop-zone.drag-over {
+  background: rgba(0, 255, 255, 0.2);
+  border-color: #00ff00;
+  transform: scale(1.02);
+}
+
+.drag-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+  animation: float 2s ease-in-out infinite;
+}
+@keyframes shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes sparkle {
+  0% { opacity: 0.5; transform: translateY(-50%) scale(1); }
+  100% { opacity: 1; transform: translateY(-50%) scale(1.2); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(0, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); }
+}
+    .message {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.bubble {
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: #2a2a2a;
+  color: #fff;
+}
+.user .bubble {
+  background: #22c55e;
+  color: #fff;
+}
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-size: cover;
+}
+.avatar.bot { background-image: url('https://i.postimg.cc/sgKWd1q6/Polish-20250913-134147206.png'); }
+.avatar.user { background-image: url('https://i.postimg.cc/BQfwbKH2/Polish-20250915-131509600.png'); }
+body {
+  border: 2px solid rgba(255, 255, 255, 0.2); /* viền mảnh, màu trắng trong suốt */
+  border-radius: 12px;                        /* bo tròn góc */
+  margin: 4px;                                /* cách mép màn hình */
+  overflow: hidden;                           /* tránh tràn hiệu ứng */
 }
   </style>
 </head>
 <body>
+	<header style="padding: 2px 5px; background: rgba(0,0,0,0.3); color: #aaa; text-align: center; font-family: Orbitron, sans-serif; font-weight: bold;">
+   XMOD Chatbot
+</header>
   <!-- Dynamic animated background -->
   <div class="dynamic-bg"></div>
   <div class="circuit-overlay"></div>
@@ -822,352 +947,67 @@
   <div class="container">
     <div id="chatArea"></div>
     <div id="inputArea">
-      <input type="text" id="userInput" placeholder="Nhập lệnh..." />
-      <button id="sendBtn">SEND</button>
-    </div>
+  <div class="icon-item">
+    <img src="https://i.postimg.cc/BQfwbKH2/Polish-20250915-131509600.png" alt="mic">
   </div>
+  <div class="icon-item">
+    <img src="https://i.postimg.cc/XJZDGKsk/Polish-20250915-131722150.png" alt="camera">
+  </div>
+  <div class="icon-item app-icon" style="background: url('https://i.postimg.cc/sgKWd1q6/Polish-20250913-134147206.png') center/cover;"></div>
+  <input type="text" id="userInput" placeholder="Nhập lệnh...">
+  <button id="sendBtn" class="icon-item send-btn" onclick="handleSend()" style="display: none;">
+  <div style="width: 35px; height: 35px; background: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; cursor: pointer;">➤</div>
+</button>
 
   <!-- Donate Button -->
-  <button id="donateBtn">DONATE</button>
 
-  <!-- Modal QR -->
-<div id="qrModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(10px);">
-  <div style="background: linear-gradient(135deg, #1a1a1a, #000); border: 2px solid #ffffff; border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 0 30px rgba(255,255,255,0.5);">
-    <h3 style="color: #ffffff; font-family: 'Orbitron', monospace; margin-bottom: 20px; text-shadow: 0 0 10px #ffffff;">QUANTUM DONATE</h3>
-    <img src="https://i.postimg.cc/YqG9JCtp/i-Pay-Fri-Aug-22-10-47-44-GMT-07-00-2025.jpg" alt="QR Donate" style="border: 2px solid #ffffff; border-radius: 10px; box-shadow: 0 0 20px rgba(255,255,255,0.3);">
-    <button id="closeQr" style="margin-top: 20px; padding: 10px 20px; background: linear-gradient(45deg, #ffffff, #cccccc); color: #000; border: none; border-radius: 10px; font-family: 'Orbitron', monospace; font-weight: 700; cursor: pointer; box-shadow: 0 0 15px rgba(255,255,255,0.4);">ĐÓNG</button>
+
+  
+
+
+
+
+<!-- Background Selector Modal -->
+<div id="bgModal" class="modal">
+  <div class="modal-content bg-modal-content">
+    <button class="modal-close" onclick="closeModal('bgModal')">×</button>
+    <h3 class="modal-title">🎨 BACKGROUND SELECTOR</h3>
+    <div id="bgGrid"></div>
+    <input type="file" id="bgUpload" accept="image/*" style="margin-top: 15px; color: #fff;">
   </div>
 </div>
 
-  <script>
-    // ===== INTERACTIVE EFFECTS =====
-    
-    // Custom cursor tracking
-    const cursor = document.querySelector('.cursor');
-    let mouseX = 0, mouseY = 0;
-    let cursorX = 0, cursorY = 0;
-
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    });
-
-    function updateCursor() {
-      cursorX += (mouseX - cursorX) * 0.1;
-      cursorY += (mouseY - cursorY) * 0.1;
-      
-      cursor.style.left = cursorX - 10 + 'px';
-      cursor.style.top = cursorY - 10 + 'px';
-      
-      requestAnimationFrame(updateCursor);
-    }
-    updateCursor();
-
-    // Mouse trail particles
-    let trailParticles = [];
-    document.addEventListener('mousemove', (e) => {
-      if (Math.random() < 0.3) {
-        createTrailParticle(e.clientX, e.clientY);
-      }
-    });
-
-    function createTrailParticle(x, y) {
-      const particle = document.createElement('div');
-      particle.className = 'trail-particle';
-      particle.style.left = x + 'px';
-      particle.style.top = y + 'px';
-      document.body.appendChild(particle);
-
-      // Animate particle
-      let opacity = 1;
-      let size = 4;
-      const animate = () => {
-        opacity -= 0.05;
-        size += 0.2;
-        particle.style.opacity = opacity;
-        particle.style.width = size + 'px';
-        particle.style.height = size + 'px';
-        
-        if (opacity > 0) {
-          requestAnimationFrame(animate);
-        } else {
-          particle.remove();
-        }
-      };
-      animate();
-    }
-
-    // Ripple effect on click
-    document.addEventListener('click', (e) => {
-      createRipple(e.clientX, e.clientY);
-    });
-
-    function createRipple(x, y) {
-      const ripple = document.createElement('div');
-      ripple.className = 'ripple';
-      ripple.style.left = (x - 50) + 'px';
-      ripple.style.top = (y - 50) + 'px';
-      document.body.appendChild(ripple);
-      
-      setTimeout(() => ripple.remove(), 600);
-    }
-
-    // Floating particles
-    function createFloatingParticle() {
-      const particle = document.createElement('div');
-      particle.className = 'floating-particle';
-      particle.style.left = Math.random() * 100 + 'vw';
-      particle.style.animationDuration = (Math.random() * 5 + 6) + 's';
-      particle.style.animationDelay = Math.random() * 2 + 's';
-      particle.style.opacity = Math.random() * 0.8 + 0.2;
-      
-      document.body.appendChild(particle);
-      setTimeout(() => particle.remove(), 12000);
-    }
-
-    // Create floating particles periodically
-    setInterval(createFloatingParticle, 300);
-
-    // ===== CHAT FUNCTIONALITY =====
-    
-    const dynamicContent = document.getElementById('dynamicContent');
-    const dynamicIsland = document.getElementById('dynamicIsland');
-    const dynamicIcon = document.getElementById('dynamicIcon');
-    const chatArea = document.getElementById('chatArea');
-    const userInput = document.getElementById('userInput');
-    const sendBtn = document.getElementById('sendBtn');
-
-    function updateTime() {
-      const now = new Date();
-      const hours = String(now.getHours()).padStart(2,'0');
-      const mins = String(now.getMinutes()).padStart(2,'0');
-      dynamicContent.textContent = hours + ':' + mins;
-    }
-
-    updateTime();
-    setInterval(updateTime, 60000);
-
-    function addMessage(text, className, useTypewriter = false) {
-      const msgDiv = document.createElement('div');
-      msgDiv.classList.add('message', className);
-      
-      if (useTypewriter && className === 'bot') {
-        msgDiv.innerHTML = '<span class="typewriter neon-text">' + text + '</span>';
-      } else {
-        msgDiv.textContent = text;
-      }
-      
-      chatArea.appendChild(msgDiv);
-      chatArea.scrollTop = chatArea.scrollHeight;
-    }
-
-    function addHtmlMessage(html, className) {
-      const msgDiv = document.createElement('div');
-      msgDiv.classList.add('message', className);
-      msgDiv.innerHTML = html;
-      chatArea.appendChild(msgDiv);
-      chatArea.scrollTop = chatArea.scrollHeight;
-    }
-
-    function showDynamic(text, icon = '📱', duration = 3000) {
-      const iconSpan = document.getElementById('dynamicIcon');
-      dynamicContent.textContent = text;
-      iconSpan.textContent = icon;
-      dynamicIsland.classList.add('expanded');
-      
-      setTimeout(() => {
-        dynamicIsland.classList.remove('expanded');
-        updateTime();
-      }, duration);
-    }
-
-    function handleSend() {
-      const txt = userInput.value.trim();
-      if (!txt) return;
-      
-      addMessage(txt, 'user');
-      userInput.value = '';
-      
-      // Screen shake effect
-      document.body.style.animation = 'shake 0.5s ease-in-out';
-      setTimeout(() => document.body.style.animation = 'none', 500);
-      
-      setTimeout(() => {
-        handleCommand(txt);
-      }, 800);
-    }
-
-    function handleCommand(txt) {
-      const cmd = txt.toLowerCase();
-
-      if (cmd === '/dowmod' || cmd === 'dowmod') {
-        addMessage('🔮 Khởi động hệ thống tải mod...', 'bot', true);
-        
-        let html = '<div class="neon-text" style="margin-top: 10px;">';
-        const mods = [
-          { 
-            title: 'NAKROTH GKTS', 
-            desc: 'NAKROTH Skin Mod - High Quality Graphics', 
-            img: 'https://i.postimg.cc/L5K9dVrK/53202.jpg', 
-            link: 'https://www.mediafire.com/file/lahx0a7mbghy3wl/NAKROTH_GKTS-XMOD.zip/file' 
-          },
-          { 
-            title: 'NAKROTH TTVT', 
-            desc: 'NAKROTH Thunder Skin - Premium Edition', 
-            img: 'https://i.postimg.cc/7PJd5vbP/16712.jpg', 
-            link: 'https://www.mediafire.com/file/l9n4gopwl4ygdbf/NAKROTH_TTVT-XMOD.zip/file' 
-          },
-          { 
-            title: 'Resources Pack', 
-            desc: 'Complete Game Resources - Latest Update', 
-            img: 'https://i.postimg.cc/YSCWv57R/lien-quan-x-conan-lich-ra-mat-tat-ca-cac-skin-collab-1.webp', 
-            link: 'https://www.mediafire.com/file/oi7bhkm1fqbb1p8/Resources_28.8.zip/file' 
-          }
-        ];
-        
-        mods.forEach(m => {
-          html += '<div class="mod-card">';
-          html += '<img src="'+m.img+'" alt="'+m.title+'" loading="lazy" onerror="this.src=\'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjMTExIi8+CjxwYXRoIGQ9Ik00MCAyMEM0Ni42Mjc0IDIwIDUyIDI1LjM3MjYgNTIgMzJDNTIgMzguNjI3NCA0Ni42Mjc0IDQ0IDQwIDQ0QzMzLjM3MjYgNDQgMjggMzguNjI3NCAyOCAzMkMyOCAyNS4zNzI2IDMzLjM3MjYgMjAgNDAgMjBaIiBmaWxsPSIjZmZmIi8+CjxwYXRoIGQ9Ik0yNCA0OEgyNEM1Ni0wMDAgNDhINTZDNTggNDggNjAgNTAgNjAgNTJWNTZDNjAgNTggNTggNjAgNTYgNjBIMjRDMjIgNjAgMjAgNTggMjAgNTZWNTJDMjAgNTAgMjIgNDggMjQgNDhaIiBmaWxsPSIjZmZmIi8+Cjwvc3ZnPgo=\';">';
-          html += '<div class="mod-info">';
-          html += '<h4 class="neon-text">'+m.title+'</h4>';
-          html += '<p>'+m.desc+'</p>';
-          html += '<a href="'+m.link+'" target="_blank" class="neon-text">⬇️ DOWNLOAD</a>';
-          html += '</div></div>';
-        });
-        
-        html += '</div>';
-        
-        setTimeout(() => {
-          addHtmlMessage(html, 'bot');
-          showDynamic('Mod Database', '🔮');
-        }, 1200);
-        
-      } else if (cmd === '/playmusic' || cmd === 'playmusic') {
-  addMessage('🎵 Activating neural music interface...', 'bot', true);
-  
-  const musicHtml = `
-    <div class="neon-text music-info">
-      🎶 NOW PLAYING: <strong>SONG ${currentSong + 1}</strong>
-      <div class="music-controls">
-        <button class="music-btn neon-text" onclick="playMusic()">▶️ PLAY</button>
-        <button class="music-btn neon-text" onclick="pauseMusic()">⏸️ PAUSE</button>
-        <button class="music-btn neon-text" onclick="prevSong()">⏮️ PREV</button>
-        <button class="music-btn neon-text" onclick="nextSong()">⏭️ NEXT</button>
-      </div>
-      <div style="background: linear-gradient(90deg, #ffffff, #cccccc); height: 4px; border-radius: 2px; margin-top: 10px; animation: pulse 2s infinite;"></div>
-    </div>
-  `;
-  
-  setTimeout(() => {
-    addHtmlMessage(musicHtml, 'bot');
-    playMusic(); // Auto play music
-    showDynamic('Neural Music Active', '🎵');
-  }, 1000);
-        
-      } else if (cmd === '/charge' || cmd === 'charge') {
-        addMessage('⚡ Scanning power grid...', 'bot', true);
-        
-        setTimeout(() => {
-          const batteryHtml = `
-            <div class="battery-info neon-text">
-              🔋 <strong>POWER STATUS:</strong>
-              <div class="battery-bar">
-                <div class="battery-fill" style="width: 85%;"></div>
-              </div>
-              <span style="text-shadow: 0 0 10px #ffffff;">85%</span>
-            </div>
-            <p class="neon-text">⚡ QUANTUM CHARGING... ETA: ~47 minutes</p>
-          `;
-          
-          addHtmlMessage(batteryHtml, 'bot');
-          showDynamic('🔋 Power: 85%', '⚡');
-        }, 1200);
-        
-      } else if (cmd.startsWith('/')) {
-        addMessage('❌ COMMAND NOT FOUND! Try: /dowmod, /playmusic, /charge', 'bot', true);
-        showDynamic('System Error', '❌');
-        
-      } else {
-        const responses = [
-          '🤖 NEURAL RESPONSE: "' + txt + '" - Data processed.',
-          '💭 AI ANALYSIS: Your message "' + txt + '" has been decoded.',
-          '🔍 CYBER SCAN: Input "' + txt + '" analyzed and stored.',
-          '⚡ QUANTUM ECHO: "' + txt + '" - Signal received loud and clear.'
-        ];
-        
-        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-        addMessage(randomResponse, 'bot', true);
-        showDynamic('AI Response', '🤖');
-      }
-    }
-
-    sendBtn.addEventListener('click', handleSend);
-    
-    userInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        handleSend();
-      }
-    });
-
-    // Enhanced input effects
-    userInput.addEventListener('input', () => {
-      if (Math.random() < 0.1) {
-        createFloatingParticle();
-      }
-    });
-
-    // Donate functionality
-    const donateBtn = document.getElementById('donateBtn');
-    const qrModal = document.getElementById('qrModal');
-
-    donateBtn.addEventListener('click', () => {
-      qrModal.style.display = 'flex';
-      showDynamic('Quantum Donate', '💎');
-    });
-
-    document.addEventListener('click', (e) => {
-      if (e.target === qrModal) {
-        qrModal.style.display = 'none';
-      }
-    });
-
-    // Welcome message
-    setTimeout(() => {
-      addMessage('🌟 Welcome to NEON XMOD Chatbot!', 'bot', true);
-      setTimeout(() => {
-        addMessage('/dowmod,/playmusic,/charge','bot',true);
-      }, 1500);
-      showDynamic('System Online', '🌟');
-    }, 1000);
-
-    // Prevent context menu on right click for better UX
-    document.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-    });
-
-    console.log('🚀 WHITE NEON XMOD CHATBOT LOADED - ALL SYSTEMS OPERATIONAL!');
-    // Music playlist
-const playlist = [
-  'https://www.dropbox.com/scl/fi/003fj25b92y8jio117ip9/Legends-Never-Die-ft.-Against-The-Current-2017.mp3?rlkey=s3qb0nb4ypbjj4w8kqrzq1udy&dl=1',
-  'https://www.dropbox.com/scl/fi/735t19z143hw1d9r0w0mp/HUNTRIX-What-It-Sounds-Like-Lyrics-Color-Coded-Lyrics.mp3?rlkey=3dqio29i3juaj79v9wblvssrh&st=fhzezkvq&dl=1', 
-  'https://www.dropbox.com/scl/fi/fbfi2t9cd7jf2qsh7kbim/Free-Official-Lyric-Video-Sony-Animation.mp3?rlkey=bw1o07z119rzsdph4kuot7mj0&st=o2atldcu&dl=1'
-];
-
-let currentSong = 0;
-const audioPlayer = new Audio();
-audioPlayer.volume = 0.5;
-
-function playMusic() {
-  audioPlayer.src = playlist[currentSong];
-  audioPlayer.play();
-}
-
-function nextSong() {
-  currentSong = (currentSong + 1) % playlist.length;
-  playMusic();
-}
-</script>
+<!-- QR Generator Modal -->
+<div id="qrGenModal" class="modal">
+  <div class="modal-content qr-modal-content">
+    <button class="modal-close" onclick="closeModal('qrGenModal')">×</button>
+    <h3 class="modal-title">📱 QR CODE GENERATOR</h3>
+    <input type="text" id="qrText" placeholder="Nhập text để tạo QR...">
+    <button onclick="generateQR()" class="modal-btn" style="background: #22c55e;">TẠO QR</button>
+    <div id="qrResult"></div>
+  </div>
+</div>
 
 
+
+ <!-- Nút mở XML Tools -->
+<button id="openXmlToolBtn" style="
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  background: linear-gradient(90deg, #22c55e, #06b6d4);
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 25px;
+  padding: 6px 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  cursor: pointer;
+  z-index: 9999;
+">
+  🧩 XML Tools
+</button>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="script.js"></script>
 </body>
-   </html>
+</html>
